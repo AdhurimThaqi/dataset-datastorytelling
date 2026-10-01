@@ -15,6 +15,9 @@ AI-assisted drafts (Claude). Read them, check them, make them yours — and note
 | W41 Concept | ⚠️ draft v0 — revise after interviews | `W41_concept/concept.md` |
 | W41 User survey | ❌ after interviews | `W41_concept/user-survey.md` |
 
+## Live page
+`ai.html` (repo root, on GitHub Pages) shows the project findings. Rebuild it after new data: `cd solutions/W39_data && python build_page.py`
+
 ## Run
 ```
 pip install pandas plotly

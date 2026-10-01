@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Americans on AI</title>
+<script src="output/plotly.min.js"></script>
+<style>
+:root{--surface:#fcfcfb;--panel:#ffffff;--ink:#0b0b0b;--ink2:#52514e;--muted:#8a8984;--line:#e6e5e0;
+  --excited:#2a78d6;--concerned:#eb6834;--neutral:#a3a29c;--accent:#2a78d6;--dem:#2a78d6;--rep:#e34948}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--surface:#1a1a19;--panel:#222221;--ink:#ffffff;--ink2:#c3c2b7;--muted:#8f8e86;--line:#34332f;
+  --excited:#3987e5;--concerned:#d95926;--neutral:#6f6e68;--accent:#3987e5;--dem:#3987e5;--rep:#e66767}}
+:root[data-theme="dark"]{--surface:#1a1a19;--panel:#222221;--ink:#ffffff;--ink2:#c3c2b7;--muted:#8f8e86;--line:#34332f;
+  --excited:#3987e5;--concerned:#d95926;--neutral:#6f6e68;--accent:#3987e5;--dem:#3987e5;--rep:#e66767}
+*{box-sizing:border-box}
+body{margin:0;background:var(--surface);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:960px;margin:auto;padding:24px 16px 64px}
+a{color:var(--accent)}
+.kicker{color:var(--ink2);font-size:13px;letter-spacing:.06em;text-transform:uppercase;margin:0}
+h1{font-size:clamp(28px,5vw,44px);line-height:1.1;margin:6px 0 12px}
+h2{font-size:22px;margin:56px 0 4px}
+p.lead{font-size:18px;color:var(--ink2);max-width:680px}
+.sub{color:var(--ink2);margin:0 0 12px;max-width:680px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:28px 0}
+.tile{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.tile b{display:block;font-size:44px;line-height:1;font-variant-numeric:tabular-nums}
+.tile span{color:var(--ink2);font-size:14px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 8px 4px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:640px){.grid2{grid-template-columns:1fr}}
+.grid2 h3{font-size:15px;margin:4px 10px 0}.grid2 .unit{font-size:12px;color:var(--muted);margin:0 10px}
+.chart{width:100%;height:360px}.chart.sm{height:230px}
+label.pick{display:inline-flex;gap:8px;align-items:center;margin:8px 0 12px;color:var(--ink2);font-size:14px}
+select{font:inherit;padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--ink)}
+#you{font-size:15px;min-height:1.6em;margin:0 0 10px}
+details{margin-top:10px;color:var(--ink2);font-size:14px}summary{cursor:pointer}
+table{border-collapse:collapse;margin-top:8px;font-variant-numeric:tabular-nums}td,th{padding:3px 12px 3px 0;text-align:left;border-bottom:1px solid var(--line)}
+.note{background:var(--panel);border-left:3px solid var(--neutral);padding:12px 16px;border-radius:0 8px 8px 0;color:var(--ink2);font-size:14px}
+footer{margin-top:56px;color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<main>
+<p class="kicker">I.BA_DAS · Data Storytelling · HSLU 2026 — project exploration</p>
+<h1>Worried, but it's coming anyway</h1>
+<p class="lead">How Americans feel about artificial intelligence, from the biweekly <a href="https://www.americanson.ai">Americans on AI</a> survey (Athena Insights / NORC). Latest wave: <span id="lastwave"></span>.</p>
+
+<div class="tiles">
+  <div class="tile"><b id="h1"></b><span>are concerned about AI's growing role in society</span></div>
+  <div class="tile"><b id="h2"></b><span>say AI is inevitable — only a minority think society can still shape it</span></div>
+  <div class="tile"><b id="h3"></b><span>already see people struggling to tell what's real from what's fake</span></div>
+</div>
+
+<h2>The mood has barely moved since June</h2>
+<p class="sub">Share of U.S. adults who feel excited vs concerned. The first point is a pilot with a different panel and method — the drop after it is mostly a method change, not a change of mood. Later moves stay within the ±3–4 point margin of error.</p>
+<div class="card"><div id="trend" class="chart"></div></div>
+
+<h2>Every group is more worried than excited</h2>
+<p class="sub">Average of the six comparable waves (25 Jun – 10 Sep). Pick your group to see where people like you stand.</p>
+<label class="pick">Find your group <select id="grp"></select></label>
+<p id="you"></p>
+<div class="card"><div id="groups" class="chart" style="height:440px"></div></div>
+<details><summary>Show as table</summary><table id="gtable"></table></details>
+
+<h2>What people already notice — and what they expect</h2>
+<p class="sub">All adults, latest wave.</p>
+<div class="grid2" id="small"></div>
+
+<h2>Same worry, different remedy</h2>
+<p class="sub">Democrats and Republicans are both mostly concerned — but they disagree on whether government should do more. Share saying the government does <b>too little</b> (average of comparable waves).</p>
+<div class="card"><div id="party" class="chart" style="height:280px"></div></div>
+
+<h2>How to read this data</h2>
+<div class="note">
+<p>U.S. adults 18+, fielded by NORC on the probability-based AmeriSpeak panel, about 1,000–2,400 people per wave, weighted to Census benchmarks. Margin of error ±2.5–4.2 points per wave, larger for subgroups — small differences between groups or waves can be noise. "Not sure" and "No answer" are real answers (up to ~29 % on some items) and are not hidden here. The 12 Jun pilot used a non-probability online panel without a "No answer" option and is only shown for transparency.</p>
+</div>
+
+<footer>Data: <a href="https://www.americanson.ai/en/download">Americans on AI</a>, Athena Insights. Analysis &amp; charts: student exploration for HSLU I.BA_DAS (not affiliated with Athena Insights or Interactive Things). · <a href="index.html">← all pages</a></footer>
+</main>
+<script>
+const D = {"trend": [{"wave": "12 Jun (pilot)", "pilot": true, "excited": 40.4, "concerned": 57.9}, {"wave": "25 Jun", "pilot": false, "excited": 24.3, "concerned": 65.6}, {"wave": "9 Jul", "pilot": false, "excited": 26.7, "concerned": 66.0}, {"wave": "23 Jul", "pilot": false, "excited": 19.5, "concerned": 71.9}, {"wave": "13 Aug", "pilot": false, "excited": 20.1, "concerned": 69.2}, {"wave": "27 Aug", "pilot": false, "excited": 22.0, "concerned": 69.4}, {"wave": "10 Sep", "pilot": false, "excited": 21.4, "concerned": 68.8}], "groups": [{"id": "race_black_nh", "name": "Black", "concerned": 58.1, "excited": 28.2}, {"id": "age_35_49", "name": "Age 35–49", "concerned": 62.5, "excited": 27.1}, {"id": "gender_men", "name": "Men", "concerned": 64.7, "excited": 26.8}, {"id": "age_18_34", "name": "Age 18–34", "concerned": 65.9, "excited": 24.4}, {"id": "party_rep", "name": "Republicans", "concerned": 66.3, "excited": 25.8}, {"id": "race_hispanic", "name": "Hispanic", "concerned": 68.1, "excited": 22.2}, {"id": "total", "name": "All adults", "concerned": 68.5, "excited": 22.3}, {"id": "age_50_64", "name": "Age 50–64", "concerned": 70.2, "excited": 20.9}, {"id": "gender_women", "name": "Women", "concerned": 72.0, "excited": 18.2}, {"id": "race_white_nh", "name": "White", "concerned": 72.2, "excited": 19.4}, {"id": "party_dem", "name": "Democrats", "concerned": 73.4, "excited": 19.7}, {"id": "age_65_plus", "name": "Age 65+", "concerned": 75.9, "excited": 16.4}], "small": [{"title": "Already seeing it in their community", "unit": "% have seen it or see it starting", "rows": [{"item": "Better health care", "pct": 18.4}, {"item": "Saving time", "pct": 48.8}, {"item": "Pressure to do more, faster", "pct": 49.0}, {"item": "Losing connections", "pct": 60.6}, {"item": "Can't tell real from fake", "pct": 81.5}]}, {"title": "AI is making this worse for families", "unit": "% somewhat or much worse", "rows": [{"item": "Household finances", "pct": 41.7}, {"item": "Outlook on the future", "pct": 59.0}, {"item": "Children's well-being", "pct": 63.7}, {"item": "Job security", "pct": 75.2}]}, {"title": "Likely within 20 years", "unit": "% already happening or likely", "rows": [{"item": "Medical / science breakthroughs", "pct": 69.7}, {"item": "Weapons of mass destruction", "pct": 71.2}, {"item": "Smarter than humans", "pct": 71.7}, {"item": "AI acts in unintended ways", "pct": 78.3}]}, {"title": "Government is doing too little about…", "unit": "% too little", "rows": [{"item": "US competitiveness", "pct": 34.7}, {"item": "Workers and jobs", "pct": 44.5}, {"item": "Environment / data centres", "pct": 48.3}, {"item": "Effects on children", "pct": 49.6}]}], "party": [{"item": "US competitiveness", "dem": 40.3, "rep": 26.2}, {"item": "Workers and jobs", "dem": 55.4, "rep": 34.1}, {"item": "Effects on children", "dem": 56.4, "rep": 39.2}, {"item": "Environment / data centres", "dem": 58.5, "rep": 35.9}], "hero": {"concerned": 69, "inevitable": 68, "fake": 82}, "last": "10 Sep"};
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+document.getElementById('lastwave').textContent = D.last;
+h1.textContent = D.hero.concerned + '%'; h2.textContent = D.hero.inevitable + '%'; h3.textContent = D.hero.fake + '%';
+const cfg = {displayModeBar:false, responsive:true};
+const narrow = () => innerWidth < 600;
+function base(extra){return Object.assign({paper_bgcolor:'rgba(0,0,0,0)',plot_bgcolor:'rgba(0,0,0,0)',
+  font:{family:'system-ui,sans-serif',color:css('--ink2'),size:13},margin:{l:10,r:20,t:10,b:40},
+  hoverlabel:{bgcolor:css('--panel'),bordercolor:css('--line'),font:{color:css('--ink')}},
+  xaxis:{gridcolor:css('--line'),zeroline:false,linecolor:css('--line')},
+  yaxis:{gridcolor:css('--line'),zeroline:false,automargin:true}, showlegend:false},extra||{})}
+
+function drawTrend(){
+  const x=D.trend.map(r=>r.wave), mk=(k,c,name)=>({x,y:D.trend.map(r=>r[k]),name,mode:'lines+markers+text',
+    line:{color:c,width:2},marker:{size:9,color:D.trend.map(r=>r.pilot?css('--surface'):c),line:{color:c,width:2}},
+    text:D.trend.map((r,i)=>i==D.trend.length-1?(narrow()?'':name+' ')+Math.round(r[k])+'%':''),textposition:'middle right',textfont:{color:css('--ink'),size:13},
+    hovertemplate:'%{x}<br>'+name+': %{y:.0f}%<extra></extra>',cliponaxis:false});
+  Plotly.react('trend',[mk('concerned',css('--concerned'),'Concerned'),mk('excited',css('--excited'),'Excited')],
+    base({margin:{l:40,r:narrow()?44:120,t:28,b:40},showlegend:narrow(),legend:{orientation:'h',y:-0.18},yaxis:{range:[0,100],ticksuffix:'%',gridcolor:css('--line'),zeroline:false},
+      xaxis:{gridcolor:'rgba(0,0,0,0)',linecolor:css('--line'),tickangle:narrow()?-45:0},hovermode:'x unified',
+      shapes:[{type:'rect',xref:'x',yref:'paper',x0:-0.5,x1:0.5,y0:0,y1:1,fillcolor:css('--line'),opacity:.5,line:{width:0},layer:'below'}],
+      annotations:[{x:0,y:1,yref:'paper',text:'pilot',showarrow:false,font:{color:css('--muted'),size:12},yanchor:'bottom'}]}),cfg);
+}
+const sel=document.getElementById('grp');
+D.groups.slice().sort((a,b)=>a.name==='All adults'?-1:b.name==='All adults'?1:a.name.localeCompare(b.name))
+  .forEach(g=>sel.add(new Option(g.name,g.id)));
+function drawGroups(){
+  const pick=sel.value, y=D.groups.map(g=>g.name), op=D.groups.map(g=>!pick||pick==='total'||g.id===pick||g.id==='total'?1:.3);
+  const seg={x:[],y:[],mode:'lines',line:{color:css('--line'),width:2},hoverinfo:'skip'};
+  D.groups.forEach(g=>{seg.x.push(g.excited,g.concerned,null);seg.y.push(g.name,g.name,null)});
+  const dot=(k,c,n)=>({x:D.groups.map(g=>g[k]),y,mode:'markers',name:n,marker:{size:12,color:c,opacity:op,line:{color:css('--panel'),width:2}},
+    hovertemplate:'%{y}<br>'+n+': %{x:.0f}%<extra></extra>'});
+  Plotly.react('groups',[seg,dot('excited',css('--excited'),'Excited'),dot('concerned',css('--concerned'),'Concerned')],
+    base({margin:{l:10,r:20,t:30,b:40},xaxis:{range:[0,100],ticksuffix:'%',gridcolor:css('--line'),zeroline:false},
+      yaxis:{automargin:true,tickfont:{color:css('--ink')}},
+      annotations:[{x:D.groups.at(-1).excited,y:D.groups.at(-1).name,text:'Excited',yshift:18,xanchor:'right',showarrow:false,font:{color:css('--ink2')}},
+                   {x:D.groups.at(-1).concerned,y:D.groups.at(-1).name,text:'Concerned',yshift:18,xanchor:'left',showarrow:false,font:{color:css('--ink2')}}]}),cfg);
+  const g=D.groups.find(g=>g.id===pick), t=D.groups.find(g=>g.id==='total');
+  document.getElementById('you').innerHTML = !g||g.id==='total' ? '' :
+    `<b>${g.name}:</b> ${Math.round(g.concerned)}% concerned, ${Math.round(g.excited)}% excited — `+
+    (g.concerned>t.concerned+2?'more worried than the average American.':g.concerned<t.concerned-2?'less worried than the average American.':'about the same as the average American.');
+}
+sel.onchange=drawGroups;
+document.getElementById('gtable').innerHTML='<tr><th>Group</th><th>Concerned</th><th>Excited</th></tr>'+
+  D.groups.slice().reverse().map(g=>`<tr><td>${g.name}</td><td>${g.concerned}%</td><td>${g.excited}%</td></tr>`).join('');
+
+const sm=document.getElementById('small');
+D.small.forEach((s,i)=>{sm.insertAdjacentHTML('beforeend',`<div class="card"><h3>${s.title}</h3><p class="unit">${s.unit}</p><div id="sm${i}" class="chart sm"></div></div>`)});
+function drawSmall(){D.small.forEach((s,i)=>Plotly.react('sm'+i,[{type:'bar',orientation:'h',x:s.rows.map(r=>r.pct),y:s.rows.map(r=>r.item),
+  marker:{color:css('--concerned')},text:s.rows.map(r=>Math.round(r.pct)+'%'),textposition:'outside',textfont:{color:css('--ink')},cliponaxis:false,
+  hovertemplate:'%{y}: %{x:.0f}%<extra></extra>'}],
+  base({margin:{l:10,r:40,t:6,b:24},bargap:.35,xaxis:{range:[0,100],showticklabels:false,gridcolor:css('--line'),zeroline:false},
+    yaxis:{automargin:true,tickfont:{color:css('--ink'),size:12}}}),cfg))}
+
+function drawParty(){
+  const y=D.party.map(r=>r.item), seg={x:[],y:[],mode:'lines',line:{color:css('--line'),width:2},hoverinfo:'skip'};
+  D.party.forEach(r=>{seg.x.push(r.rep,r.dem,null);seg.y.push(r.item,r.item,null)});
+  const dot=(k,c,n)=>({x:D.party.map(r=>r[k]),y,mode:'markers',name:n,marker:{size:12,color:c,line:{color:css('--panel'),width:2}},hovertemplate:'%{y}<br>'+n+': %{x:.0f}%<extra></extra>'});
+  const top=D.party.at(-1);
+  Plotly.react('party',[seg,dot('rep',css('--rep'),'Republicans'),dot('dem',css('--dem'),'Democrats')],
+    base({margin:{l:10,r:20,t:30,b:40},xaxis:{range:[0,100],ticksuffix:'%',gridcolor:css('--line'),zeroline:false},yaxis:{automargin:true,tickfont:{color:css('--ink')}},
+      annotations:[{x:top.rep,y:top.item,text:'Republicans',yshift:18,xanchor:'right',showarrow:false,font:{color:css('--ink2')}},{x:top.dem,y:top.item,text:'Democrats',yshift:18,xanchor:'left',showarrow:false,font:{color:css('--ink2')}}]}),cfg)}
+
+function drawAll(){drawTrend();drawGroups();drawSmall();drawParty()}
+drawAll();
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',drawAll);
+addEventListener('resize',()=>{clearTimeout(window._r);window._r=setTimeout(drawAll,200)});
+new MutationObserver(drawAll).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+</script>
+</body>
+</html>
