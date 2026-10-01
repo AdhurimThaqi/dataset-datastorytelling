@@ -1,0 +1,5 @@
+__pycache__/
+.venv/
+.ipynb_checkpoints/
+exercises/W39_data-exploration/output/
+.DS_Store

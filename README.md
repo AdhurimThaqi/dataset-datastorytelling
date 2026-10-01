@@ -38,3 +38,6 @@ Every chart has a camera icon (top-right) → export PNG for storyboards / anima
 - [Kaggle Datasets](https://www.kaggle.com/datasets)
 - [data.stadt-zuerich.ch](https://data.stadt-zuerich.ch) – City of Zurich
 - [BFS / Swiss Federal Statistical Office](https://www.bfs.admin.ch)
+
+## Course exercises & project
+All exercise material, the real project dataset ("Americans on AI") and templates for the milestones are in [`exercises/`](exercises/README.md).

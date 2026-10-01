@@ -1,0 +1,24 @@
+Day,Time,Place,Type,Volume_ml,Reason,Company,Enjoyment_1_5,Note
+Mon,07:15,Kitchen at home,Filter coffee,250,Waking up,alone,2,still half asleep
+Mon,09:40,Office,Espresso,30,Habit,with others,3,chat at the machine
+Mon,14:05,Office,Cappuccino,180,Tiredness,alone,4,drank it too hot
+Tue,07:05,Kitchen at home,Filter coffee,250,Waking up,alone,2,
+Tue,10:20,Café bar,Latte,300,Company,with others,5,sat for a long time
+Tue,16:30,Office,Espresso,30,Tiredness,alone,4,did not help
+Wed,06:50,Kitchen at home,Filter coffee,250,Waking up,alone,1,got up too early
+Wed,11:10,Train,Latte,200,Habit,alone,2,"paper cup, lukewarm"
+Wed,15:45,Library,Espresso,30,Break,with others,4,
+Wed,20:10,Balcony,Espresso,30,Reward,with others,5,sunset
+Thu,07:30,Kitchen at home,Cappuccino,180,Waking up,with others,4,shared kitchen was full
+Thu,13:20,Office,Filter coffee,250,Habit,alone,3,
+Thu,17:00,Café bar,Espresso,30,Company,with others,5,second espresso on the house
+Fri,08:00,Kitchen at home,Filter coffee,250,Waking up,alone,3,
+Fri,10:45,Office,Cappuccino,180,Break,with others,4,
+Fri,14:30,Office,Espresso,30,Tiredness,alone,2,tasted burnt
+Fri,19:20,Café bar,Latte,300,Company,with others,5,end of the week
+Sat,09:50,Kitchen at home,Latte,300,Reward,with others,5,"newspaper, unhurried"
+Sat,11:30,Balcony,Filter coffee,250,Habit,with others,4,
+Sat,16:10,Café bar,Cappuccino,180,Company,with others,3,too much foam
+Sun,10:30,Kitchen at home,Latte,300,Reward,alone,5,best cup of the week
+Sun,13:00,Balcony,Espresso,30,Habit,alone,3,
+Sun,18:40,Kitchen at home,Filter coffee,250,Tiredness,with others,2,"too late, slept badly"

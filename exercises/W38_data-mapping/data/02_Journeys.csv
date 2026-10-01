@@ -1,0 +1,23 @@
+Day,Start_time,Destination,Mode,Duration_min,Distance_km,Weather,Mood_1_5,Detours,Note
+Mon,07:40,to university,bike,18,3.4,rain,2,1,arrived soaked
+Mon,12:15,lunch,on foot,9,0.7,cloudy,4,0,
+Mon,18:05,home,bike,21,3.4,cloudy,3,2,detour because of roadworks
+Tue,07:50,to university,bus,26,4.1,rain,2,0,overcrowded
+Tue,17:30,shopping,on foot,14,1.1,rain,3,1,
+Tue,18:20,home,bus,22,4.1,rain,3,0,
+Wed,08:10,to university,bike,17,3.4,sunny,5,1,tailwind
+Wed,13:00,library,on foot,6,0.5,sunny,5,0,
+Wed,19:40,concert,tram,13,2.6,clear,4,1,
+Wed,23:15,home,on foot,38,3.1,clear,4,0,missed the last tram
+Thu,07:45,to university,bike,19,3.4,fog,3,2,poor visibility
+Thu,16:00,sport,bike,11,2.2,fog,4,1,
+Thu,20:30,home,bike,16,2.9,clear,5,0,empty streets
+Fri,07:35,to university,bike,18,3.4,sunny,5,1,
+Fri,11:50,coffee,on foot,7,0.6,sunny,5,0,
+Fri,22:10,bar,tram,15,2.8,clear,3,2,missed the connection
+Sat,10:20,market,on foot,23,1.8,sunny,5,0,walked back with shopping bag
+Sat,15:45,lake,bike,34,7.2,sunny,5,1,
+Sat,21:00,friends,bus,19,3.9,clear,4,0,
+Sun,11:00,walk,on foot,52,4.3,cloudy,5,0,no destination
+Sun,17:20,station,tram,12,2.6,rain,2,1,delayed
+Sun,19:00,home,on foot,26,2.1,rain,2,0,drenched

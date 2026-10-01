@@ -1,0 +1,23 @@
+Day,Item,Material,Weight_g,Place,Disposal,Avoidable,Note
+Mon,Packaging,Plastic,12,Kitchen,Recycling,yes,yoghurt pot
+Mon,Paper,Paper,45,Desk,Recycling,no,notes from the day before
+Mon,Food waste,Organic,130,Kitchen,Compost,yes,bread gone stale
+Tue,Packaging,Cardboard,90,Hallway,Recycling,no,parcel
+Tue,Drinks bottle,Glass,380,Kitchen,Recycling,no,
+Tue,Coffee cup,Composite,22,out and about,General waste,yes,take-away
+Wed,Food waste,Organic,210,Kitchen,Compost,yes,cooked too much
+Wed,Paper,Paper,8,Bag,General waste,no,till receipt
+Wed,Packaging,Plastic,6,Office,General waste,yes,snack bag
+Thu,Drinks can,Aluminium,15,Office,Recycling,no,
+Thu,Packaging,Plastic,18,Kitchen,Recycling,yes,salad tray
+Thu,Clothing,Textile,240,Bedroom,Collection point,no,"t-shirt, hole in it"
+Fri,Food waste,Organic,95,Kitchen,Compost,yes,salad wilted
+Fri,Coffee cup,Composite,22,out and about,General waste,yes,
+Fri,Paper,Paper,120,Desk,Recycling,no,"printout, misprint"
+Sat,Drinks bottle,Glass,380,Balcony,Recycling,no,
+Sat,Packaging,Cardboard,160,Hallway,Recycling,no,pizza box
+Sat,Food waste,Organic,60,Kitchen,Compost,yes,pizza crust
+Sun,Electronics,Electronic,90,Desk,Collection point,no,broken cable
+Sun,Paper,Paper,30,Kitchen,Recycling,no,newspaper
+Sun,Packaging,Plastic,9,Kitchen,General waste,yes,cheese wrapper
+Sun,Food waste,Organic,175,Fridge,Compost,yes,forgotten leftovers
