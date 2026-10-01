@@ -3,7 +3,7 @@
 Four **real, public** datasets to practise the DAS workflow:
 inspect → clean → find the story → visualise.
 
-**Live report:** https://adhurimthaqi.github.io/dataset-datastorytelling/output/report.html
+**Live report:** https://adhurimthaqi.github.io/dataset-datastorytelling/
 
 ## Run it
 
