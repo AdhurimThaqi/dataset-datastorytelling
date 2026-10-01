@@ -42,3 +42,26 @@ Columns: `Subgroup, Wave, Question_ID, Full_Question, Dimension, Answer, Percent
 - Does AI sentiment differ between `party_dem` and `party_rep`?
 - Are younger people (`age_18_34`) more enthusiastic than older ones (`age_65_plus`)?
 - + your own questions
+
+## W39 assignments (from Fiona's slides)
+**A · Context & method** — answer in the process doc:
+- Who collects the data, for whom, and why? What is it for, who could benefit?
+- How was it collected (survey method)? Who/what was included (area, time period)?
+- How might the method influence the results? (Different questions → different data)
+
+**B · Notebook** — load data · inspect JSON · make a tidy table · map subgroup IDs to labels ·
+explore categories · check missing / uncertain answers · first visualisation.
+
+**C · From data to story**
+1. Develop as many questions to ask the dataset as possible
+2. Explore them (notebook, americanson.ai, AI tools)
+3. Thematic research: existing projects, studies, articles, similar surveys (e.g. Swiss Media Database)
+4. Record findings: insights, surprises, open questions
+
+Suggested questions: Do major AI events show up in the data (make an AI-event timeline)? ·
+Have attitudes changed over time? · Which groups are most concerned / most confident?
+
+## My findings
+| Question | Answer / number | Surprise? | Open question |
+|---|---|---|---|
+| | | | |
