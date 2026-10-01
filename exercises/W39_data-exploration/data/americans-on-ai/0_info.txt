@@ -1,5 +1,0 @@
-1_master: complete dataset with all waves and subgroups
-2_waves: one CSV per wave with all subgroups
-3_subgroups: one CSV per subgroup across all waves
-4_wave_subgroups: one folder per wave containing the subgroup CSVs for that wave
-5_own_export: Under Chapter "4. Exports" in the Jupyter Notebook you will find an export code cell where you can filter the data through your chosen waves, supergroups or topics to create your own CSV file.

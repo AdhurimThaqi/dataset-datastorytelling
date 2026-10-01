@@ -12,9 +12,9 @@ Groups of 2–3. One shared Google Doc per group with all lecturers (weekly log 
 ## Milestones
 | Due | Milestone | Folder |
 |---|---|---|
-| W40 · 01.10 | Bring data-mapping sketches (W38 homework) | `W38_data-mapping/` |
-| **W41 · 08.10** | **User research, rebriefing and concept — in bullet points** | `W40_user-research/`, `W41_concept/` |
-| W43 · 22.10 | At least 3 different designs (hand sketches) | `W42-43_prototyping/` (create) |
+| W40 · 01.10 | Bring data-mapping sketches (W38 homework) | `W38_mapping/` |
+| **W41 · 08.10** | **User research, rebriefing and concept — in bullet points** | `W40_interviews/`, `W41_concept/` |
+| W43 · 22.10 | At least 3 different designs (hand sketches) | `W42_prototyping/` (create) |
 | W44 · 29.10 | Implementation plan / software architecture | `W44_feasibility/` (create) |
 | W48 · 26.11 | Results of the user test | `W48_user-test/` (create) |
 | W51 · 17.12 | Prototype + presentation to Interactive Things | `W51_final/` (create) |
@@ -42,7 +42,7 @@ The official module description (I.BA_DAS_02.07.2026_EN.pdf) says: oral exam 7 m
 
 ## Folders
 - `process-log.md` — weekly 3-sentence log (copy into the group Google Doc)
-- `W38_data-mapping/` — mini-project brief + the 4 datasets
-- `W39_data-exploration/` — the real project data, the course notebook, `explore_ai.py`
-- `W40_user-research/` — interview guide, 3 interview sheets, criteria
+- `W38_mapping/` — mini-project brief + the 4 datasets
+- `W39_data/` — the real project data, the course notebook, `explore_ai.py`
+- `W40_interviews/` — interview guide, 3 interview sheets, criteria
 - `W41_concept/` — rebriefing, user survey, concept (Milestone 1)

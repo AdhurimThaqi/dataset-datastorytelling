@@ -1,0 +1,7 @@
+Files (originally from the course Google Drive, https://tinyurl.com/y5r355ya):
+- survey_all_waves_all_subgroups.csv  complete dataset, all 7 waves x 12 subgroups x 6 questions
+- data.json                           raw source incl. methodology notes and question definitions
+- HSLU_Data_Storytelling_Analysis.ipynb  course notebook (Colab). Chapter "4. Export" filters the data
+                                      by wave / subgroup / question -> save the CSV into own_exports/
+The Drive also has the same data split per wave / per subgroup / per wave x subgroup.
+Those are just filtered copies of the master CSV, so they are not stored here - make them with the notebook export when needed.

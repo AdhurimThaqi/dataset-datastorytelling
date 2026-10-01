@@ -8,7 +8,7 @@ import pandas as pd
 import plotly.express as px
 
 ROOT = Path(__file__).parent
-DATA = ROOT / "data" / "americans-on-ai" / "1_master" / "survey_all_waves_all_subgroups.csv"
+DATA = ROOT / "survey_all_waves_all_subgroups.csv"
 OUT = ROOT / "output"
 OUT.mkdir(exist_ok=True)
 PILOT = "2026-06-12"  # Prolific pilot, different method than later NORC waves

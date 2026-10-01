@@ -1,18 +1,18 @@
 # W39 · Data exploration — "Americans on AI"
 
 Where does the data come from, how was it collected and structured, which questions and stories can it answer?
-Slides: `../../../../course-material/W39_260924_Dataexploration_Slides.pdf` (local only, not in git).
+Slides: `course-material/W39_260924_Dataexploration_Slides.pdf` in the course folder (local only, not in git).
 Original Drive folder: https://tinyurl.com/y5r355ya · Data source: https://www.americanson.ai/en/download
 
-## The data (`data/americans-on-ai/`)
-| Path | Content |
+## The data (this folder)
+| File | Content |
 |---|---|
-| `1_master/survey_all_waves_all_subgroups.csv` | everything: 9,176 rows × 7 columns |
-| `2_waves/` | one CSV per wave (7) |
-| `3_subgroups/` | one CSV per subgroup (12) |
-| `4_wave_subgroups/<wave>/` | one CSV per wave × subgroup (81) |
-| `5_own_exports/` | put your own filtered exports here (notebook chapter 4) |
-| `data.json` | raw source (incl. methodology notes, question definitions, per-wave notes) |
+| `survey_all_waves_all_subgroups.csv` | everything: 9,176 rows × 7 columns |
+| `data.json` | raw source (methodology notes, question definitions, per-wave notes) |
+| `HSLU_Data_Storytelling_Analysis.ipynb` | course notebook (Colab) |
+| `own_exports/` | your filtered CSVs from the notebook's export cell |
+
+The Drive also has per-wave / per-subgroup splits — they are only filtered copies of the master, so make them with the notebook export when you need one.
 
 Columns: `Subgroup, Wave, Question_ID, Full_Question, Dimension, Answer, Percentage` (weighted %, full sample as base).
 
@@ -35,7 +35,7 @@ Columns: `Subgroup, Wave, Question_ID, Full_Question, Dimension, Answer, Percent
 - Party is not a weighting target, so party composition can shift between waves.
 
 ## Tools
-- `notebook/HSLU_Data_Storytelling_Analysis.ipynb` — course notebook (Google Colab): JSON → tidy table, overview, missing values, first chart, **export cell** (filter by wave/subgroup/question → CSV for Datawrapper / RAWGraphs / Tableau).
+- `HSLU_Data_Storytelling_Analysis.ipynb` — course notebook (Google Colab): JSON → tidy table, overview, missing values, first chart, **export cell** (filter by wave/subgroup/question → CSV for Datawrapper / RAWGraphs / Tableau).
 - `explore_ai.py` — local version of the key numbers + charts: `python explore_ai.py` → `output/`.
 
 ## Questions from the notebook to answer yourself
