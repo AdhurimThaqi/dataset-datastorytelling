@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Milestone 1 · Concept</title>
+<style>
+:root{--surface:#fcfcfb;--panel:#fff;--ink:#0b0b0b;--ink2:#52514e;--muted:#8a8984;--line:#e6e5e0;--accent:#2a78d6;--soft:#f3f2ee}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--surface:#1a1a19;--panel:#222221;--ink:#fff;--ink2:#c3c2b7;--muted:#8f8e86;--line:#34332f;--accent:#3987e5;--soft:#2a2a28}}
+:root[data-theme="dark"]{--surface:#1a1a19;--panel:#222221;--ink:#fff;--ink2:#c3c2b7;--muted:#8f8e86;--line:#34332f;--accent:#3987e5;--soft:#2a2a28}
+body{margin:0;background:var(--surface);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:820px;margin:auto;padding:32px 16px 80px}
+a{color:var(--accent)}
+.kicker{color:var(--ink2);font-size:13px;letter-spacing:.06em;text-transform:uppercase;margin:0}
+h1{margin:.2em 0 .3em;line-height:1.15}
+.lede{color:var(--ink2);margin:0 0 24px}
+nav{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;position:sticky;top:0;background:var(--surface);padding:10px 0;z-index:1}
+nav button{text-align:left;font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer}
+nav button span{display:block;color:var(--ink2);font-size:13px;line-height:1.35;margin-top:2px}
+nav button[aria-selected="true"]{border-color:var(--accent);box-shadow:inset 0 -3px 0 var(--accent)}
+@media (max-width:600px){nav{grid-template-columns:1fr}nav button span{display:none}}
+article{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 24px 24px;margin-top:12px;overflow-wrap:anywhere}
+article h1{font-size:26px}article h2{font-size:19px;margin-top:1.8em;padding-top:.6em;border-top:1px solid var(--line)}
+article blockquote{margin:1em 0;padding:8px 14px;background:var(--soft);border-left:3px solid var(--accent);border-radius:4px;color:var(--ink2)}
+article blockquote p{margin:.3em 0}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;margin:1em 0}
+th,td{border-bottom:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}
+th{color:var(--ink2);font-weight:600}
+code{background:var(--soft);padding:1px 5px;border-radius:4px;font-size:.9em}
+li{margin:.2em 0}
+footer{color:var(--muted);font-size:13px;margin-top:24px}
+</style>
+</head>
+<body>
+<main>
+<p class="kicker"><a href="index.html">Data Storytelling</a> · Americans on AI · Milestone 1</p>
+<h1>Rebriefing, user survey, concept</h1>
+<p class="lede">Three documents that build on each other. Every decision in the concept traces back to a rebriefing line (R#) or a survey insight (S#); new assumptions are marked [A].</p>
+<nav role="tablist">
+<button role="tab" data-tab="rebriefing"><b>1. Rebriefing</b><span>Have we understood what is being asked?</span></button>
+<button role="tab" data-tab="survey"><b>2. User survey</b><span>What do the people we design for actually need?</span></button>
+<button role="tab" data-tab="concept"><b>3. Concept</b><span>This is how we solve it, and this is why.</span></button>
+</nav>
+<article id="doc" aria-live="polite"></article>
+<footer>Source files: <code>exercises/W41_concept/*.md</code> · rebuild with <code>python build_page.py</code></footer>
+</main>
+<script type="text/markdown" id="md-rebriefing">
+# Rebriefing — v1 (12.10.2026)
+
+## Task
+- **R1 · In our words:** "Americans on AI" turns US public opinion on AI into percentages every two weeks. We design *one* way into that data
+  that lets a non-expert feel where public opinion stands, and where they stand themselves.
+- **R2 · Format:** animatic, branched animatic, or interactive prototype, plus a short justification of our decisions. Web or exhibition.
+- **R3 · Frame:** groups of 2–3, HSLU I.BA_DAS, final presentation to Interactive Things on **17.12.2026**. We make a prototype, not a product.
+
+## Client vs. end users (not the same)
+- **R4 · Client:** Interactive Things (Zurich), which builds the official platform. **Data owner:** Athena Insights (fieldwork: NORC).
+- **R5 · End users:** people who are not AI or data experts. Lecturers review the work but are not the users.
+
+## Target groups, in priority order
+1. **R6 · Primary:** students and young professionals in Switzerland (20–35) who use AI tools every week but haven't settled their opinion.
+   They want to know whether their unease or enthusiasm is "normal".
+2. **R7 · Secondary:** people over 50 who rarely use AI and are mostly worried. They want to know whether they're alone with it.
+3. **R8 · Not our focus:** researchers, journalists, policy people. They need the full data platform, which Interactive Things already builds.
+- ⚡ **R9 · Our reading:** the audience we can reach and test with is **Swiss**, not American. The data is about Americans.
+  We treat that gap as part of the task: comparing yourself to a foreign public, not pretending to be part of it.
+
+## Success criterion: how Interactive Things sees it worked
+- **R10:** In the W48 user test, people from the primary group can do three things without help: (a) say where "people like them" stand,
+  (b) repeat the main finding in their own words, (c) name one thing that surprised them.
+  The final wording comes from the interviews (`../W40_interviews/criteria.md`).
+
+## Non-negotiable guard rails
+- **R11 · Neutral towards AI:** no "AI is good / bad" framing. The survey is designed as a neutral instrument, and our design has to be too.
+- **R12 · Honest with the data:**
+  - "Not sure", "None of these" and "No answer" stay visible (up to ~29 % on some items).
+  - The pilot wave (12.06, Prolific, other method) is left out or clearly marked.
+  - Differences smaller than the margin of error (±3–4 pts, more for subgroups) are not shown as change or as a gap.
+- **R13 · Stays valid for future waves:** a new wave arrives every two weeks. Text uses rounded wording ("two in three", not "68.8 %"),
+  numbers are pulled from the latest wave, and no claim depends on a fixed date.
+- **R14 · Uncomfortable but true:** party (Dem/Rep) and race/ethnicity subgroups exist in the data. If we show them, we show them without ranking groups as "better" or "worse".
+- **R15 · Technical:** data only from the official CSV/JSON. The prototype must run in a browser or on one exhibition station. No backend we can't maintain.
+
+## Data basis
+- **R16:** Americans on AI, 7 waves (12.06–10.09.2026), n ≈ 1,000–2,400 per wave, 6 questions / 20 items, 12 subgroups
+  (total, gender, party, 4 age bands, 3 race/ethnicity groups). Weighted %, full sample as base.
+- **R17 · What the data actually says** (latest wave, see `solutions/W39_data/findings.md`):
+  - about 2 in 3 are concerned, about 1 in 5 are excited
+  - about 2 in 3 say AI is inevitable, fewer than 1 in 5 think society can shape it
+  - about 4 in 5 see people struggling to tell real from fake
+  - **barely any movement across waves**
+- ⚡ **R18 · Our reading:** the honest headline is **stability, not change**. A tracker invites "what moved this week?" stories,
+  but the moves are within the margin of error. We will not build a "trend" story the data doesn't carry.
+
+## Collaboration
+- **R19:** Feedback in class from Alain (concept / UX), Gordan (feasibility), Fiona (data). Interactive Things gives feedback at the final presentation.
+  Within the group the group decides; when we can't agree, the lecturer of that week decides *(to confirm)*.
+
+## Explicitly not part of the work
+- **R20:**
+  - a dashboard or full data platform (Interactive Things builds that)
+  - all 6 questions × 12 subgroups × 7 waves (we pick)
+  - data from other countries or our own survey
+  - production-ready code, accounts or tracking
+  - making a statement about whether AI is good
+
+## Open points (addressee · deadline)
+- **O1:** Does Interactive Things prefer web or exhibition? → Alain · 15.10
+- **O2:** Are we allowed to use the name / branding "Americans on AI"? → Alain / Interactive Things · 15.10
+- **O3:** Will new waves arrive during the semester, and in the same format? → Fiona · 15.10
+- **O4:** Is it OK to address a Swiss audience with US data (R9), or does the client expect a US audience? → Alain · 15.10
+- **O5:** Grades vs. "no grades" (the course script and the module description contradict each other) → Alain · 15.10
+
+## Cross-check against the briefing
+- [x] Client and end users named separately (R4, R5)
+- [x] All target groups covered and prioritised (R6–R8)
+- [x] Objective in our own words (R1)
+- [x] Content guard rails named, incl. uncomfortable ones (R11–R14)
+- [x] Data basis + handling of updates (R13, R16)
+- [x] Contacts, feedback points, decision paths (R19; decision path to confirm)
+- [x] What is not part of the work (R20)
+- [x] How the agency will see it worked (R10)
+- [x] Every open question has an addressee and a deadline (O1–O5)
+
+</script>
+<script type="text/markdown" id="md-survey">
+# User survey — v1 (12.10.2026)
+
+## Whom we talk to, and why
+| # | Who | Why this person | Target group |
+|---|---|---|---|
+| P1 | Student from another department (HSLU Wirtschaft / Design), ~20–25 | Uses AI weekly, no technical background. This is our primary user. | R6 |
+| P2 | Working person 25–35, not in IT | Meets AI at work, under time pressure. Tests the "AI at work / job security" side. | R6 |
+| P3 | Someone 50+ who rarely uses AI (family / neighbour) | Contrast case: the group that is most concerned in the data. | R7 |
+
+- **Deliberately not interviewed:** other Informatik / ImTech students. They think like us.
+- **Whom we don't reach (yet):**
+  - Americans (the people in the data)
+  - under-18s
+  - people who reject AI completely
+  - anyone outside German-speaking Switzerland
+  → We have to name this whenever the concept generalises.
+
+## Interview guide (used for all three)
+**Intro (read out):** "Hi, I'm … from HSLU. We're working on a project about how people experience AI in everyday life.
+There are no right or wrong answers. We're interested in your experiences, not your opinion on technology. About 20 minutes. Is it OK if my colleague takes notes?"
+
+**Broad openers**
+1. Tell me about the last time you came across AI in your everyday life. Where were you, what happened?
+2. What do you use AI for in a normal week? Walk me through a typical situation.
+3. Tell me about a moment when AI surprised you, positively or negatively.
+
+**Deeper**
+4. What happened the last time you weren't sure whether something was real or made by AI?
+5. How has AI changed anything in your work or studies so far? What did that feel like?
+6. What was the last news story about AI that stuck with you? What did you do or say afterwards?
+7. Tell me about the last conversation you had about AI with friends or family.
+8. What happened the last time you decided *not* to use AI for something?
+
+**Success**
+9. If you saw a website or exhibit about how people feel about AI, how would you notice afterwards that it was worth your time?
+10. Where do you go when you want to know what "people in general" think about something? What happened the last time?
+
+**Follow-ups:** "Can you tell me more?" · "What happened next?" · "How did that feel?" · (silence)
+**Roles:** one asks, one writes word for word. Explain nothing, defend nothing, don't pitch the concept.
+
+## Answers, as close to verbatim as possible
+> Quotes in this version are working wording and will be replaced with the final interview notes.
+
+| P | Q | Quote | Context / observation |
+|---|---|---|---|
+| P1 | Q4 | "There was this video of a politician on TikTok and I watched it twice before I checked the comments. Half the people said it's fake. I still don't know." | Long pause, then a very concrete story |
+| P1 | Q6/7 | "My parents think it's dangerous. I think it's just… there. You can't really not use it anymore." | Shrugged |
+| P1 | Q9 | "If I could say something smart about it at dinner with my family, not just 'it's fine'." | |
+| P2 | Q5 | "Since we have it, my boss expects things faster. So the time I save is gone again." | Irritated |
+| P2 | Q6 | "There was an article that AI will replace half of office jobs. I read it on the train and thought, okay, that's me." | Nervous laugh |
+| P2 | Q7 | "With colleagues we joke about it. Nobody really says they're scared." | |
+| P3 | Q1 | "The phone does things now that I didn't ask for." | |
+| P3 | Q4 | "My friend sent a picture in the WhatsApp group of the Pope in a white jacket and we all believed it." | Animated, told it in detail |
+| P3 | Q6 | "On the news they say it will change everything. Nobody asks us if we want that." | Raised voice |
+| P3 | Q10 | "The news, SRF. Or I ask around." | |
+
+## Desk research: published surveys
+Large US samples that back up (or qualify) what we heard. Note: all three are US data from 2024–2025, older than our dataset.
+
+- **Pew, Sept 2025** (n = 5,023 US adults, 9–15 June 2025):
+  - 50 % are more concerned than excited about AI (up from 37 % in 2021), 10 % more excited, **38 % equally both** → backs **S6** (mixed feelings).
+  - **76 %** say it is extremely or very important to tell AI-made from human-made content, but **53 %** aren't confident they can → backs **S1**.
+  - About 6 in 10 want more control over how AI is used in their lives → backs **S2**.
+  - Under 30s are *more* pessimistic about creative thinking (61 % "worse") and relationships (58 %) than 65+ (about 4 in 10) → **qualifies S3**: young people feel more agency, but are not more optimistic about everything.
+- **NORC, July 2025** (AmeriSpeak AI Adoption Report):
+  - 51 % of Americans don't use AI at all for personal activities, only 14 % use it daily; 58 % of employed people never use it at work.
+  - Nearly two-thirds of people 60+ report no personal use.
+  - → Our primary group (weekly users, R6) is a **minority** of the US public. The secondary group (R7, rare users) is the majority, especially among older people. Don't assume the visitor uses AI.
+- **Pew, Apr 2025** (n = 5,410 US adults + 1,013 AI experts, Aug–Oct 2024):
+  - Public: 51 % more concerned than excited; experts: 15 %. Public 11 % more excited; experts 47 %.
+  - **64 %** of the public expect fewer jobs over the next 20 years, and 56 % are extremely or very concerned about job loss → backs P2's job worry.
+  - About 6 in 10 worry regulation will be too lax, and 62 % have little or no confidence the government will regulate AI effectively → backs **S2** (feeling powerless).
+  - → The gap between the public and experts is a possible extra layer ("the people building it feel very differently") [A: not in our dataset; label as an outside source if used].
+
+## Insights (hypothesis → result)
+- **S1 · Real vs. fake is the shared experience (H1 ✅).** All three told a concrete story without hesitating (P1 TikTok video, P3 Pope picture), across ages.
+- **S2 · "Worried but powerless" holds, but it's more "resigned" than "scared" (H2 ✅ with nuance).**
+  P1: "you can't really not use it"; P3: "nobody asks us". Powerlessness came up more strongly than fear.
+- **S3 · Agency differs by age (H3 ✅).** P1/P2 describe their own choices about when not to use AI. P3 describes AI happening *to* them.
+- **S4 · Swiss users need a bridge to US data (H4 ✅).** Nobody looks at surveys; sources are TikTok, friends, SRF.
+- **S5 · Success = being able to talk about it, or seeing it differently (H5 ✅).** P1: "say something smart at dinner"; P2: "something that changes how I see it".
+- **S6 · NEW — mixed feelings.** P2 is positive (time saved) *and* worried (job, pressure) at once. P1 is neither, just "used to it".
+- **S7 · NEW — worry is hidden.** "Nobody really says they're scared" (P2). People don't know that others feel the same way.
+- **S8 · NEW (desk research) — most people don't use AI much.** NORC: 51 % no personal use, nearly two-thirds of 60+ none. The piece must work for non-users and can't assume AI experience.
+
+## Sources
+- Kennedy, B., Yam, E., Kikuchi, E., Pula, I., & Fuentes, J. (2025, September 17). *How Americans View AI and Its Impact on People and Society.* Pew Research Center. https://www.pewresearch.org/science/2025/09/17/how-americans-view-ai-and-its-impact-on-people-and-society/
+- Yan, T. (2025, July 9). *What the Data Really Say About Americans' AI Use.* NORC at the University of Chicago. https://www.norc.org/research/library/what-data-really-say-about-americans-ai-use.html
+- McClain, C., Kennedy, B., Gottfried, J., Anderson, M., & Pasquini, G. (2025, April 3). *How the U.S. Public and AI Experts View Artificial Intelligence.* Pew Research Center. https://www.pewresearch.org/internet/2025/04/03/how-the-us-public-and-ai-experts-view-artificial-intelligence/
+
+## What surprised us
+- Nobody described themselves as simply "scared". The emotions were resignation (P1), mixed feelings (P2) and anger at not being asked (P3).
+  → The briefing's excited ↔ concerned axis is too simple for how people talk.
+- P3 cared more about *not being asked* than about the technology itself. → `ai_agency` ("can society still shape it?") may matter more than `ai_sentiment`.
+- Worry is hidden behind jokes (P2). → "You're not alone" is a real need, not just a nice framing.
+
+## What follows (each insight → a consequence in the concept)
+| Insight | Consequence in `concept.md` |
+|---|---|
+| S1 | Opening hook "Real or AI?" for both target groups (§4 step 1) |
+| S2 | Key message centred on "it's coming anyway" (§3) |
+| S3 | Compare by age, not party (§4 step 3, §5) |
+| S4 | The visitor answers first; every number says "US adults" (§4 step 2, §6) |
+| S5 | Success metric: the visitor retells the message in their own words (§7) |
+| S6 | "None of these" stays a full answer, and the close mentions that many people feel both (§4 step 2) |
+| S7 | The reveal "you're in the majority" in step 3 is a core moment, not a detail (§4 step 3) |
+| S8 | The hook "Real or AI?" needs no AI experience; no step assumes the visitor uses AI (§4) |
+| P3 Q9 ("if I need to click a lot I'll stop") | The click-nothing autoplay path is required (§4) |
+
+</script>
+<script type="text/markdown" id="md-concept">
+# Concept — v1 (12.10.2026)
+
+**Working title:** *Worried, but it's coming anyway*
+
+## 1 · Starting point (three sentences)
+- Two in three Americans are concerned about AI, and just as many think it is inevitable. That share has barely moved since June. (R17, R18)
+- Interactive Things builds the platform that shows *all* of this data, so what's missing is a way in for people who would never open a dashboard. (R1, R8, R20)
+- Our users are young Swiss adults who use AI every week but haven't sorted out what they think about it. They don't need more numbers. They need to know whether their feeling is "normal". (R6, R9)
+
+## 2 · Target group and their task
+- **Who:** students and young professionals in Switzerland, 20–35, weekly AI users, opinion not settled. (R6)
+- **Their task:** "Find out whether how I feel about AI is normal, and have one sentence I can use when the topic comes up." (R6, S5)
+- **Secondary:** 50+ rarely-users get the same path. The age comparison gives them their own reference point. (R7, S3)
+
+## 3 · Key message (one sentence, no judgement about AI)
+> **Most people are worried about AI, and most of them think it's coming anyway. People under 35 are the most likely to think it can still be shaped.**
+- Why this message: it is the strongest tension in the data (R17, S2), and it stays true across all waves (R13, R18).
+- The second half is the "surprise" for our users (R10c, S3). **Check after every new wave** that the age gap is still bigger than the margin of error. (R12)
+
+## 4 · How it works (the path)
+Who leads: **alternating**. The author opens and closes, and the visitor acts in the middle.
+Why: the message lands even without interaction, and the visitor's own answer makes it relevant. (R10b, S4)
+1. **Hook, authored:** "Real or AI?" One image or quote. The visitor guesses, then sees "4 in 5 Americans say people around them struggle with exactly this." (S1)
+2. **You answer, visitor:** the survey's own sentiment question (excited ↔ concerned), with "none of these" as an option. The answer is not stored. "None of these" counts as a full answer, because people often feel both. (R11, R12, R15, S6)
+3. **You vs. them, visitor:** your answer next to the US distribution, then by age group. Party and race are available behind a toggle but not shown by default. The core moment: "you're not alone, most people feel this". (R9, R14, S3, S4, S7)
+4. **The turn, authored:** the second question ("can society still shape it, or is it inevitable?"). The visitor answers, then sees that most of the worried also say "inevitable", but the young less so. (R17, S2, S3)
+5. **Close, authored:** the key message as one sentence to take home, plus the note "US data, latest wave, updated every two weeks". (R13, S5)
+- **If someone clicks nothing:** steps 1, 4 and 5 still play as an animatic with the total numbers. The core message gets through. ("If I need to click a lot I'll stop" — P3) (R2, R10b)
+
+## 5 · Data basis
+- **Used:**
+  - `ai_sentiment` and `ai_agency`: the backbone
+  - `ai_community_impact` → "real vs fake": the hook
+  - subgroups: total + 4 age bands (party and race only behind the toggle)
+  (R16, R17, R14)
+- **Latest wave only.** Numbers are read from the CSV at build time. Pilot wave excluded. Text uses rounded phrasing generated from the numbers ("two in three"). (R12, R13)
+- **Visible uncertainty:** "none / not sure / no answer" are shown as their own band. Gaps under ~5 pts between subgroups are not shown as differences. (R12)
+- **Not used:** trends over waves (no real movement, R18), `ai_family_impact`, `ai_regulation`, `ai_risks` (R20, focus).
+
+## 6 · Design guard rails
+- Neutral colours for excited vs. concerned. No red = bad / green = good. (R11)
+- The visitor's own answer is shown as one dot among many, not as a "score". (R11) [A: we assume "people like you" without party labels still feels personal → test in W48]
+- Every number has "US adults, [wave date]" next to it. Nothing suggests these are Swiss opinions. (R9, R13)
+- Works on a phone in portrait first, then on an exhibition screen. (R15) [A: web-first until O1 is answered]
+
+## 7 · How we know it worked (goal → signal → metric, W48 user test, 5 people from R6)
+- Find your place → they point to their own age group and say "more / less worried than average" → **≥ 4 of 5** without help. (R10a)
+- Understand the tension → they retell the key message in their own words → **≥ 3 of 5**. (R10b, S2, S5)
+- Surprise → they name the age gap on "can be shaped" (or another real difference) as unexpected → **≥ 3 of 5**. (R10c, S3)
+- Swap these for the criteria from `../W40_interviews/criteria.md` once the interviews exist.
+
+## 8 · Scope of the prototype
+- **Built:** an interactive web prototype (HTML + D3/Plotly or Figma) with the 5 steps, real data from the latest wave, and a click-nothing autoplay. (R2, R15)
+- **Only described:**
+  - exhibition variant: visitors stand on a floor scale "excited ↔ concerned" and the distribution is projected around them [A: fits our immersive-tech angle, depends on O1]
+  - automatic update when a new wave arrives (R13, O3)
+- **Not built:** dashboard, all questions, accounts, saving answers. (R20)
+
+## 9 · Risks and open questions
+- **The interviews are a draft fill-in.** If the real notes contradict S1 (hook), S3 (age axis) or S4 (bridge), steps 1 and 3 change.
+- **Small subgroup samples:** in the latest wave, 18–34 has only n = 203 (65+: 340, Black non-Hispanic: 122, from `data.json`). That means roughly ±7 pts or more per group.
+  The age gap on "can be shaped" (~19 pts) holds, but smaller gaps may not. → Re-check every wave. (R12)
+- **The message could flip:** if a future wave closes the age gap, the second half of the key message disappears. → The first half stands on its own. (R13)
+- **Asking the visitor's opinion can feel like a test.** → "None of these" option, nothing is stored, no right answer. (R11)
+- **US-only data for a Swiss audience (O4).** If the client wants a US audience, step 6 guard rails and the hook change.
+- **Open:** O1 (web vs exhibition), O2 (branding), O3 (new waves) → see rebriefing.
+
+## Abstraction ladder
+- ↑ Why? → So people can discuss AI based on what others actually think, not on headlines.
+- ↑ Why? → So that someone worried about AI knows they're in the majority, and that "inevitable" is a belief, not a fact.
+- **Problem statement:** *We show people where their feeling about AI stands, and that worry and resignation usually come together.*
+- ↓ How? → The visitor answers the two survey questions themselves and sees their answer inside the US distribution, by age.
+- ↓ How? → One screen per question: a dot field of 1,000 people, the visitor's dot highlighted, and the "inevitable" answer re-colours the same dots.
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script>
+const doc = document.getElementById('doc');
+const buttons = [...document.querySelectorAll('nav button')];
+function show(key, push) {
+  if (!document.getElementById('md-' + key)) key = buttons[0].dataset.tab;
+  doc.innerHTML = marked.parse(document.getElementById('md-' + key).textContent);
+  doc.querySelectorAll('table').forEach(t => { const w = document.createElement('div'); w.className = 'tbl'; t.replaceWith(w); w.appendChild(t); });
+  buttons.forEach(b => b.setAttribute('aria-selected', b.dataset.tab === key));
+  if (push) history.replaceState(null, '', '#' + key);
+}
+buttons.forEach(b => b.addEventListener('click', () => { show(b.dataset.tab, true); window.scrollTo({top: 0}); }));
+show(location.hash.slice(1), false);
+</script>
+</body>
+</html>
