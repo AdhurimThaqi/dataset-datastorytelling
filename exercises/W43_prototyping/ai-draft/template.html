@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Real or AI? · draft</title>
+<!-- AI DRAFT (W42 §9, optional step) of direction A. Built by build.py from the official CSV. Rough on purpose. -->
+<style>
+:root{--surface:#fcfcfb;--panel:#fff;--ink:#0b0b0b;--ink2:#52514e;--muted:#8a8984;--line:#e6e5e0;--soft:#f3f2ee;
+--vexc:#1c5cab;--sexc:#86b6ef;--scon:#ee9b72;--vcon:#b84a1d;--none:#bdbcb6;--na:#e2e1dc;--shape:#2a78d6;--inev:#eb6834}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--surface:#1a1a19;--panel:#222221;--ink:#fff;--ink2:#c3c2b7;--muted:#8f8e86;--line:#34332f;--soft:#2a2a28;
+--vexc:#86b6ef;--sexc:#256abf;--scon:#c4501f;--vcon:#f2a27e;--none:#6b6a65;--na:#45443f;--shape:#3987e5;--inev:#d95926}}
+:root[data-theme="dark"]{--surface:#1a1a19;--panel:#222221;--ink:#fff;--ink2:#c3c2b7;--muted:#8f8e86;--line:#34332f;--soft:#2a2a28;
+--vexc:#86b6ef;--sexc:#256abf;--scon:#c4501f;--vcon:#f2a27e;--none:#6b6a65;--na:#45443f;--shape:#3987e5;--inev:#d95926}
+*{box-sizing:border-box}
+body{margin:0;background:var(--surface);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:460px;margin:auto;padding:16px 16px 48px;min-height:100vh}
+.draft{font-size:12px;color:var(--muted);border:1px dashed var(--line);border-radius:8px;padding:6px 10px;margin-bottom:12px}
+.bar{display:flex;gap:4px;margin-bottom:16px}.bar i{flex:1;height:4px;border-radius:2px;background:var(--line)}.bar i.on{background:var(--ink2)}
+section{display:none}section.on{display:block;animation:in .35s ease}
+@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+h1{font-size:26px;line-height:1.2;margin:.2em 0 .4em}h2{font-size:19px;line-height:1.3;margin:.2em 0 .6em}
+p{margin:.4em 0}.small{font-size:13px;color:var(--ink2)}.src{font-size:12px;color:var(--muted);margin-top:10px}
+.hook{aspect-ratio:4/3;border:2px dashed var(--line);border-radius:12px;display:grid;place-items:center;text-align:center;padding:20px;color:var(--muted);background:var(--soft);margin:12px 0}
+.row{display:flex;gap:10px}.row button{flex:1}
+button{font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;cursor:pointer;text-align:left;width:100%;margin:5px 0}
+button:hover{border-color:var(--ink2)}button.pick{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+button.next{text-align:center;background:var(--ink);color:var(--surface);border-color:var(--ink);margin-top:14px}
+.big{font-size:64px;font-weight:700;line-height:1;margin:18px 0 6px}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}.tabs button{width:auto;margin:0;padding:6px 10px;font-size:14px;border-radius:999px}
+.tabs button[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.field{width:100%;height:auto;display:block;margin:6px 0}
+.legend{list-style:none;padding:0;margin:6px 0;font-size:13px;color:var(--ink2)}
+.legend li{display:flex;align-items:center;gap:8px;margin:2px 0}.legend b{margin-left:auto;color:var(--ink);font-weight:600}
+.sw{width:12px;height:12px;border-radius:3px;flex:none}
+.note{background:var(--soft);border-radius:10px;padding:10px 12px;margin:10px 0;font-size:15px}
+.ages{margin:10px 0}.ages div{display:grid;grid-template-columns:56px 1fr 72px;align-items:center;gap:8px;font-size:14px;margin:4px 0}
+.ages span.t{height:14px;background:var(--soft);border-radius:4px;position:relative;overflow:hidden}
+.ages span.t i{position:absolute;inset:0 auto 0 0;background:var(--shape);border-radius:0 4px 4px 0}
+#tip{position:fixed;pointer-events:none;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:6px 9px;font-size:13px;display:none;box-shadow:0 2px 8px #0002}
+details{margin-top:18px;font-size:13px}table{border-collapse:collapse;width:100%;font-size:12px}th,td{border-bottom:1px solid var(--line);padding:4px;text-align:right}th:first-child,td:first-child{text-align:left}
+.tbl{overflow-x:auto}
+</style>
+</head>
+<body>
+<main>
+<div class="draft">AI draft · direction A · W43 · not a finished design. Numbers: official “Americans on AI” CSV, latest wave.</div>
+<div class="bar" id="bar"></div>
+
+<section id="s1">
+  <h1>Real or AI?</h1>
+  <div class="hook">[image placeholder]<br>one real photo or one AI-made image, chosen in W44 (rights + neutral subject)</div>
+  <div class="row"><button data-guess>Real</button><button data-guess>AI</button></div>
+  <p class="small" id="auto1">Nothing to tap? The story plays on by itself in a few seconds.</p>
+</section>
+
+<section id="s2">
+  <p class="small">Whatever you guessed: many people can't tell.</p>
+  <div class="big" id="fakeBig"></div>
+  <p id="fakeTxt"></p>
+  <p class="small" id="fakeNs"></p>
+  <p class="src" data-src></p>
+  <button class="next" data-next>Next</button>
+</section>
+
+<section id="s3">
+  <p class="small">Now you. Same question, same answers as in the survey.</p>
+  <h2 id="q1"></h2>
+  <div id="opts1"></div>
+  <p class="small">Your answer stays on this page. Nothing is saved.</p>
+</section>
+
+<section id="s4">
+  <h2>You + 1,000 US adults</h2>
+  <div class="tabs" id="tabs"></div>
+  <button id="more" style="width:auto;font-size:13px;padding:4px 10px">Show more groups (gender, party, race)</button>
+  <svg class="field" id="f1" role="img" aria-label="1,000 dots by answer"></svg>
+  <ul class="legend" id="lg1"></ul>
+  <div class="note" id="you1"></div>
+  <p class="src" id="src4"></p>
+  <button class="next" data-next>Next</button>
+</section>
+
+<section id="s5">
+  <p class="small">A second question from the same survey.</p>
+  <h2 id="q2"></h2>
+  <div id="opts2"></div>
+  <div id="after2" hidden>
+    <svg class="field" id="f2" role="img" aria-label="1,000 dots by answer to the second question"></svg>
+    <ul class="legend" id="lg2"></ul>
+    <p class="small">These are not the same people as before: the survey publishes each question on its own, so the dots re-sort.</p>
+    <div class="ages" id="ages"></div>
+    <div class="note" id="gapTxt"></div>
+    <p class="src" data-src></p>
+    <button class="next" data-next>Next</button>
+  </div>
+</section>
+
+<section id="s6">
+  <h1 id="close"></h1>
+  <p class="small">US adults, not Swiss opinions. You are not part of this survey, and your answers were not saved.</p>
+  <p class="src" data-src></p>
+  <button class="next" id="again">Start again</button>
+  <details><summary>All numbers as a table</summary><div class="tbl" id="tbl"></div></details>
+</section>
+<div id="tip"></div>
+</main>
+
+<script>
+const D = __DATA__;
+const SENT = [["very_excited","Very excited","--vexc"],["somewhat_excited","Somewhat excited","--sexc"],
+  ["somewhat_concerned","Somewhat concerned","--scon"],["very_concerned","Very concerned","--vcon"],
+  ["none","None of these are close to how I feel","--none"],["no_answer","No answer","--na"]];
+const AG = [["can_shape","People like me can shape how much AI is part of our lives","--shape"],
+  ["inevitable","AI is coming into our lives whether we want it or not","--inev"],
+  ["neither","Neither of these are close to how I feel","--none"],["no_answer","No answer","--na"]];
+const AGES = ["age_18_34","age_35_49","age_50_64","age_65_plus"];
+const MORE = ["gender_women","gender_men","party_dem","party_rep","race_white_nh","race_black_nh","race_hispanic"];
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const fmt = v => (v > 0 && v < 0.05 ? "<0.1" : v.toFixed(1).replace(/\.0$/, "")) + " %";
+const per100 = v => Math.round(v) + " in 100";
+const steps = $$("section"); let cur = 0, auto = false, you1 = null, you2 = null, group = "total";
+
+// ---- dots: largest remainder so the 1,000 dots always add up to 1,000 ----
+function thousand(dist, codes) {
+  const raw = codes.map(([c]) => dist[c] * 10), base = raw.map(Math.floor);
+  let left = 1000 - base.reduce((a, b) => a + b, 0);
+  raw.map((v, i) => [v - base[i], i]).sort((a, b) => b[0] - a[0]).slice(0, Math.max(0, left)).forEach(([, i]) => base[i]++);
+  return base;
+}
+function field(svg, dist, codes, youCode) {
+  const counts = thousand(dist, codes), cols = 37, cell = 11, cells = [];
+  codes.forEach(([c], i) => { if (c === youCode) cells.push([c, i, true]); for (let k = 0; k < counts[i]; k++) cells.push([c, i, false]); });
+  const rows = Math.ceil(cells.length / cols);
+  svg.setAttribute("viewBox", `0 0 ${cols * cell} ${rows * cell}`);
+  svg.innerHTML = cells.map(([c, i, me], n) => {
+    const x = (n % cols) * cell + cell / 2, y = Math.floor(n / cols) * cell + cell / 2, col = `var(${codes[i][2]})`;
+    return me ? `<circle cx="${x}" cy="${y}" r="5" fill="${col}" stroke="var(--ink)" stroke-width="2.2" data-k="${i}" data-me="1"/>`
+              : `<circle cx="${x}" cy="${y}" r="4" fill="${col}" data-k="${i}"/>`;
+  }).join("");
+  svg.onpointermove = e => { const k = e.target.dataset && e.target.dataset.k; if (k === undefined) return tip();
+    tip(e, (e.target.dataset.me ? "<b>You</b> · " : "") + `${codes[k][1]}<br><b>${fmt(dist[codes[k][0]])}</b> · ${counts[k]} of 1,000 dots`); };
+  svg.onpointerleave = () => tip();
+  return counts;
+}
+function legend(ul, dist, codes, counts) {
+  ul.innerHTML = codes.map(([c, l, v], i) => `<li><span class="sw" style="background:var(${v})"></span>${l}<b>${fmt(dist[c])}</b></li>`).join("");
+}
+function tip(e, html) {
+  const t = $("#tip"); if (!e) { t.style.display = "none"; return; }
+  t.innerHTML = html; t.style.display = "block";
+  t.style.left = Math.min(e.clientX + 12, innerWidth - t.offsetWidth - 8) + "px"; t.style.top = (e.clientY + 14) + "px";
+}
+
+// ---- gap rule: only call it a difference if it beats the combined margin of error ----
+const real = (a, b, va, vb) => Math.abs(va - vb) > Math.hypot(D.groups[a].moe, D.groups[b].moe);
+const conc = g => D.groups[g].sentiment.somewhat_concerned + D.groups[g].sentiment.very_concerned;
+
+// ---- steps ----
+function go(i) {
+  cur = i; steps.forEach((s, k) => s.classList.toggle("on", k === i));
+  $("#bar").innerHTML = steps.map((_, k) => `<i class="${k <= i ? "on" : ""}"></i>`).join("");
+  if (i === 3) draw4();
+  if (i === 4 && auto) answer2(null);
+  // second sentence only while the age gap still beats the margin of error (re-checked every wave, R13)
+  if (i === 5) $("#close").textContent = "Most people are worried about AI, and most think it's coming anyway."
+    + (D.shapeGapReal ? " Younger adults are more likely than older adults to think it can still be shaped." : "");
+  scrollTo({top: 0});
+}
+function stopAuto() { auto = false; clearTimeout(timer); }
+let timer = setTimeout(() => { auto = true; play([1, 4, 5]); }, 8000);
+function play(seq) {
+  if (!auto || !seq.length) return; go(seq[0]);
+  timer = setTimeout(() => play(seq.slice(1)), seq[0] === 4 ? 9000 : 6000);
+}
+document.addEventListener("pointerdown", e => { if (e.target.closest("button")) stopAuto(); }, true);
+
+// 1 → 2
+$$("[data-guess]").forEach(b => b.onclick = () => go(1));
+const F = D.groups.total.fake;
+$("#fakeBig").textContent = D.fakeWords.replace("about ", "");
+$("#fakeTxt").innerHTML = `US adults say they <b>have seen</b> or are <b>starting to see</b> people in their local community “${D.fakeItem.replace("People are ", "")}”: ${fmt(F.have_seen + F.starting)}.`;
+$("#fakeNs").textContent = `Have seen ${fmt(F.have_seen)} · starting ${fmt(F.starting)} · expect soon ${fmt(F.expect_soon)} · don't expect ${fmt(F.dont_expect)} · not sure ${fmt(F.not_sure)} · no answer ${fmt(F.no_answer)}`;
+$$("[data-src]").forEach(p => p.textContent = D.waveLabel + " · weighted · source: Americans on AI (Athena Insights / NORC)");
+$$("[data-next]").forEach(b => b.onclick = () => go(cur + 1));
+
+// 3: answer sentiment
+$("#q1").textContent = D.sentimentQ;
+$("#opts1").innerHTML = SENT.slice(0, 5).map(([c, l]) => `<button data-a="${c}">${l}</button>`).join("");
+$$("#opts1 button").forEach(b => b.onclick = () => { you1 = b.dataset.a; go(3); });
+
+// 4: you vs America
+function tabs() {
+  const list = ["total", ...AGES, ...($("#more").dataset.on ? MORE : [])];
+  $("#tabs").innerHTML = list.map(g => `<button aria-pressed="${g === group}" data-g="${g}">${D.groups[g].label}</button>`).join("");
+  $$("#tabs button").forEach(b => b.onclick = () => { group = b.dataset.g; draw4(); });
+}
+$("#more").onclick = () => { $("#more").dataset.on = $("#more").dataset.on ? "" : "1"; $("#more").textContent = $("#more").dataset.on ? "Fewer groups" : "Show more groups (gender, party, race)"; tabs(); };
+function draw4() {
+  tabs(); const g = D.groups[group], counts = field($("#f1"), g.sentiment, SENT, you1); legend($("#lg1"), g.sentiment, SENT, counts);
+  const lab = SENT.find(s => s[0] === you1), same = g.sentiment[you1];
+  let t = you1 ? `In <b>${g.label}</b>, ${per100(same)} chose what you chose (“${lab[1]}”). ` : "";
+  if (group !== "total") {
+    const a = conc(group), b = conc("total");
+    t += real(group, "total", a, b) ? `Concerned: ${per100(a)}, ${a > b ? "more" : "less"} than all US adults (${per100(b)}).`
+                                    : `Concerned: ${per100(a)}, about the same as all US adults (${per100(b)}).`;
+  } else t += `Concerned: ${per100(conc("total"))}. Excited: ${per100(g.sentiment.very_excited + g.sentiment.somewhat_excited)}. Tap an age group.`;
+  $("#you1").innerHTML = t;
+  $("#src4").textContent = `${g.label}: n = ${g.n.toLocaleString("en")}, margin of error about ±${g.moe} pts · ${D.waveLabel.split(", n =")[0]}`;
+}
+
+// 5: the turn
+$("#q2").textContent = D.agencyQ;
+$("#opts2").innerHTML = AG.slice(0, 3).map(([c, l]) => `<button data-a="${c}">${l}</button>`).join("");
+$$("#opts2 button").forEach(b => b.onclick = () => answer2(b.dataset.a));
+function answer2(code) {
+  you2 = code; $$("#opts2 button").forEach(b => b.classList.toggle("pick", b.dataset.a === code));
+  $("#after2").hidden = false; const t = D.groups.total;
+  const counts = field($("#f2"), t.agency, AG, code); legend($("#lg2"), t.agency, AG, counts);
+  $("#ages").innerHTML = `<p class="small" style="margin:0 0 4px">“People like me can shape it”, by age</p>` + AGES.map(g => {
+    const v = D.groups[g].agency.can_shape;
+    return `<div><span>${D.groups[g].label}</span><span class="t"><i style="width:${v}%"></i></span><b>${per100(v)}</b></div>`; }).join("");
+  const y = D.groups.age_18_34.agency.can_shape, o = D.groups.age_65_plus.agency.can_shape, m = D.groups.age_35_49.agency.can_shape;
+  $("#gapTxt").innerHTML = (D.shapeGapReal ? `18–34: <b>${per100(y)}</b> vs 65+: <b>${per100(o)}</b>. This gap is bigger than the margin of error. ` : "The age groups are within the margin of error. ")
+    + (D.shapeGap1835 ? "" : `18–34 and 35–49 (${per100(m)}) are about the same.`)
+    + ` Across all US adults, ${D.inevWords} chose “coming whether we want it or not”.`;
+}
+
+// 6: close + table
+$("#again").onclick = () => { you1 = you2 = null; group = "total"; $("#after2").hidden = true; go(0); };
+const cols = [["Concerned", g => conc(g)], ["Excited", g => D.groups[g].sentiment.very_excited + D.groups[g].sentiment.somewhat_excited],
+  ["None", g => D.groups[g].sentiment.none], ["Can shape", g => D.groups[g].agency.can_shape], ["Inevitable", g => D.groups[g].agency.inevitable],
+  ["Neither", g => D.groups[g].agency.neither], ["Real/fake seen", g => D.groups[g].fake.have_seen + D.groups[g].fake.starting]];
+$("#tbl").innerHTML = `<table><tr><th>Group (n)</th>${cols.map(c => `<th>${c[0]}</th>`).join("")}</tr>` +
+  Object.keys(D.groups).map(g => `<tr><td>${D.groups[g].label} (${D.groups[g].n})</td>${cols.map(c => `<td>${c[1](g).toFixed(1)}</td>`).join("")}</tr>`).join("") + "</table>" +
+  `<p class="src">${D.waveLabel}. Percent of each group; "no answer" not shown in the table but included in the dots.</p>`;
+
+// review shortcuts for screenshots / user tests: ?step=1..6&a=<sentiment code>&b=<agency code>&g=<group>&theme=light|dark
+const q = new URLSearchParams(location.search);
+if (q.get("theme")) document.documentElement.dataset.theme = q.get("theme");
+if (q.get("step")) {
+  stopAuto(); you1 = q.get("a"); group = q.get("g") || "total";
+  go(+q.get("step") - 1); if (q.get("b")) answer2(q.get("b"));
+} else go(0);
+</script>
+</body>
+</html>
