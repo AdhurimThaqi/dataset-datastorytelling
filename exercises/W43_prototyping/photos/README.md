@@ -1,0 +1,3 @@
+Put photos of ALL hand sketches here, including the rejected ones.
+Name them like: A_frame1-6.jpg, B_frame1-6.jpg, C_frame1-6.jpg, rejected_01.jpg …
+Keep files small (phone photo, max ~2 MB each).

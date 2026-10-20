@@ -14,7 +14,7 @@ Groups of 2–3. One shared Google Doc per group with all lecturers (weekly log 
 |---|---|---|
 | W40 · 01.10 | Bring data-mapping sketches (W38 homework) | `W38_mapping/` |
 | **W41 · 08.10** | **User research, rebriefing and concept — in bullet points** | `W40_interviews/`, `W41_concept/` |
-| W43 · 22.10 | At least 3 different designs (hand sketches) | `W42_prototyping/` (create) |
+| W43 · 22.10 | At least 3 different designs (hand sketches) | `W43_prototyping/` |
 | W44 · 29.10 | Implementation plan / software architecture | `W44_feasibility/` (create) |
 | W48 · 26.11 | Results of the user test | `W48_user-test/` (create) |
 | W51 · 17.12 | Prototype + presentation to Interactive Things | `W51_final/` (create) |
