@@ -46,3 +46,4 @@ The official module description (I.BA_DAS_02.07.2026_EN.pdf) says: oral exam 7 m
 - `W39_data/` — the real project data, the course notebook, `explore_ai.py`
 - `W40_interviews/` — interview guide, 3 interview sheets, criteria
 - `W41_concept/` — rebriefing, user survey, concept (Milestone 1)
+- `W43_prototyping/` — three directions, wireframes, sketch guide, AI draft, comparison (Milestone 2)

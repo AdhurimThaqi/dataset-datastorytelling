@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Milestone 2 · Three designs</title>
+<style>
+:root{--surface:#fcfcfb;--panel:#fff;--ink:#0b0b0b;--ink2:#52514e;--muted:#8a8984;--line:#e6e5e0;--accent:#2a78d6;--soft:#f3f2ee}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--surface:#1a1a19;--panel:#222221;--ink:#fff;--ink2:#c3c2b7;--muted:#8f8e86;--line:#34332f;--accent:#3987e5;--soft:#2a2a28}}
+:root[data-theme="dark"]{--surface:#1a1a19;--panel:#222221;--ink:#fff;--ink2:#c3c2b7;--muted:#8f8e86;--line:#34332f;--accent:#3987e5;--soft:#2a2a28}
+body{margin:0;background:var(--surface);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:820px;margin:auto;padding:32px 16px 80px}
+a{color:var(--accent)}
+.kicker{color:var(--ink2);font-size:13px;letter-spacing:.06em;text-transform:uppercase;margin:0}
+h1{margin:.2em 0 .3em;line-height:1.15}
+.lede{color:var(--ink2);margin:0 0 24px}
+nav{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;position:sticky;top:0;background:var(--surface);padding:10px 0;z-index:1}
+nav button{text-align:left;font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer}
+nav button span{display:block;color:var(--ink2);font-size:13px;line-height:1.35;margin-top:2px}
+nav button[aria-selected="true"]{border-color:var(--accent);box-shadow:inset 0 -3px 0 var(--accent)}
+@media (max-width:600px){nav{grid-template-columns:1fr 1fr}nav button span{display:none}}
+article{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 24px 24px;margin-top:12px;overflow-wrap:anywhere}
+article h1{font-size:26px}article h2{font-size:19px;margin-top:1.8em;padding-top:.6em;border-top:1px solid var(--line)}
+article blockquote{margin:1em 0;padding:8px 14px;background:var(--soft);border-left:3px solid var(--accent);border-radius:4px;color:var(--ink2)}
+article blockquote p{margin:.3em 0}
+article img{width:100%;height:auto;border:1px solid var(--line);border-radius:6px;background:#fff}
+article pre{background:var(--soft);padding:12px;border-radius:8px;overflow-x:auto;font-size:13px;white-space:pre-wrap}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;margin:1em 0}
+th,td{border-bottom:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}
+th{color:var(--ink2);font-weight:600}
+code{background:var(--soft);padding:1px 5px;border-radius:4px;font-size:.9em}
+pre code{background:none;padding:0}
+li{margin:.2em 0}
+footer{color:var(--muted);font-size:13px;margin-top:24px}
+</style>
+</head>
+<body>
+<main>
+<p class="kicker"><a href="index.html">Data Storytelling</a> · Americans on AI · Milestone 2</p>
+<h1>Three different designs</h1>
+<p class="lede">Three directions that each start with a different first sketch: a phone screen, a floor plan, a dinner table. The milestone is the hand sketches; the wireframes here are digital references. Numbers: latest wave, 10–14 Sep 2026, n = 1,083.</p>
+<nav role="tablist">
+<button role="tab" data-tab="directions"><b>1. Directions</b><span>Three sentences + A, B, C</span></button>
+<button role="tab" data-tab="wireframes"><b>2. Wireframes</b><span>6 frames per direction</span></button>
+<button role="tab" data-tab="compare"><b>3. Comparison</b><span>Criteria, feasibility, recommendation</span></button>
+<button role="tab" data-tab="ai"><b>4. AI draft</b><span>Prompt + three checks</span></button>
+</nav>
+<article id="doc" aria-live="polite"></article>
+<footer>Source files: <code>exercises/W43_prototyping/</code> · rebuild with <code>python build_page.py</code></footer>
+</main>
+<script type="text/markdown" id="md-directions">
+# Three sentences before we sketch (W42 §6)
+
+Taken from `../W41_concept/concept.md`, `../W41_concept/user-survey.md` and `../W40_interviews/`. No new claims.
+Numbers: latest NORC wave, 10–14 Sep 2026, n = 1,083 (run `python data_cut.py`).
+
+**The data shows …**
+about 2 in 3 Americans are concerned about AI (68.8 %, `ai_sentiment`), and about 2 in 3 say
+"AI is coming into our lives whether we want it or not" (67.5 %, `ai_agency`). Only 17.4 % chose
+"people like me can shape how much AI is part of our lives". Among 18–34 it is 26.7 %, among 65+ 8.1 %.
+
+**People told us …**
+"Nobody asks us if we want that." (interview 03, 50+, about AI in the news)
+
+**Our question: How might we …?**
+How might we let young adults find out whether their feeling about AI is "normal", and show them
+that being worried and thinking "it's coming anyway" are both majority views?
+
+---
+
+- Check from the script: read the three lines to someone from another group. If they can't retell the question, sharpen it. *(to do in class)*
+- Careful with the wording: the data has **no crosstab** between the two questions. We can say "2 in 3 are worried *and* 2 in 3 say it's coming",
+  not "the worried are the ones who say it's coming". The minimum overlap is 36.3 % of all adults, which is 52.8 % of the concerned.
+  That technically supports "most of the worried", but only as a lower bound. → Keep the sentence about two separate majorities.
+
+
+---
+
+# Three directions — v1 (20.10.2026)
+
+Milestone 2 (W43, 22.10): "at least three different designs, as hand sketches".
+Test from the W42 script: **would each one start with a different first sketch?**
+- **A** starts with a phone screen.
+- **B** starts with a floor plan seen from above.
+- **C** starts with a table and chairs.
+→ Three different first sketches, not three versions of one chart.
+
+Success criteria (from `../W40_interviews/criteria.md`), used below as **C1–C3, ★**:
+- **C1:** say whether "people like them" are more or less worried than average
+- **C2:** find a moment that matches their own experience with AI
+- **C3:** repeat the main finding in their own words
+- **★ (surprise):** notice that younger people feel more able to shape AI than older people
+
+All numbers below come from the latest NORC wave (10–14 Sep 2026, n = 1,083, ±4.1 pts). The pilot wave is excluded.
+To reproduce them, run `python data_cut.py`.
+Subgroup margins of error are estimated: 18–34 ±9.4, 35–49 ±8.1, 50–64 ±8.2, 65+ ±7.2 pts [A: same design effect as the full sample].
+
+---
+
+## A · "Real or AI?" — web flow (our concept v1)
+Wireframe: `wireframes/A.svg`
+
+- **Context → format:** web, phone in portrait first → **interactive prototype**.
+- **The path:**
+  1. guess real or AI
+  2. reveal: about 4 in 5 see people struggling with real vs. fake
+  3. answer the sentiment question yourself
+  4. your dot among 1,000 US dots, then by age
+  5. the turn: second question, "inevitable"
+  6. one sentence to take home
+- **Data cut:**
+  - `ai_community_impact`, item "struggling to tell what's real from what's fake": have seen 57.1 + starting 24.4 = 81.5 %; not sure 6.9 %
+  - `ai_sentiment`: excited 21.4, concerned 68.8, none 9.1, no answer 0.7 %
+  - `ai_agency`: can shape 17.4, inevitable 67.5, neither 14.0, no answer 1.0 %
+  - subgroups: total + 4 age bands; party/race only behind a toggle
+  - latest wave only
+- **Mapping rules:**
+  - one respondent share → dots out of 1,000 (1 dot ≈ 1 in 1,000)
+  - answer → position in the row (very excited → very concerned, then none, then no answer)
+  - answer category → grey value (no red/green)
+  - visitor → the one outlined dot
+  - age band → regrouping of the same dots
+  - 2nd question → the same dots re-sorted (not the same people)
+- **Who leads:** alternating. The author leads 1, 2, 5 and 6; the visitor leads 3 and 4.
+- **If someone clicks nothing:** after 8 s it autoplays 1 → 2 → 5 → 6 with total numbers only. The key message still gets through.
+- **Serves:**
+  - **C1** (strong: own dot + age)
+  - **C2** (strong: hook)
+  - **C3** (close sentence)
+  - **★** (step 5, 18–34: 26.7 % vs 65+: 8.1 % "can shape"; the gap of 18.5 pts is bigger than the combined margin of ±11.8)
+- **Risks:**
+  - It's the most "familiar" format, close to the Pew quiz (move 4). It may feel like a test.
+  - The hook image needs rights and has to be neutral. A real-vs-AI quiz can drift into "gotcha".
+  - The visitor answering can be mistaken for being *in* the data. → Label: "you are not part of this survey".
+- **What we'd reject:**
+  - scoring the guess (right/wrong)
+  - storing answers
+  - a trend line over waves (no real movement, R18)
+  - showing party by default (R14)
+
+## B · "Stand where you feel" — exhibition
+Wireframe: `wireframes/B.svg`
+
+- **Context → format:** exhibition, a floor projection plus two walls → **animatic** (the documented sequence of the room's states).
+- **The path:**
+  1. attract loop
+  2. step onto the excited ↔ concerned scale, and 1,000 dots form piles
+  3. "348 of 1,000 stand here with you"
+  4. the crowd splits into age lanes
+  5. the floor flips to "can shape ↔ coming anyway"
+  6. a room next to a country
+- **Data cut:**
+  - `ai_sentiment`, 6 answer codes as dots per 1,000: very excited 47, somewhat excited 167, somewhat concerned 348, very concerned 339, none 91, no answer 7
+  - `ai_agency`: can shape 174, inevitable 675, neither 140, no answer 10
+  - 4 age bands for the lanes. Concerned per 100: 18–34: 61 · 35–49: 66 · 50–64: 74 · 65+: 76
+- **Mapping rules:**
+  - answer → floor position (the scale in the original order)
+  - share → pile size (dots per 1,000)
+  - visitor's body → a ring of light
+  - "none of these" → a separate zone **of the same size**
+  - age → lane
+  - 2nd question → the floor flips and the dots re-sort (no crosstab, so no dot "moves with" a person)
+  - visitors' own positions → a tally on a **separate** wall, never merged into the US dots (brief §05)
+- **Who leads:** the audience leads with their body, inside an authored loop that the author runs.
+- **What a non-participant gets:** a passer-by who never steps on still sees the loop 1 → 2 → 4 → 5 with the US numbers.
+  People in company can talk about each other's spots.
+- **Serves:**
+  - **C1** (strong, physical: "I stand here")
+  - **★** (lanes + flip)
+  - **C3** (medium: the message has to be written on the wall)
+  - **C2** (weak: there's no real-vs-fake moment yet → could be added as a wall text at the entrance)
+- **Risks:**
+  - Standing on "very concerned" in public can feel exposing. → Several spots at once, "none of these" has equal size, nothing recorded.
+  - Hardware: projector + tracking (depth camera) is hard to test by W48. A paper floor + a moderator is enough for the user test.
+  - The room tally might be read as data. → "not representative" label, reset daily.
+  - The format is exhibition-only, while O1 (web vs. exhibition) is still open.
+- **What we'd reject:**
+  - counting visitors into the US numbers
+  - photos or names
+  - a leaderboard of spots
+  - fake "movement" of the same dots between the two questions
+
+## C · "Dinner table" — branched animatic
+Wireframe: `wireframes/C.svg`
+
+- **Context → format:** an exhibition screen at a real table (or a web video), with one choice → **branched animatic**.
+- **The path:**
+  1. the table: four diners, one per age band, plus an empty chair for "you"
+  2. the shared moment: everyone has seen fakes
+  3. choice: sit next to 18–34 or 65+
+  4. that diner's numbers (4a / 4b)
+  5. the branches merge: the real gap, then the key message
+- **Data cut:**
+  - `ai_community_impact` real-fake "seen" per age band: 18–34: 81.9 · 35–49: 79.2 · 50–64: 84.1 · 65+: 81.0 % (no real gap, so it's the shared moment)
+  - `ai_sentiment` + `ai_agency` for 18–34 (n = 203) and 65+ (n = 340):
+    - concerned: 60.6 vs 76.4
+    - excited: 25.3 vs 16.3
+    - none: 12.3 vs 7.3
+    - can shape: 26.7 vs 8.1
+    - inevitable: 58.4 vs 73.6
+- **Mapping rules:**
+  - subgroup → one character (seat)
+  - the character's line → their group's numbers, said as "x in 100"
+  - the branch → a subgroup filter
+  - the highlighted seat → whom you follow
+  - a gap is only spoken as a difference if it's bigger than the combined margin of error. Otherwise the line is "about the same" (e.g. 18–34 vs 35–49 on "can shape": 26.7 vs 22.5, under the ±12.4 margin)
+- **Who leads:** the author, with one audience choice in the middle.
+- **What a non-chooser gets:** no choice for 8 s → it plays 18–34, then 65+, then the shared ending. The full message comes through.
+- **Serves:**
+  - **C2** (strong: the dinner table and the shared fake-video moment, interview 01 "say something smart at dinner")
+  - **C3** (strong: the message is literally said at a table, so it's easy to retell)
+  - **★** (the two diners turn to each other: 27 vs 8)
+  - **C1** (medium: you pick a seat, but you don't place yourself)
+- **Risks:**
+  - Characters can become stereotypes ("the old one is scared"). → Clearly fictional, every line is a group share, not a personal opinion. No faces, no names. Party/race are never characters (R14).
+  - Invented dialogue can be mistaken for real quotes. → Visible label "fictional characters, real survey numbers".
+  - It's the most writing-heavy direction (script + voice/timing).
+  - Only two branches stay within what the small subgroups can carry.
+- **What we'd reject:**
+  - a party-politics dinner (Dem vs. Rep as characters)
+  - using real interview quotes as character lines
+  - a "who's right?" ending
+
+---
+
+## Sketches we tried and did not take (add yours in class)
+- *Placeholder:* trend line of "concerned" over 6 waves. Rejected: the moves are inside the margin of error (65.6 → 71.9 → 68.8 %, R18).
+- *Placeholder:* map of the US. Rejected: no regional data in the CSV.
+- → Add every Design Studio sketch here (one line each: what it was + why not), and photograph it (`photos/`).
+
+</script>
+<script type="text/markdown" id="md-wireframes">
+# Wireframes
+
+> **Digital wireframes — reference for the hand sketches, not the milestone itself.** The milestone sketches are drawn by hand and photographed (see `sketch-guide.md`).
+
+## A · Real or AI? (web)
+
+[![A · Real or AI? (web)](exercises/W43_prototyping/wireframes/A.svg)](exercises/W43_prototyping/wireframes/A.svg)
+
+## B · Stand where you feel (exhibition)
+
+[![B · Stand where you feel (exhibition)](exercises/W43_prototyping/wireframes/B.svg)](exercises/W43_prototyping/wireframes/B.svg)
+
+## C · Dinner table (branched animatic)
+
+[![C · Dinner table (branched animatic)](exercises/W43_prototyping/wireframes/C.svg)](exercises/W43_prototyping/wireframes/C.svg)
+</script>
+<script type="text/markdown" id="md-compare">
+# Comparing A / B / C
+
+> **This is a recommendation for the group to decide.** It is not a decision. Discuss it in class on 22.10, then fill in the "Decision" line at the bottom.
+
+**Scale:** ●●● strong · ●● partly · ● weak.
+**Criteria:** from `../W40_interviews/criteria.md`.
+
+## Against our success criteria
+
+| Criterion | A · Real or AI? (web) | B · Stand where you feel (exhibition) | C · Dinner table (branched animatic) |
+|---|---|---|---|
+| **C1:** say whether "people like them" are more or less worried than average | ●●● own dot + age tabs, with an explicit "more / less / about the same" sentence | ●●● physical: "I stand here", then age lanes | ●● you pick a seat but never place yourself |
+| **C2:** find a moment that matches their own AI experience | ●●● the real-or-AI hook *is* the shared experience (81.5 %) | ● no real-vs-fake moment yet (it could be added at the entrance) | ●●● the fake video at the table and the dinner conversation |
+| **C3:** repeat the main finding in their own words | ●● one closing sentence | ●● wall text, easy to miss in a group | ●●● the message is literally said at a table |
+| **★ Surprise:** young people feel more able to shape AI | ●● step 5, bars by age | ●●● the younger lane lights up on the flip | ●●● two diners face each other: 27 vs 8 |
+| **Non-clicker / passer-by** | autoplay 1 → 2 → 5 → 6 | loop of the room states | default branch after 8 s |
+| **Guard rails** (neutral, no party default, uncertainty visible) | ✅ quiz feel = risk | ✅ exposure in public = risk | ⚠️ stereotype risk, labelled as fictional |
+
+## Feasibility for week 44 (implementation plan) and the W48 user test
+
+| | A | B | C |
+|---|---|---|---|
+| **Hand-in format** (brief §06) | interactive prototype | animatic | branched animatic |
+| **Tech** | 1 HTML page, plain JS/SVG; data as JSON generated from the CSV. **The AI draft already runs.** | projector + floor tracking (depth camera / pressure mats), or Wizard-of-Oz with paper. Animatic = video of the room states. | video/animation tool (Figma, After Effects, or HTML with 2 branches). Script, voice, timing. |
+| **New waves** (R13) | rebuild = run `build.py` | re-render the animatic | re-record the lines with new numbers |
+| **Effort until W51** | low–medium | high (hardware, space) | medium (writing-heavy) |
+| **Testable in W48 with 5 people from R6** | ✅ online or on a phone, alone | ⚠️ needs a room; paper floor + moderator possible | ✅ play the video, ask them to retell |
+| **Dependency on open points** | O1 (web vs. exhibition), O2 (name/branding) | O1 (must be exhibition) | O1 (either works), O2 |
+| **Biggest unknown** | Does answering feel like a test? | Do people dare to stand on "very concerned" in public? | Do invented characters feel like real voices / stereotypes? |
+
+## Recommendation (for the group to decide)
+
+- **Take A into W44 as the main direction.**
+  - It covers all three criteria + the surprise (no ● anywhere).
+  - It matches concept v1 and fits the web context.
+  - It can be tested in W48 without a room.
+  - A working draft with verified numbers already exists (`ai-draft/`).
+- **Borrow from C:**
+  - the "dinner table" framing for step 6, so it's easier to retell (C3 is A's weakest point)
+  - C's rule "only speak a gap if it beats the margin of error", which A already uses in the tab text
+- **Keep B as the "only described" exhibition variant** (concept §8). Its "348 of 1,000 stand here with you" line can be A's step-4 sentence.
+- **Reconsider if:**
+  - O1 comes back as "exhibition". → Then B (or C on a table screen) becomes the main direction, and A turns into its web companion.
+  - The hand-sketch critique on 22.10 shows people prefer C's retelling.
+- **Before W44:** settle the closing wording.
+  - "Under 35 are the *most* likely to think it can be shaped" (concept v1) isn't supported: 18–34 vs 35–49 is inside the margin.
+  - Use "younger adults are more likely than older adults" instead (see `ai-draft/checks.md` §2).
+
+**Decision (group, date):** _______________________
+
+</script>
+<script type="text/markdown" id="md-ai">
+# AI draft (optional W42 step)
+
+**[Open the draft of direction A →](exercises/W43_prototyping/ai-draft/index.html)** · made *after* the wireframes, every number injected from the CSV by `build.py`.
+
+# Prompt used for the AI draft (direction A)
+
+- **Optional W42 step (§9):** "use AI only after sketching". The draft was made **after** `wireframes/A.svg`. It uses the wireframe as "my sketch".
+  → When the hand sketch of A exists, re-run the prompt with the photo (`photos/A.jpg`) and compare.
+- **Tool:** Claude (Claude Code), 20.10.2026.
+- **Output:** `index.html`, generated by `build.py` so that every number is read from the CSV at build time.
+- **Template:** W42 script §9.2, filled in. Interview content is paraphrased, not quoted (check 3).
+
+---
+
+```text
+I am a design student. Please build a rough first prototype of a data story.
+
+MY IDEA
+The data shows that about 2 in 3 US adults are concerned about AI (ai_sentiment) and about 2 in 3 say
+"AI is coming into our lives whether we want it or not" (ai_agency); younger adults choose
+"people like me can shape how much AI is part of our lives" more often than older adults.
+People told us, in our own words: an older interviewee felt left out of the decision about AI;
+a younger one could not tell whether a video online was real.
+Our question: How might we let young adults find out whether their feeling about AI is "normal",
+and show them that being worried and thinking "it's coming anyway" are both majority views?
+This direction lets young adults in Switzerland (web, phone first) experience where their own answer
+sits among 1,000 US adults, by age group.
+
+MY SKETCH
+The image shows my sketch (wireframes/A.svg, 6 phone frames). Follow its layout and order:
+1 guess real or AI · 2 reveal "4 in 5 see people struggling with real vs fake" · 3 answer the sentiment
+question yourself · 4 your dot among 1,000 dots, then by age · 5 the agency question, dots re-sort,
+age comparison · 6 one closing sentence. If nobody clicks for 8 s, play 1 → 2 → 5 → 6 by itself.
+Do not turn it into a standard chart.
+
+MY DATA
+The file survey_all_waves_all_subgroups.csv has these columns:
+Subgroup: total, 4 age bands, gender, party, race/ethnicity · Wave: start date of the wave ·
+Question_ID: ai_sentiment, ai_agency, ai_community_impact, … · Full_Question: wording ·
+Dimension: item text for multi-item questions · Answer: answer code · Percentage: weighted %.
+Use only the latest wave (2026-09-10). The pilot wave 2026-06-12 is excluded.
+Only use numbers from this file. Do not invent, round or fill in numbers.
+Do not average the answers; show how they are spread. Keep "none of these", "neither", "not sure"
+and "no answer" visible as their own categories.
+
+MAPPING
+- one dot → about 1 in 1,000 US adults (Percentage × 10, sum kept at 1,000)
+- Answer → position in the dot field (very excited → very concerned → none → no answer)
+- Answer → colour: excited = blue (two steps), concerned = orange (two steps), none/neither/no answer = greys.
+  No red/green, no good/bad framing.
+- the visitor's answer → one extra outlined dot inside its answer block
+- Subgroup (age band) → the same dots re-coloured with that group's distribution
+- Question (ai_agency instead of ai_sentiment) → the same dots re-sorted; they are not the same people
+- Party and race only behind a toggle, never by default.
+
+EXAMPLE
+From our own course site (index.html / w41.html), use the colours of the surfaces, the fonts and the
+calm layout, not a chart type.
+
+RESULT
+One HTML file that opens in a browser. Rough is fine.
+
+AT THE END, LIST
+1. Every mapping you used.
+2. Every change you made to the data (filtering, grouping, averaging, rounding).
+3. Everything you had to guess.
+```
+
+---
+
+The answers to "AT THE END, LIST" are in `checks.md` (§2), together with the three W42 checks.
+
+
+---
+
+# Three checks before we trust the draft (W42 §9.3)
+
+**Draft:** `index.html` (direction A), built by `build.py` from `template.html` + the official CSV.
+- Open it in a browser: double-click `index.html`.
+- **Review shortcuts:** `index.html?step=4&a=somewhat_concerned&g=age_18_34`
+  - `step` = 1–6
+  - `a` = sentiment answer code
+  - `b` = agency answer code
+  - `g` = subgroup
+  - `theme` = light / dark
+
+## 1 · Check the numbers: three numbers, against the CSV
+
+Source: `exercises/W39_data/survey_all_waves_all_subgroups.csv`, line numbers as in the file (header = line 1).
+
+| # | Shown in the draft | CSV rows (Subgroup, Wave, Question_ID, Answer, Percentage) | Match? |
+|---|---|---|---|
+| 1 | Step 2: **"4 in 5"** … "81.5 %" have seen or are starting to see people struggling to tell real from fake | l. 8125 `total, 2026-09-10, ai_community_impact` (item "…what's real from what's fake"), `have_seen, 57.13` + l. 8126 `starting, 24.39` = **81.52** | ✅ 81.52 → "81.5 %"; "4 in 5" = 80 ± 3.5 pts (rule in `data_cut.words`) |
+| 2 | Step 5: **"AI is coming into our lives whether we want it or not 67.5 %"** | l. 7866 `total, 2026-09-10, ai_agency, inevitable, 67.51` | ✅ 67.51 → "67.5 %" |
+| 3 | Step 5: **"18–34: 27 in 100 vs 65+: 8 in 100"** ("can shape") | l. 7885 `age_18_34, 2026-09-10, ai_agency, can_shape, 26.66` · l. 7896 `age_65_plus, 2026-09-10, ai_agency, can_shape, 8.13` | ✅ 26.66 → 27, 8.13 → 8 |
+
+- **Extra check, by code:**
+  - every value embedded in `index.html` (12 subgroups × sentiment, agency and real/fake codes) was compared with the CSV by a script on 20.10.2026: **0 mismatches**
+  - a missing CSV row is shown as 0 (see §2)
+- To reproduce: `python ../data_cut.py` prints the same values.
+
+## 2 · Read the AI's list: filters, averages, roundings, guesses
+
+**Mappings used**
+- dot = about 1 in 1,000 US adults
+- answer → position in the dot field (scale order, then none / no answer)
+- excited → blue (very = darker), concerned → orange (very = darker), none / neither / no answer → greys. No red/green.
+- visitor → one extra dot with an outline, inside the block of their answer ("You + 1,000")
+- subgroup tab → the same 1,000 dots re-coloured with that group's distribution
+- second question → the dots re-sort (explicitly *not* the same people)
+- "can shape" by age → bar length 0–100 %
+
+**Filters**
+- latest NORC wave only (`2026-09-10`, field dates 10–14 Sep 2026, n = 1,083)
+- pilot wave `2026-06-12` (Prolific, different method) excluded
+- earlier NORC waves not shown
+
+**Grouping**
+- "excited" = very + somewhat excited
+- "concerned" = very + somewhat concerned
+- "seen" (real/fake) = have seen + starting to see
+- These nets are the same as in `data.json` (`excited_sum`, `concerned_sum`, `seen_sum`).
+
+**Averaging:** none. No averages across waves or across groups.
+
+**Rounding**
+- percentages shown with 1 decimal ("67.5 %"), or as "x in 100" (rounded to whole numbers)
+- the headline words ("4 in 5", "2 in 3") come from `data_cut.words()`: a fraction is used only if the value is within ±3.5 pts of it
+- dots: share × 10, rounded with the largest-remainder method so the dots always add up to 1,000. Example: 'none' 9.10 % → 91 dots.
+- values above 0 but below 0.05 % are shown as "<0.1 %"
+
+**Missing values**
+- 8 "no answer" rows are not in the CSV for the latest wave: 50–64 (sentiment, agency, real/fake), women (sentiment), Hispanic (sentiment, agency), white non-Hispanic (sentiment, real/fake)
+- they are shown as 0 % (the categories still add up to ~100)
+
+**Assumptions / guesses**
+1. **Subgroup margin of error is estimated, not published:** ±4.05 × √(1,083 / n), i.e. the same design effect as the full sample, at p = 0.5 (conservative).
+   - A gap counts as "real" only if it is bigger than √(MoE₁² + MoE₂²).
+   - Result: 18–34 vs 65+ on "can shape" = 18.5 pts > ±11.8 → real. 18–34 vs 35–49 = 4.1 pts < ±12.4 → "about the same".
+   - Tab text vs "all US adults" uses the same rule. 18–34 concerned 61 vs 69 → "about the same", because the test is strict: 18–34 is part of the total.
+2. **No crosstab between the two questions.** The closing sentence says "most are worried, and most think it's coming anyway" (two separate majorities).
+   It does **not** say "the worried are the ones who think it's inevitable". The lower bound of the overlap is 36.3 % of all adults.
+3. **Changed wording vs. concept v1:** the concept says "people under 35 are the *most* likely to think it can still be shaped".
+   - 18–34 (26.7) vs 35–49 (22.5) is inside the margin, so "most likely" isn't supported.
+   - The draft says "**younger adults are more likely than older adults**", and only while the 18–34 vs 65+ gap is real (checked again at every build).
+   - → The group should decide on the wording in `concept.md`.
+4. **Hook image:** placeholder. It isn't dataset content and gets chosen in W44.
+5. **Colours:** blue/orange from the course palette. Each arm was validated as an ordinal ramp (light and dark mode), with direct labels + a table view as relief for the light steps.
+   - [A] blue/orange reads as neutral → test in W48.
+
+## 3 · Protect people: no names, quotes or personal data
+
+- [x] **`prompt.md` contains no names, no ages, no study programme and no verbatim interview quotes.** The two interview points are rewritten in our own words ("an older interviewee felt left out of the decision about AI"; "a younger one could not tell whether a video online was real").
+- [x] **`index.html` / `template.html` contain no interview content at all.** Checked by search on 20.10.2026 for every quote keyword from `../W40_interviews/` (TikTok, Pope, dinner, boss, "Nobody asks", P1–P3): 0 hits.
+- [x] **The page stores nothing:** no cookies, no localStorage, no network requests (the page loads no external scripts). The visitor's answers live only in page memory and are gone on reload.
+- [x] **Only the official aggregated dataset** (weighted % per subgroup) went into the draft, no individual respondents.
+- Follow the HSLU rules on AI tools. The prompt and the result are saved here as research documentation (W42 §9.4).
+
+## Still to do (W42 §9.4: "it's still a sketch")
+- [ ] Make a second version with a different example (e.g. a different look borrowed from another reference) and compare. Note what doesn't work.
+- [ ] Re-run the prompt with the photo of the **hand sketch** of A instead of the wireframe.
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script>
+const doc = document.getElementById('doc');
+const buttons = [...document.querySelectorAll('nav button')];
+function show(key, push) {
+  if (!document.getElementById('md-' + key)) key = buttons[0].dataset.tab;
+  doc.innerHTML = marked.parse(document.getElementById('md-' + key).textContent);
+  doc.querySelectorAll('table').forEach(t => { const w = document.createElement('div'); w.className = 'tbl'; t.replaceWith(w); w.appendChild(t); });
+  buttons.forEach(b => b.setAttribute('aria-selected', b.dataset.tab === key));
+  if (push) history.replaceState(null, '', '#' + key);
+}
+buttons.forEach(b => b.addEventListener('click', () => { show(b.dataset.tab, true); window.scrollTo({top: 0}); }));
+show(location.hash.slice(1), false);
+</script>
+</body>
+</html>
