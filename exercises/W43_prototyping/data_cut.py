@@ -117,6 +117,8 @@ def wave_label(wave=LATEST):
 
 
 if __name__ == "__main__":
+    import sys
+    sys.stdout.reconfigure(encoding="utf-8")
     print(f"Latest NORC wave: {LATEST}  (n = {N_TOTAL}, MoE ±{MOE_TOTAL} pts)  pilot {PILOT} excluded")
     print(f"NORC waves: {', '.join(NORC_WAVES)}\n")
     print(f"{'subgroup':14} {'n':>5} {'MoE':>5} | {'excit':>6} {'conc':>6} {'none':>5} {'n/a':>5} | "
