@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Exercises & process</title>
+<style>
+:root{--surface:#fcfcfb;--panel:#fff;--ink:#0b0b0b;--ink2:#52514e;--muted:#8a8984;--line:#e6e5e0;--accent:#2a78d6;--soft:#f3f2ee}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--surface:#1a1a19;--panel:#222221;--ink:#fff;--ink2:#c3c2b7;--muted:#8f8e86;--line:#34332f;--accent:#3987e5;--soft:#2a2a28}}
+:root[data-theme="dark"]{--surface:#1a1a19;--panel:#222221;--ink:#fff;--ink2:#c3c2b7;--muted:#8f8e86;--line:#34332f;--accent:#3987e5;--soft:#2a2a28}
+body{margin:0;background:var(--surface);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:820px;margin:auto;padding:32px 16px 80px}
+a{color:var(--accent)}
+.kicker{color:var(--ink2);font-size:13px;letter-spacing:.06em;text-transform:uppercase;margin:0}
+h1{margin:.2em 0 .3em;line-height:1.15}
+.lede{color:var(--ink2);margin:0 0 24px}
+nav{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;position:sticky;top:0;background:var(--surface);padding:10px 0;z-index:1}
+nav button{text-align:left;font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer}
+nav button span{display:block;color:var(--ink2);font-size:13px;line-height:1.35;margin-top:2px}
+nav button[aria-selected="true"]{border-color:var(--accent);box-shadow:inset 0 -3px 0 var(--accent)}
+@media (max-width:600px){nav{grid-template-columns:1fr 1fr}nav button span{display:none}}
+article{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 24px 24px;margin-top:12px;overflow-wrap:anywhere}
+article h1{font-size:26px}article h2{font-size:19px;margin-top:1.8em;padding-top:.6em;border-top:1px solid var(--line)}
+article blockquote{margin:1em 0;padding:8px 14px;background:var(--soft);border-left:3px solid var(--accent);border-radius:4px;color:var(--ink2)}
+article blockquote p{margin:.3em 0}
+article img{width:100%;height:auto;border:1px solid var(--line);border-radius:6px;background:#fff}
+article pre{background:var(--soft);padding:12px;border-radius:8px;overflow-x:auto;font-size:13px;white-space:pre-wrap}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;margin:1em 0}
+th,td{border-bottom:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}
+th{color:var(--ink2);font-weight:600}
+code{background:var(--soft);padding:1px 5px;border-radius:4px;font-size:.9em}
+pre code{background:none;padding:0}
+li{margin:.2em 0}
+footer{color:var(--muted);font-size:13px;margin-top:24px}
+</style>
+</head>
+<body>
+<main>
+<p class="kicker"><a href="index.html">Data Storytelling</a> · Americans on AI · Exercises</p>
+<h1>Exercises & process</h1>
+<p class="lede">The weekly exercises behind the milestones, and how the project developed week by week. Solo project, HSLU I.BA_DAS, autumn 2026. AI use is named where it happened.</p>
+<nav role="tablist">
+<button role="tab" data-tab="log"><b>1. Process log</b><span>Week by week</span></button>
+<button role="tab" data-tab="w38"><b>2. W38 · Mapping</b><span>Six ways to draw one week</span></button>
+<button role="tab" data-tab="w39"><b>3. W39 · Data</b><span>Context, method, findings</span></button>
+<button role="tab" data-tab="w40"><b>4. W40 · Interviews</b><span>Criteria + three interviews</span></button>
+<button role="tab" data-tab="files"><b>5. Files</b><span>Data, code, sources</span></button>
+</nav>
+<article id="doc" aria-live="polite"></article>
+<footer>Source files: <code>exercises/</code> and <code>solutions/</code> · rebuild with <code>python exercises/build_page.py</code></footer>
+</main>
+<script type="text/markdown" id="md-log">
+# Process log — Adhurim Thaqi (solo project)
+
+Every week: what was easy, what was hard, what I'll do better next week, plus research (data, processing, sources).
+I work alone, so every contribution below is mine. AI tools I used (Claude) are named where I used them.
+
+## W38 · 17.09 — What are data visualisations?
+- **Easy:** Understanding the core idea that a visualisation is a deliberate, lossy compression: someone decides what gets left out.
+- **Hard:** The data-mapping homework. I chose the coffee-week dataset and used the "LLM route" the brief allows: Claude generated six mappings as SVGs (`solutions/W38_mapping/`). Two break conventions on purpose (time running right to left, a category mapped to size). I didn't draw my own on paper, so I missed the "every mark is a decision" experience.
+- **Better next week:** Draw at least a few sketches myself before using AI.
+- **Data / sources:** `exercises/W38_mapping/data/01_Coffee-Week.csv` · W38 script.
+
+## W39 · 24.09 — Data exploration
+- **Easy:** Loading the "Americans on AI" survey (7 waves, 12 subgroups, 6 questions) and getting first numbers: about 2 in 3 US adults are concerned about AI, and about 2 in 3 say it's coming anyway.
+- **Hard:** The methodology. The first wave (12 Jun) is a pilot from a different panel (Prolific, no "No answer" option). The big drop in "excited" after it is mostly a method change, not a change of mood. I also had to learn that differences under the ±3–4 pt margin of error aren't real differences.
+- **Better next week:** Read the method notes (`data.json`) *before* drawing conclusions.
+- **Data / sources:** master CSV + `data.json` from the course Drive · course notebook · `solutions/W39_data/analysis.py` and `findings.md` (written with Claude, numbers checked against the CSV) · Pew Research 2025 and The Hill (7 Jul 2026) for context.
+- **Repo:** set up the GitHub repo and Pages site; findings page `ai.html`.
+
+## W40 · 01.10 — Research and requirements analysis
+- **Easy:** Writing open "tell me about the last time…" questions; the funnel structure (broad → deep → success) made sense.
+- **Hard:** Technical side: Windows "filename too long" errors in git (OneDrive path + long folder names) forced me to restructure the repo. Content side: defining one target group instead of "everyone".
+- **Better next week:** Recruit interviewees earlier; plan the interviews instead of leaving them to the end.
+- **Data / sources:** W40 script, Human-Centred Design script · interview guide in `exercises/W41_concept/user-survey.md`.
+
+## W41 · 08.10 — Concept development (Milestone 1)
+- **Easy:** The rebriefing: putting the task in my own words, client vs. end users, guard rails (neutral towards AI, honest with uncertainty).
+- **Hard:** My concept and quotes were written before the real interviews existed; the Milestone 1 page still had placeholder quotes. Lesson: research first, concept second.
+- **Better next week:** Do the real interviews and replace every placeholder.
+- **Data / sources:** `exercises/W41_concept/` (rebriefing, user survey, concept v1, drafted with Claude) · Milestone 1 page `w41.html`.
+
+## W42 · 15.10 + W43 · 22.10 — Prototyping (Milestone 2)
+- **Easy:** Finding three directions that really start with a different first sketch: a phone screen (A, web), a room from above (B, exhibition), a dinner table (C, branched animatic).
+- **Hard:**
+  - I did it in the wrong order. I first made an AI-generated storyboard as a reference (`ai-reference/`), then redrew all three directions by hand (`photos/`). The W42 script says sketch first, AI second.
+  - Not overstating the data: there is no crosstab between the two questions, so "two majorities" is fine, but "the worried are the ones who say inevitable" is not. "Under 35 are the *most* likely to think it can be shaped" turned out to be inside the margin of error against 35–49, so I changed it to "more likely than older adults".
+  - In A, frames 3 and 6 still had the wrong content (frame 3 repeated the real/AI guess instead of the survey question; frame 6 said "Be more critical", which breaks my own neutrality rule). Corrected on paper.
+- **Interviews done:** three people (student 22, marketing assistant 29, retail worker 34). All three told a real-vs-fake story. The strongest new insight came from interview 2: comment sections don't tell you what "most people" think, and a representative survey does. That became my surprise criterion. Nobody aged 50+ yet.
+- **Better next week:** Sketch before touching AI; add one 50+ interview; decide web vs. exhibition so the W44 implementation plan has a clear target.
+- **Data / sources:** `exercises/W43_prototyping/` (directions, comparison, wireframes, AI draft of A with prompt + three checks, all with Claude) · hand sketches in `photos/` · interviews in `exercises/W40_interviews/interviews/`.
+
+</script>
+<script type="text/markdown" id="md-w38">
+# W38 · Data mapping (dataset: 01_Coffee-Week.csv)
+
+> **Made with AI:** these six mappings were generated with Claude (the LLM route the brief allows), not drawn by hand.
+
+## The six mappings
+| # | Dimension → channel | Convention broken? | Legible without legend? |
+|---|---|---|---|
+| 1 Timetable | time of day → x · day → y · volume → circle area · place → hue · enjoyment → opacity | no | mostly — calendar pattern is familiar; colours need the legend |
+| 2 Coffee clock | time → angle (24 h) · day → ring · volume → size · type → hue | partly (clock instead of axis) | yes for "when" (the empty night is obvious), no for exact times |
+| 3 Bars per day | total volume → bar length · each cup → segment (time order) · type → hue | no | yes — most familiar form, but only answers "how much" |
+| 4 Cups (Dear Data) | one glyph per coffee · volume → cup height · type → hue · enjoyment → steam lines · company → dashed outline | no, invented glyph | no — needs "how to read it", but carries 5 dimensions per mark |
+| 5 Broken time | time → x **reversed (right→left)** · day → y **Mon at bottom** · volume → **lightness** · enjoyment → size | **yes, 3×** | no — everyone reads left→right first and gets the days upside down |
+| 6 Broken category | reason → **size** (alphabetical) | **yes — the classic mistake** | it *looks* legible, but it lies: size invents a ranking ("Waking up" > "Break") that isn't in the data |
+
+Data types used (see exercise README): Day = temporal/ordinal · Time = temporal · Place, Type, Reason = nominal · Volume_ml = quantitative ·
+Company = binary · Enjoyment_1_5 = ordinal.
+Friction point avoided in #1–#4: volume and enjoyment are both "more is more", so they never share the same channel.
+
+## Answers to the W38 questions
+**Which mappings are immediately legible — clarity of mapping or familiarity of pattern?**
+#3 (bars) and #1 (timetable) are read fastest, but mainly because of *familiarity* (bar chart, calendar), not because the mapping is better.
+#2 works through a learned pattern from another domain (the clock). #4 is the clearest *mapping* (every channel carries meaning)
+but needs its rule explained — like Boris Müller's poetry poster.
+
+**What gets lost in the compression, and who decides?**
+We decided. #3 throws away time of day, place, reason and mood to answer one question. #1 drops reason and company.
+None of the graphics shows that something is missing — only #4 keeps almost everything, at the price of legibility.
+The "Note" column (free text) is lost everywhere, and that's where the human story is ("best cup of the week", "tasted burnt").
+
+**Where would interactivity help?**
+Hover on a mark to read the note · filter by reason ("only coffees for tiredness") · toggle between #1 and #3 (when vs how much).
+
+**What happened when breaking conventions (#5, #6)?**
+#5: the graphic becomes a puzzle — correct data, wrong first reading. Quantity as lightness is almost impossible to compare.
+#6: the most dangerous one, because it still looks clean. It shows the W38 rule: *size is a channel for quantities, not categories.*
+
+
+## The six images
+
+### 1 · timeline
+
+[![1_timeline](solutions/W38_mapping/sketches/1_timeline.svg)](solutions/W38_mapping/sketches/1_timeline.svg)
+
+### 2 · clock
+
+[![2_clock](solutions/W38_mapping/sketches/2_clock.svg)](solutions/W38_mapping/sketches/2_clock.svg)
+
+### 3 · bars
+
+[![3_bars](solutions/W38_mapping/sketches/3_bars.svg)](solutions/W38_mapping/sketches/3_bars.svg)
+
+### 4 · cups
+
+[![4_cups](solutions/W38_mapping/sketches/4_cups.svg)](solutions/W38_mapping/sketches/4_cups.svg)
+
+### 5 · broken time
+
+[![5_broken_time](solutions/W38_mapping/sketches/5_broken_time.svg)](solutions/W38_mapping/sketches/5_broken_time.svg)
+
+### 6 · broken category size
+
+[![6_broken_category_size](solutions/W38_mapping/sketches/6_broken_category_size.svg)](solutions/W38_mapping/sketches/6_broken_category_size.svg)
+</script>
+<script type="text/markdown" id="md-w39">
+# W39 · Data exploration
+
+**[See the dataset overview: Americans on AI →](ai.html)**
+
+# W39 · Assignment A — Context & method
+
+Sources: `data.json` (methodology_notes + per-wave notes), The Hill (7 Jul 2026), EA Forum launch post — links at the bottom.
+
+## Context
+**Who collects the data, and for whom?**
+Athena Insights, a newly founded US non-profit, publishes it as "Americans on AI" (americanson.ai).
+Fieldwork: NORC at the University of Chicago (AmeriSpeak panel); the pilot was run on Prolific.
+Audience: people working on AI policy, journalists, the public. Interactive Things is building the official platform.
+
+**Why is it collected / intended purpose?**
+To track US opinion on AI *continuously* instead of one-off polls: separate stable attitudes from short-term swings
+and see which outside events move opinion. Research lead Colin Bortner on the design: a deliberately "very neutral instrument"
+so that if AI affects people negatively, it shows up in the data.
+
+**Who could benefit?** Policymakers and regulators, journalists, AI companies (public trust), advocacy groups on both sides,
+and the public — "how do people like me feel?".
+Caution: the project comes out of the AI-policy community (launched on the Effective Altruism forum). That doesn't make the numbers
+wrong, but it's worth naming when we judge which questions were chosen.
+
+## Method
+**How was it collected?** Online/phone questionnaire, 6 fixed questions (20 items), repeated every ~2 weeks.
+- Pilot (12–18 Jun 2026): Prolific, **non-probability** online panel, n = 1,799, forced response (no "No answer"), party without leaners.
+- From 25 Jun 2026: NORC **AmeriSpeak, probability-based** household panel, mixed mode (~90–98 % web, rest phone),
+  n = 1,055–2,430 per wave, margin of error **±2.5 to ±4.2 points**. Weighted (raking) to Census benchmarks on age, sex, region,
+  race/ethnicity, education, plus 2024 presidential vote. Party is *not* a weighting target.
+
+**Who/what is included?** US adults 18+, nationwide, June–September 2026 (7 waves). Subgroups: gender, party (Dem/Rep), 4 age bands,
+3 race/ethnicity groups (from the first NORC wave on). Not included: Independents as their own group, under-18s, non-US, income,
+education or urban/rural breakdowns (weighted for, but not published).
+
+**How might the method influence the results?**
+1. **Pilot ≠ later waves.** Excitement drops from 40 % (pilot) to 24 % (first NORC wave). Different panel, forced answers,
+   different party coding → most of that jump is probably the **method change**, not a change of mood. Treat the pilot as a separate series.
+2. **Margins of error of ±3–4 points per wave** (larger for subgroups) → wave-to-wave moves of 2–5 points are mostly noise.
+3. **Question wording sets the frame:** "excited vs concerned" forces a two-pole view; "none of these" is the only escape.
+   Pew asks a different version ("more concerned / more excited / equal mix") and gets 51 % "more concerned" — so the 68 % here is not directly comparable.
+4. **Non-response counts:** "No answer" and "Not sure" are real categories (up to ~28 % on some items). Dropping them would inflate every other share.
+5. **Weighting to 2024 vote** keeps the party balance stable but means party composition shifts are partly smoothed away.
+
+## Sources
+- The Hill, 7 Jul 2026 — https://thehill.com/policy/technology/5955918-americans-ai-sentiment-poll/
+- EA Forum launch post — https://forum.effectivealtruism.org/posts/AnW5Whvkjhafmetns/americans-on-ai-a-new-tracker-of-us-public-opinion-on-ai
+- Pew Research Center (Apr 2025), *How the U.S. Public and AI Experts View AI* — https://www.pewresearch.org/internet/2025/04/03/how-the-us-public-and-ai-experts-view-artificial-intelligence/
+- Data + methodology: `exercises/W39_data/data.json`
+
+
+---
+
+# W39 · Assignments B + C — Findings
+
+Numbers from `analysis.py` (run it to reproduce). "NORC waves" = the 6 comparable waves 25 Jun – 10 Sep 2026 (pilot excluded).
+Latest wave = 10 Sep 2026 (n = 1,083, ±4.1 pts).
+
+## B · Notebook steps (done in `analysis.py` / course notebook)
+Loaded the master CSV (9,176 rows × 7 cols, 0 technical NaNs) · tidy already (one row = subgroup × wave × question × item × answer) ·
+7 waves, 12 subgroups, 6 questions / 20 items · "uncertain" answers checked (Q6 below) · charts in `output/`.
+
+## C · Questions → answers
+
+| # | Question | Answer | Surprise? |
+|---|---|---|---|
+| 1 | Has the mood changed over time? | **Basically no.** Across the NORC waves 66–72 % are concerned and 20–27 % excited. Moves are within the ±3–4 pt margin. The big drop from the pilot (40 % → 24 % excited) is most likely a method change. | Stability is the story, not change |
+| 2 | Which groups are most / least concerned? | Most: **65+ (76 %)**, Democrats (73 %), white non-Hispanic (72 %), women (72 %). Least: **Black non-Hispanic (58 %)**, 35–49 (63 %), men (65 %). Every single group is more concerned than excited. | Black Americans are the most optimistic group |
+| 3 | Dem vs Rep — do they differ? | On *feeling* only a little: Dem 73 % vs Rep 66 % concerned. On *what government should do* a lot: "government does too little" on the environment/data centres 59 % vs 36 % (+23), workers & jobs 55 vs 34 (+21), children 56 vs 39 (+17). | Worry is bipartisan, the remedy is partisan |
+| 4 | Are young people more enthusiastic? | Slightly: 18–34 → 24 % excited vs 65+ → 16 %. But the young also *see* more effects: time saved 54 % vs 34 %, pressure to do more 53 % vs 37 %. The old expect more of everything in the future: breakthroughs 74 % vs 59 %, AI smarter than humans 73 % vs 63 %. | Young = experience it now, old = imagine the future |
+| 5 | What do people already see happening? | **82 % already see people struggling to tell real from fake.** Losing connections 61 %, pressure 49 %, saving time 49 %, better health care only 18 %. | Fakes are *the* lived experience |
+| 6 | What does AI do to families? | Job security worse **75 %** (better 14 %), children's well-being worse 64 %, outlook worse 59 %, household finances worse 42 %. | Jobs + kids = the emotional core |
+| 7 | Can we still shape AI? | **68 % say AI is inevitable**, only 17 % think society can shape it. | Concerned *and* powerless — strongest tension in the data |
+| 8 | What about the next 20 years? | Over 70 % think each is already happening or likely: AI behaving unintentionally 78 %, smarter than humans 72 %, weapons of mass destruction 71 %, **and** medical breakthroughs 70 %. | People expect the miracle and the disaster at once |
+| 9 | Regulation? | Plurality says government does **too little**: children 50 %, environment 48 %, jobs 45 % — only ~25 % say too much. | |
+| 10 | How big is "don't know"? | Up to 29 % (better health care), 23 % (competitiveness). Uncertainty is highest where people have no direct experience. | |
+| 11 | Do AI events show up? | Possible signal: the 23–28 Jul wave has the **highest concern (72 %) and lowest excitement (20 %)**. It was fielded right after the reported first autonomous AI-agent cyberattack (21 Jul 2026, see Wikipedia "2026 in AI"). But +6 pts vs the previous wave is close to the margin of error, and the next waves stay ~69 %. → hypothesis only, needs a proper event timeline. | |
+
+## Insights for the concept
+1. **"Worried but powerless"** — 69 % concerned, 68 % "inevitable". That gap is a story with tension.
+2. **Real vs fake** is the experience almost everyone shares (82 %) — a strong point of connection for any visitor.
+3. **The split is about solutions, not feelings** — Democrats and Republicans worry similarly but disagree on regulation.
+4. **Stability over time** — the honest headline is "nothing changes", which is itself interesting in a fast-moving AI news cycle.
+5. **"People like you"** works with this data: 12 subgroups → visitor picks their group, sees where they stand vs. others (NYT jobless-rate pattern from W41).
+
+## Open questions
+- How do Independents feel? (not published as a group)
+- Does concern differ by education or income? (weighted for, not published)
+- Would a longer series show event effects? Build a timeline of AI news per wave.
+- What's in "none of these" (~10 %)?
+
+## Sources for thematic research
+- Pew Research Center (Apr 2025) — 51 % of US adults more concerned than excited, vs 15 % of AI experts; ~60 % worry regulation won't go far enough.
+  https://www.pewresearch.org/internet/2025/04/03/how-the-us-public-and-ai-experts-view-artificial-intelligence/
+- The Hill on the first NORC wave (65 % concerned, 24 % excited, ~70 % can't control AI in their lives) — https://thehill.com/policy/technology/5955918-americans-ai-sentiment-poll/
+- 2026 in artificial intelligence (event timeline, incl. 21 Jul agent cyberattack report) — https://en.wikipedia.org/wiki/2026_in_artificial_intelligence
+- NORC on AI and health information — https://www.norc.org/research/library/ai-changing-how-americans-access-health-information-many-remain-skeptical.html
+- To do: search the Swiss Media Database (SMD via HSLU library) for Swiss coverage of AI attitudes.
+
+</script>
+<script type="text/markdown" id="md-w40">
+# W40 · Interviews
+
+**[How the interviews fed the user survey (Milestone 1) →](w41.html#survey)**
+
+# Success criteria (revised after 3 interviews, October 2026)
+
+Form: **"Someone from [our target group] can [notice / understand / do something] — without help."**
+Rule: no quote, no criterion. Each one can be checked in the W48 user test.
+
+| # | Criterion | Source quotes (interview #) |
+|---|---|---|
+| 1 | Someone from our target group can say whether "people like them" (same age group) are more or less worried about AI than the average — without help. | "If it showed what other people my age think about AI" (01) · "compare my own views with those of people in different professions" (02) · "a simple overview showing what different age groups think" (03) |
+| 2 | Someone from our target group can find a moment in the story that matches their own experience with AI — without help. | "I wasn't completely sure, so I didn't share it." (01) · "I searched for more information before believing it." (02) · "I couldn't tell whether it was genuine, and I didn't know how to check it." (03) |
+| 3 | Someone from our target group can retell the main finding in their own words, without technical terms — without help. | "It should explain things simply, without using too many technical words." (03) · "I would want to see credible data" (02) |
+| ★ Surprise | Someone from our target group notices that these numbers come from a representative survey of US adults, unlike comment sections and polls — without help. | "The challenge is knowing whether the people commenting represent the wider population or just a very vocal group." (02) · "Reddit, YouTube comments, or Instagram polls" (01) · "I don't normally look for research studies." (03) |
+
+Guard rail confirmed by the interviews (not a criterion): "I wouldn't want something that only promotes AI or only focuses on its risks." (02) → R11, neutral towards AI.
+
+
+---
+
+# Interview 01 — Student, 22, business student
+
+- **Who:** P1, business student, 22. Uses AI several times a week for studying, writing and understanding difficult topics.
+- **Why this person:** primary target group (R6): weekly AI user, no technical background.
+- **Date:** October 2026 · **Interviewer:** Adhurim Thaqi (solo project, notes written up after the interview)
+
+## Answers (as given)
+
+**Broad openers**
+1. *Last time you came across AI?* — "Yesterday, I used ChatGPT to explain a topic from one of my lectures. I had read the slides but didn't really understand them, so I asked it to explain everything in simpler words and give me an example."
+2. *What do you use AI for in a normal week?* — "I mainly use ChatGPT for studying, summarizing long texts, improving emails, and brainstorming ideas for assignments. Usually, I start with Google, but when I need a clear explanation, I use AI."
+3. *A moment when AI surprised you?* — "I was surprised when it explained a difficult topic in a way that made it immediately understandable. But another time, it gave me an answer that sounded completely correct but contained false information. Since then, I check important facts myself."
+
+**Deeper**
+
+4. *Last time you weren't sure if something was real or AI?* — "I saw a video on Instagram that looked realistic, but something about the person's face and movements seemed strange. I checked the comments, and some people said it was AI-generated. I wasn't completely sure, so I didn't share it."
+5. *How has AI changed your studies?* — "It saves me time because I can ask questions whenever I get stuck. I feel less dependent on other people for explanations. At the same time, I sometimes worry that I'm learning less if I let AI do too much of the work."
+6. *Last AI news story that stuck with you?* — "I remember reading about AI taking over certain jobs. I talked about it with a friend because we were wondering what the job market would look like after graduation. It made me think that we need to learn how to work with AI rather than ignore it."
+7. *How do you talk about AI with friends or family?* — "My friends and I often share funny answers or useful prompts. We also discuss whether using AI for assignments counts as cheating. Some people think it's just another tool, while others think it gives students an unfair advantage."
+8. *Last time you decided not to use AI?* — "I had to write a personal reflection for a course. I decided to write it myself because I wanted it to sound like me. I only used a spellchecker afterwards."
+
+**Success**
+
+9. *How would you notice a website/exhibit about AI was worth your time?* — "If it showed what other people my age think about AI and included real examples, I would find it interesting. I would also like to see statistics about how people actually use AI, not just whether they like or dislike it."
+10. *Where do you go to find out what people in general think?* — "Usually Reddit, YouTube comments, or Instagram polls. Recently, I looked through Reddit discussions about AI in education to see whether other students had the same concerns as me."
+
+## Key quotes → what it means for us
+| Quote | Insight |
+|---|---|
+| Q4: "I wasn't completely sure, so I didn't share it." | **S1:** real vs. fake is a lived, everyday experience. |
+| Q5: "It saves me time … At the same time, I sometimes worry that I'm learning less" | **S6:** mixed feelings: benefit and worry at once. |
+| Q6: "we need to learn how to work with AI rather than ignore it" | **S2:** acceptance that AI is coming; adapting rather than resisting. |
+| Q8: "I wanted it to sound like me." | **S3:** frequent users draw their own lines about where *not* to use AI. |
+| Q9: "If it showed what other people my age think about AI" | **S5 → criterion 1:** comparing with peers is what makes it worth the time. |
+| Q10: "Reddit, YouTube comments, or Instagram polls" | **S4:** opinions come from social media, not from surveys. |
+
+**Surprise:** P1 wants to know how people *use* AI, not only whether they like it. Our dataset measures feelings, not use → we must say clearly what the data does and doesn't show.
+
+
+---
+
+# Interview 02 — Working professional, 29, marketing assistant
+
+- **Who:** P2, marketing assistant, 29. Uses AI at work but is concerned about reliability, privacy and the effect on jobs.
+- **Why this person:** primary target group (R6), the work side: AI on the job, time pressure.
+- **Date:** October 2026 · **Interviewer:** Adhurim Thaqi (solo project, notes written up after the interview)
+
+## Answers (as given)
+
+**Broad openers**
+1. *Last time you came across AI?* — "This morning, I used an AI feature to help me draft a social media caption for work. I gave it some information about a campaign, and it generated a few different versions. I picked one and edited it before using it."
+2. *What do you use AI for in a normal week?* — "I use it to brainstorm campaign ideas, improve written communication, summarize information, and sometimes translate short texts. It is mostly a productivity tool for me. I don't use it for everything because I need to make sure the final result fits our company."
+3. *A moment when AI surprised you?* — "I once gave it a very short description of a campaign, and it generated several creative ideas that I hadn't considered. I was surprised by how quickly it did that. However, some suggestions were unrealistic, so I still needed to use my own judgment."
+
+**Deeper**
+
+4. *Last time you weren't sure if something was real or AI?* — "I saw an image online that looked like a real photograph of a public figure. The lighting and details looked convincing, but I couldn't find the same image on a reliable news website. I searched for more information before believing it."
+5. *How has AI changed your work?* — "It has made some repetitive tasks faster, especially writing first drafts and brainstorming. That gives me more time for other work. But I also feel pressure to produce things faster because people expect AI to make everything easier."
+6. *Last AI news story that stuck with you?* — "I read an article about companies using AI to automate jobs. It made me wonder how many tasks in my own role could eventually be automated. I discussed it with a colleague, and we agreed that human creativity and understanding clients are still important."
+7. *How do you talk about AI with friends or family?* — "At work, we talk about productivity and whether AI-generated content meets our quality standards. With friends, we talk more about fake images, privacy, and jobs. Everyone seems to have a different level of trust in it."
+8. *Last time you decided not to use AI?* — "I was preparing a message for an unhappy client. I decided to write it myself because the situation needed empathy and a personal understanding of the relationship. I didn't want the message to sound generic or artificial."
+
+**Success**
+
+9. *How would you notice a website/exhibit about AI was worth your time?* — "I would want to see credible data, different perspectives, and practical examples. It would be interesting to compare my own views with those of people in different professions. I wouldn't want something that only promotes AI or only focuses on its risks."
+10. *Where do you go to find out what people in general think?* — "I usually read news websites and LinkedIn discussions. If I want more personal opinions, I look at Reddit. The challenge is knowing whether the people commenting represent the wider population or just a very vocal group."
+
+## Key quotes → what it means for us
+| Quote | Insight |
+|---|---|
+| Q4: "I couldn't find the same image on a reliable news website." | **S1:** real vs. fake again, here with active checking. |
+| Q5: "I also feel pressure to produce things faster because people expect AI to make everything easier." | **S6:** time saved *and* new pressure. Matches the survey item "pressured to do more, faster" (49 % of US adults see it). |
+| Q6: "how many tasks in my own role could eventually be automated" | Job worry, in line with `ai_family_impact` → job security. |
+| Q9: "compare my own views with those of people in different professions" | **S5 → criterion 1:** comparison with others. |
+| Q9: "I wouldn't want something that only promotes AI or only focuses on its risks." | Confirms guard rail **R11** (neutral towards AI). |
+| Q10: "knowing whether the people commenting represent the wider population or just a very vocal group" | **S7 (new) → surprise criterion:** a representative survey is exactly what comments can't offer. |
+
+**Surprise:** P2 named the problem of representativeness without being asked. That is the strongest argument *for* using survey data at all.
+
+
+---
+
+# Interview 03 — Retail worker, 52, rarely uses AI
+
+- **Who:** P3, man, 52, retail worker. Uses AI only occasionally, mostly meets it through social media and online services; uncertain about it.
+- **Why this person:** contrast case: rare user (the majority of US adults use AI rarely, see desk research S8). *Planned was someone 50+; not reached yet.*
+- **Date:** October 2026 · **Interviewer:** Adhurim Thaqi (solo project, notes written up after the interview)
+
+## Answers (as given)
+
+**Broad openers**
+1. *Last time you came across AI?* — "A few days ago, I saw a video on Facebook that looked very strange. Someone in the comments said it was made with AI. I hadn't thought much about it before, but it made me wonder how many videos online are fake."
+2. *What do you use AI for in a normal week?* — "I don't really use ChatGPT regularly. I mostly use my phone, Google, and social media. I probably interact with AI without realizing it, such as when an app recommends videos or when my phone suggests words while I'm typing."
+3. *A moment when AI surprised you?* — "I saw a video of a person speaking and moving in a way that looked completely real. Someone explained that it had been generated by AI. I was surprised because I thought I would be able to recognize something fake more easily."
+
+**Deeper**
+
+4. *Last time you weren't sure if something was real or AI?* — "It was a video shared by someone I know. I couldn't tell whether it was genuine, and I didn't know how to check it. I looked at the comments, but people were arguing about it, so I eventually moved on."
+5. *How has AI changed your work or everyday life?* — "I haven't noticed a major change in my daily work. Sometimes I hear that companies are introducing AI, and I wonder whether it will affect people's jobs. I don't know enough about it to say what will happen, but I would like to understand it better."
+6. *Last AI news story that stuck with you?* — "I remember hearing that AI can create realistic pictures and videos of people doing things they never actually did. I mentioned it to my brother because I thought it could cause problems if people believed everything they saw online."
+7. *How do you talk about AI with friends or family?* — "We usually talk about it when someone shares a strange video or an article. Some people think AI is impressive, while others think it will cause problems. Most of us don't really know how it works, so the conversation is usually based on what we have seen online."
+8. *Last time you decided not to use AI?* — "I needed information about a product recently, and I used Google instead of ChatGPT. I'm used to searching for websites and reading the information myself. I didn't really see a reason to use another tool for something simple."
+
+**Success**
+
+9. *How would you notice a website/exhibit about AI was worth your time?* — "I would understand AI better and know how to recognize fake videos or pictures. It should explain things simply, without using too many technical words. I would also like to know what AI can and cannot do."
+10. *Where do you go to find out what people in general think?* — "I usually look at Facebook comments, YouTube, or ask people I know. I don't normally look for research studies. It would be useful to see a simple overview showing what different age groups think and why."
+
+## Key quotes → what it means for us
+| Quote | Insight |
+|---|---|
+| Q3: "I thought I would be able to recognize something fake more easily." | **S1:** even a rare user meets fakes, and overestimated himself. |
+| Q4: "I couldn't tell whether it was genuine, and I didn't know how to check it." | **S3:** rare users lack the tools to check; AI happens *to* them. |
+| Q5: "I don't know enough about it to say what will happen" | **S2:** uncertainty rather than fear. |
+| Q7: "the conversation is usually based on what we have seen online" | **S4 / S7:** opinions come from what circulates online. |
+| Q9: "It should explain things simply, without using too many technical words." | **Criterion 3:** plain language, no statistics jargon. |
+| Q10: "a simple overview showing what different age groups think and why" | **Criterion 1:** comparison by age, said by a rare user without prompting. |
+
+**Surprise:** P3 most wants to learn *how to spot fakes*. Our dataset can show that most people struggle with it, but it can't teach detection → name this limit in the close.
+
+</script>
+<script type="text/markdown" id="md-files">
+# Files
+
+The source files behind this page and the milestones, on GitHub.
+
+| What | File |
+|---|---|
+| Survey data (all waves, all subgroups) | [`exercises/W39_data/survey_all_waves_all_subgroups.csv`](https://github.com/AdhurimThaqi/dataset-datastorytelling/blob/main/exercises/W39_data/survey_all_waves_all_subgroups.csv) |
+| Survey data with methodology notes | [`exercises/W39_data/data.json`](https://github.com/AdhurimThaqi/dataset-datastorytelling/blob/main/exercises/W39_data/data.json) |
+| Course notebook | [`exercises/W39_data/HSLU_Data_Storytelling_Analysis.ipynb`](https://github.com/AdhurimThaqi/dataset-datastorytelling/blob/main/exercises/W39_data/HSLU_Data_Storytelling_Analysis.ipynb) |
+| W39 analysis script | [`solutions/W39_data/analysis.py`](https://github.com/AdhurimThaqi/dataset-datastorytelling/blob/main/solutions/W39_data/analysis.py) |
+| W38 mapping script | [`solutions/W38_mapping/mappings.py`](https://github.com/AdhurimThaqi/dataset-datastorytelling/blob/main/solutions/W38_mapping/mappings.py) |
+| Interview guide | [`exercises/W40_interviews/interview-guide.md`](https://github.com/AdhurimThaqi/dataset-datastorytelling/blob/main/exercises/W40_interviews/interview-guide.md) |
+| Interviews 01–03 | [`exercises/W40_interviews/interviews`](https://github.com/AdhurimThaqi/dataset-datastorytelling/tree/main/exercises/W40_interviews/interviews) |
+| Milestone 1 sources (W41) | [`exercises/W41_concept`](https://github.com/AdhurimThaqi/dataset-datastorytelling/tree/main/exercises/W41_concept) |
+| Milestone 2 sources (W43) | [`exercises/W43_prototyping`](https://github.com/AdhurimThaqi/dataset-datastorytelling/tree/main/exercises/W43_prototyping) |
+| Process log | [`exercises/process-log.md`](https://github.com/AdhurimThaqi/dataset-datastorytelling/blob/main/exercises/process-log.md) |
+
+> **Course material:** the four W38 datasets (`exercises/W38_mapping/data/`) and the notebook `HSLU_Data_Storytelling_Analysis.ipynb` come from the lecturers, not from me.
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script>
+const doc = document.getElementById('doc');
+const buttons = [...document.querySelectorAll('nav button')];
+function show(key, push) {
+  if (!document.getElementById('md-' + key)) key = buttons[0].dataset.tab;
+  doc.innerHTML = marked.parse(document.getElementById('md-' + key).textContent);
+  doc.querySelectorAll('table').forEach(t => { const w = document.createElement('div'); w.className = 'tbl'; t.replaceWith(w); w.appendChild(t); });
+  buttons.forEach(b => b.setAttribute('aria-selected', b.dataset.tab === key));
+  if (push) history.replaceState(null, '', '#' + key);
+}
+buttons.forEach(b => b.addEventListener('click', () => { show(b.dataset.tab, true); window.scrollTo({top: 0}); }));
+show(location.hash.slice(1), false);
+</script>
+</body>
+</html>
