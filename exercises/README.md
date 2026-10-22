@@ -15,9 +15,11 @@ Groups of 2–3. One shared Google Doc per group with all lecturers (weekly log 
 | W40 · 01.10 | Bring data-mapping sketches (W38 homework) | `W38_mapping/` |
 | **W41 · 08.10** | **User research, rebriefing and concept — in bullet points** | `W40_interviews/`, `W41_concept/` |
 | W43 · 22.10 | At least 3 different designs (hand sketches) | `W43_prototyping/` |
-| W44 · 29.10 | Implementation plan / software architecture | `W44_feasibility/` (create) |
+| W44 · 29.10 (remote) | Implementation plan / software architecture · refine the concept with what the W43 test showed · 2–3 design references and what you borrow from each · the HTML prototype file and **all prompts** in the research documentation | `W44_plan/` (create) |
 | W48 · 26.11 | Results of the user test | `W48_user-test/` (create) |
 | W51 · 17.12 | Prototype + presentation to Interactive Things | `W51_final/` (create) |
+
+W43 slides (Gordan): https://ex.yugo.at/hslu/datastorytelling/W43_Slides.html — one aspect, one interaction, one test; prototype card; one HTML file built with an LLM.
 
 ## Schedule
 | Week | Date | Topic | Lecturer |
