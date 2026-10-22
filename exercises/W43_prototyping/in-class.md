@@ -64,6 +64,7 @@ ACCEPTANCE  1. Understood without our help
 **Built:** [prototype v1, "Real or AI?"](https://adhurimthaqi.github.io/dataset-datastorytelling/exercises/W43_prototyping/prototype/v1.html).
 Four valley pictures (2 AI, 2 real) → guess → "57 of 100" as 100 dots.
 **v2** (after the lecturer's test: "I like the time pressure, make it more obvious"): [open v2](https://adhurimthaqi.github.io/dataset-datastorytelling/exercises/W43_prototyping/prototype/v2.html), a visible 5-second countdown per picture; no answer in time counts as "not sure".
+**v3** (my review: end too cramped, time not obvious enough): [open v3](https://adhurimthaqi.github.io/dataset-datastorytelling/exercises/W43_prototyping/prototype/v3.html), a funny clock bar with a burning fuse, a 3-2-1 screen, and the end split into "Your result" → "Show me →" → "The number".
 All prompts are in [`prototype/prompts.md`](https://github.com/AdhurimThaqi/dataset-datastorytelling/blob/main/exercises/W43_prototyping/prototype/prompts.md) and the test script in [`prototype/test.md`](https://github.com/AdhurimThaqi/dataset-datastorytelling/blob/main/exercises/W43_prototyping/prototype/test.md).
 
 - Build **one HTML file** with an LLM: guardrails → experience (longest part) → one design reference → the data word for word.

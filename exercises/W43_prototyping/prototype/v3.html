@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Real or AI?</title>
+<!--
+  Prototype v3 · W43 Crazy 6's box 1 "Guess" · direction A "Real or AI?"
+  v2 = visible time pressure (lecturer feedback) · v3 = separate, playful timer + 3-2-1 + end split into two calmer screens
+  HSLU I.BA_DAS, Adhurim Thaqi (solo). Built with Claude (LLM), prompts in prompts.md.
+  One aspect: 57 of 100 Americans already see people around them struggling to tell real from fake.
+  Data: Americans on AI (Athena Insights / NORC), total, wave 10-14 Sep 2026, n = 1,083.
+  Review shortcuts: ?step=result · ?step=number · ?theme=dark / ?theme=light · ?limit=8 (seconds per picture)
+-->
+<style>
+:root{--surface:#fcfcfb;--panel:#fff;--ink:#0b0b0b;--ink2:#52514e;--muted:#8a8984;--line:#e6e5e0;--soft:#f3f2ee;
+--seen:#d9531e;--starting:#f2b393;--rest:#d7d6d0;--na:#ecebe6;--accent:#2a78d6;--hot:#d9531e;--late:#6e6d68}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--surface:#1a1a19;--panel:#222221;--ink:#fff;--ink2:#c3c2b7;--muted:#8f8e86;--line:#34332f;--soft:#2a2a28;
+--seen:#f07a45;--starting:#8a4a2c;--rest:#55544f;--na:#3a3936;--accent:#3987e5;--hot:#f07a45;--late:#8f8e86}}
+:root[data-theme="dark"]{--surface:#1a1a19;--panel:#222221;--ink:#fff;--ink2:#c3c2b7;--muted:#8f8e86;--line:#34332f;--soft:#2a2a28;
+--seen:#f07a45;--starting:#8a4a2c;--rest:#55544f;--na:#3a3936;--accent:#3987e5;--hot:#f07a45;--late:#8f8e86}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--surface);color:var(--ink);font:17px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:480px;margin:auto;padding:20px 16px 32px;min-height:100svh;display:flex;flex-direction:column}
+section{display:none;flex:1;flex-direction:column}
+section.on{display:flex;animation:in .35s ease}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+h1{font-size:36px;line-height:1.1;margin:.4em 0 .3em;letter-spacing:-.01em}
+h2{font-size:26px;line-height:1.2;margin:.2em 0 .4em}
+p{margin:.5em 0}
+.ink2{color:var(--ink2)}.small{font-size:14px;color:var(--ink2)}.tiny{font-size:12px;color:var(--muted)}
+.kicker{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0}
+button{font:inherit;cursor:pointer;border-radius:14px;border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:14px 18px;min-height:54px}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.primary{background:var(--ink);color:var(--surface);border-color:var(--ink);font-weight:700;width:100%}
+.spacer{flex:1;min-height:20px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px}
+
+/* intro */
+.rule{display:flex;gap:12px;align-items:center;margin-top:20px}
+.rule .clock{flex:none;width:58px;height:58px;border-radius:50%;background:var(--ink);color:var(--surface);display:flex;align-items:center;justify-content:center;font:800 26px/1 system-ui,sans-serif}
+.rule b{font-size:19px;display:block;line-height:1.25}
+
+/* 3-2-1 */
+#s-ready{align-items:center;justify-content:center;text-align:center}
+.count{font:900 160px/1 system-ui,sans-serif;letter-spacing:-.05em;margin:0}
+.count.pop{animation:pop .9s ease-out}
+@keyframes pop{0%{transform:scale(1.6);opacity:0}25%{opacity:1}100%{transform:scale(.9);opacity:.85}}
+
+/* guess */
+.progress{display:flex;gap:6px;margin:4px 0 10px}.progress i{flex:1;height:4px;border-radius:2px;background:var(--line)}.progress i.done{background:var(--ink)}
+.clockbar{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:16px;background:var(--soft);margin-bottom:10px;transition:background .3s,color .3s}
+.clockbar .num{flex:none;width:56px;height:56px;border-radius:50%;background:var(--ink);color:var(--surface);display:flex;align-items:center;justify-content:center;font:900 30px/1 system-ui,sans-serif;font-variant-numeric:tabular-nums}
+.clockbar .say{flex:1;font-weight:700;font-size:17px;line-height:1.25;min-height:2.5em;display:flex;align-items:center}
+.clockbar.hurry{background:var(--hot);color:#fff}
+.clockbar.hurry .num{background:#fff;color:var(--hot);animation:shake .25s linear infinite}
+.clockbar.done{background:var(--late);color:#fff}.clockbar.done .num{background:#fff;color:var(--late);animation:none}
+.clockbar.paused{opacity:.5}
+@keyframes shake{0%,100%{transform:rotate(0)}25%{transform:rotate(-8deg)}75%{transform:rotate(8deg)}}
+.fuse{position:relative;height:8px;border-radius:4px;background:var(--line);margin:0 0 12px}
+.fuse i{position:absolute;left:0;top:0;bottom:0;width:100%;border-radius:4px;background:var(--ink);transform-origin:left}
+.fuse b{position:absolute;top:50%;width:22px;height:22px;margin:-11px 0 0 -11px;font-size:18px;line-height:22px;text-align:center}
+.fuse.hurry i{background:var(--hot)}
+.pic{position:relative;border-radius:16px;overflow:hidden;background:var(--soft);aspect-ratio:4/3;border:1px solid var(--line)}
+.pic img{width:100%;height:100%;object-fit:cover;display:block;transition:filter .3s}
+.pic .err{position:absolute;inset:0;display:none;align-items:center;justify-content:center;text-align:center;padding:20px;color:var(--ink2);font-size:14px}
+.pic.broken .err{display:flex}
+.pic.timeout img{filter:grayscale(1) brightness(.55) blur(2px)}
+.pic .tout{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center;font:800 26px/1.15 system-ui,sans-serif;padding:16px}
+.pic .tout span{font-size:44px}
+.pic.timeout .tout{display:flex}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.choices button{font-size:20px;font-weight:800;letter-spacing:.04em}
+.choices button[disabled]{opacity:.4;cursor:default}
+.choices button.picked{opacity:1;border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.answer{margin-top:12px;padding:14px 16px;border-radius:14px;background:var(--soft);display:none}
+.answer.on{display:block;animation:in .3s ease}
+.answer b{font-size:18px}
+.answer .credit{font-size:12px;color:var(--muted);margin-top:6px}.answer .credit a{color:inherit}
+.next{margin-top:12px;display:none}.next.on{display:block}
+
+/* result */
+.score{font:900 84px/1 system-ui,sans-serif;letter-spacing:-.04em;margin:.1em 0 0}
+.score small{font-size:32px;color:var(--muted);font-weight:700}
+.thumbs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:22px 0 14px}
+.thumbs div{border-radius:14px;overflow:hidden;position:relative;aspect-ratio:4/3;background:var(--soft)}
+.thumbs img{width:100%;height:100%;object-fit:cover;display:block}
+.thumbs span{position:absolute;left:8px;top:8px;font-size:12px;font-weight:800;padding:4px 9px;border-radius:999px;background:rgba(255,255,255,.92);color:#0b0b0b}
+.thumbs span.wrong{background:#0b0b0b;color:#fff}
+.thumbs span.late{background:var(--late);color:#fff}
+.thumbs em{position:absolute;right:8px;bottom:8px;font-style:normal;font-size:12px;font-weight:700;color:#fff;background:rgba(0,0,0,.55);padding:3px 8px;border-radius:999px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 0}
+.chips span{font-size:14px;padding:6px 12px;border-radius:999px;background:var(--soft)}
+.bridge{font-size:19px;font-weight:600;line-height:1.35;margin:26px 0 18px}
+
+/* number */
+.big{font:900 112px/.9 system-ui,sans-serif;letter-spacing:-.05em;margin:.1em 0 .05em;color:var(--seen)}
+.big small{display:block;font-size:24px;letter-spacing:0;font-weight:700;color:var(--ink);margin-top:10px}
+.claim{font-size:19px;line-height:1.4;margin:.4em 0 0}
+.dots{display:grid;grid-template-columns:repeat(10,1fr);gap:8px;margin:30px auto 8px;width:100%;max-width:320px}
+.dots i{aspect-ratio:1;border-radius:50%;background:var(--na);transition:background .25s,transform .25s}
+.dots i.seen{background:var(--seen)}.dots i.starting{background:var(--starting)}.dots i.rest{background:var(--rest)}
+.dots i.pop{transform:scale(1.3)}
+.dotnote{text-align:center;font-size:13px;color:var(--muted);margin:0 0 26px}
+.legend{list-style:none;padding:0;margin:0;font-size:15px}
+.legend li{display:flex;gap:10px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line)}
+.legend li:last-child{border-bottom:0}
+.legend li::before{content:"";width:12px;height:12px;border-radius:50%;flex:none;background:var(--c)}
+.legend b{min-width:1.8em;text-align:right;font-variant-numeric:tabular-nums}
+.later{opacity:0;transition:opacity .6s}.later.on{opacity:1}
+.surprise{margin-top:16px;border-left:4px solid var(--seen);background:var(--soft);border-radius:0 14px 14px 0;padding:14px 16px}
+.surprise b{font-size:20px}
+.you-too{font-size:14px;color:var(--ink2);margin-top:12px}
+.row{display:flex;gap:10px;margin-top:22px}.row button{flex:1}
+.source{margin-top:26px;padding-top:12px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+.source a{color:inherit}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+
+<!-- 0 · intro -->
+<section id="s-intro" class="on" aria-labelledby="t-intro">
+  <p class="kicker">A tiny test · under 1 minute</p>
+  <h1 id="t-intro">Real or AI?</h1>
+  <p class="ink2">Four mountain valleys. Some are photos. Some were made by AI. Tap what you think.</p>
+  <div class="rule"><div class="clock" id="lim">5</div><div><b>You get <span class="limtxt">5</span> seconds per picture.</b><span class="small">About as long as you look at a post before your thumb scrolls on.</span></div></div>
+  <div class="spacer"></div>
+  <button class="primary" id="start">I'm ready</button>
+  <p class="tiny" style="text-align:center;margin-top:10px">Nothing is saved. No answer in time counts as “not sure”. Keys: <b>R</b> = Real, <b>A</b> = AI.</p>
+</section>
+
+<!-- 1 · 3-2-1 -->
+<section id="s-ready" aria-live="assertive">
+  <p class="count" id="cd">3</p>
+  <p class="ink2" id="cdsay">Thumbs on REAL and AI…</p>
+</section>
+
+<!-- 2 · guess -->
+<section id="s-guess">
+  <div class="progress" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+  <div class="clockbar" id="clock" aria-live="polite"><div class="num" id="secs">5</div><div class="say" id="say">Take a good look 👀</div></div>
+  <div class="fuse" id="fuse" aria-hidden="true"><i id="fusebar"></i><b id="spark">🔥</b></div>
+  <div class="pic" id="pic"><img id="img" alt=""><div class="tout"><span>🫠</span>Too slow.<br>The feed moved on.</div><div class="err">The picture couldn't load.<br>This prototype needs an internet connection.</div></div>
+  <div class="choices">
+    <button data-g="real">REAL</button>
+    <button data-g="ai">AI</button>
+  </div>
+  <div class="answer" id="answer" aria-live="polite"></div>
+  <button class="primary next" id="next">Next</button>
+</section>
+
+<!-- 3 · your result -->
+<section id="s-result" aria-labelledby="t-result">
+  <p class="kicker">Your result</p>
+  <p class="score" id="score">2<small> / 4</small></p>
+  <h2 id="t-result">Not as easy as it looks, right?</h2>
+  <div class="thumbs" id="thumbs"></div>
+  <div class="chips" id="chips"></div>
+  <p class="bridge">You're not the only one. How many Americans already see this happening around them?</p>
+  <div class="spacer"></div>
+  <button class="primary" id="toNumber">Show me →</button>
+</section>
+
+<!-- 4 · the number -->
+<section id="s-number" aria-labelledby="t-number">
+  <p class="kicker">Americans on AI · September 2026</p>
+  <p class="big" id="t-number">57<small>of 100 Americans</small></p>
+  <p class="claim">say they <b>already see people around them struggling to tell what's real from what's fake</b> because of AI.</p>
+
+  <div class="dots" id="dots" role="img" aria-label="100 dots: 57 already see it, 24 are starting to see it, 9 expect it soon, 2 don't expect it, 7 not sure, 1 no answer."></div>
+  <p class="dotnote">1 dot = 1 person in 100</p>
+
+  <div class="later" id="later">
+    <div class="card">
+      <ul class="legend">
+        <li style="--c:var(--seen)"><b>57</b> already see it in their community</li>
+        <li style="--c:var(--starting)"><b>24</b> are starting to see it</li>
+        <li style="--c:var(--rest)"><b>9</b> expect it soon</li>
+        <li style="--c:var(--rest)"><b>2</b> don't expect it</li>
+        <li style="--c:var(--na)"><b>8</b> not sure (7) or no answer (1)</li>
+      </ul>
+    </div>
+    <div class="surprise"><b>Only 2 in 100</b> don't expect it at all.</div>
+    <p class="you-too" id="youtoo"></p>
+    <div class="row"><button id="again">Play again</button></div>
+    <div class="source">
+      Question: "Thinking about your local community, how much are you seeing each of the following changes because of AI? People are struggling to tell what's real from what's fake."<br>
+      Data: <i>Americans on AI</i>, Athena Insights with NORC at the University of Chicago, all US adults, survey 10–14 Sep 2026, n = 1,083, margin of error about ±4 points. Percentages rounded to whole people: 57.13 → 57, 24.39 → 24, 8.67 → 9, 1.98 → 2, 6.94 → 7, 0.89 → 1.<br>
+      Pictures: Wikimedia Commons (credits shown after each answer). Prototype v3 by Adhurim Thaqi, HSLU Data Storytelling, built with Claude.
+    </div>
+  </div>
+</section>
+
+</main>
+<script>
+const FP = n => "https://commons.wikimedia.org/wiki/Special:FilePath/" + encodeURIComponent(n) + "?width=960";
+const PAGE = n => "https://commons.wikimedia.org/wiki/File:" + encodeURIComponent(n);
+const PICS = [
+  { file: "Scenic Valley in the Afternoon (Ideogram 2.0).webp", truth: "ai",
+    what: "Made by AI", detail: "Generated with Ideogram 2.0 from a text prompt.", credit: "Public domain" },
+  { file: "2021 in Val Bavona to south.jpg", truth: "real",
+    what: "A real photo", detail: "Val Bavona, Ticino, Switzerland, 2021.", credit: "Photo: SchmalspurDVZO, CC BY-SA 4.0" },
+  { file: "Late Afternoon Cloudy Valley (SD3.5).webp", truth: "ai",
+    what: "Made by AI", detail: "Generated with Stable Diffusion 3.5 from a text prompt.", credit: "Public domain" },
+  { file: "Bavona river near Roseto in Val Bavona.jpg", truth: "real",
+    what: "A real photo", detail: "The Bavona river near Roseto, Ticino, Switzerland.", credit: "Photo: SchmalspurDVZO, CC BY-SA 4.0" },
+];
+// What the clock says, by seconds left (one set per picture, so it never repeats).
+const SAY = [
+  { 5: "Take a good look 👀", 4: "Check the light…", 3: "Hmm. Too perfect?", 2: "Your thumb wants to scroll 👆", 1: "DECIDE!! 😬" },
+  { 5: "New picture. Fresh eyes 👀", 4: "Look at the water…", 3: "Real? Fake? Real?", 2: "The feed won't wait ⏩", 1: "NOW!! 😱" },
+  { 5: "Halfway there 💪", 4: "Clouds look weird?", 3: "Trust your gut…", 2: "Tick tock ⏰", 1: "GO GO GO 🫣" },
+  { 5: "Last one! 🏁", 4: "Rocks, trees, river…", 3: "You've got this?", 2: "Scrolling in 2… 👆", 1: "CHOOSE!! 🤯" },
+];
+// "People are struggling to tell what's real from what's fake", total, wave 2026-09-10.
+// Raw %: have_seen 57.13 · starting 24.39 · expect_soon 8.67 · dont_expect 1.98 · not_sure 6.94 · no_answer 0.89
+const DOTS = [["seen", 57], ["starting", 24], ["rest", 9 + 2], ["na", 7 + 1]];
+
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const q = new URLSearchParams(location.search);
+if (q.get("theme")) document.documentElement.dataset.theme = q.get("theme");
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const LIMIT = Math.max(2, Math.min(30, +q.get("limit") || 5));
+$("#lim").textContent = LIMIT; $$(".limtxt").forEach(e => e.textContent = LIMIT);
+PICS.forEach(p => { const i = new Image(); i.src = FP(p.file); });
+
+let n = 0, shownAt = 0, results = [], raf = 0, ticking = false, timers = [];
+const later = (fn, ms) => timers.push(setTimeout(fn, ms));
+function clearAll() { timers.forEach(clearTimeout); timers = []; stopTimer(); }
+function screen(id) { $$("section").forEach(s => s.classList.toggle("on", s.id === id)); window.scrollTo(0, 0); }
+
+/* 3-2-1 */
+function ready() {
+  screen("s-ready");
+  const lines = ["Thumbs on REAL and AI…", "Eyes open…", "Here it comes…"];
+  [3, 2, 1].forEach((k, i) => later(() => {
+    const c = $("#cd"); c.textContent = k; c.classList.remove("pop"); void c.offsetWidth; c.classList.add("pop");
+    $("#cdsay").textContent = lines[i];
+  }, i * 800));
+  later(() => { n = 0; results = []; screen("s-guess"); showPic(); }, reduce ? 1200 : 2400);
+}
+
+/* clock */
+function sayFor(left) { const s = SAY[n % SAY.length]; return s[Math.min(5, Math.max(1, Math.ceil(left * 5 / LIMIT)))]; }
+function startTimer() {
+  ticking = true; $("#clock").className = "clockbar"; $("#fuse").className = "fuse";
+  const tick = () => {
+    if (!ticking) return;
+    const left = Math.max(0, LIMIT - (performance.now() - shownAt) / 1000), f = left / LIMIT;
+    $("#secs").textContent = Math.ceil(left);
+    const s = sayFor(left); if ($("#say").textContent !== s) $("#say").textContent = s;
+    $("#fusebar").style.transform = `scaleX(${f})`; $("#spark").style.left = (f * 100) + "%";
+    const hurry = left <= LIMIT * 0.4;
+    $("#clock").classList.toggle("hurry", hurry); $("#fuse").classList.toggle("hurry", hurry);
+    if (left <= 0) return timeout();
+    raf = requestAnimationFrame(tick);
+  };
+  raf = requestAnimationFrame(tick);
+}
+function stopTimer() { ticking = false; cancelAnimationFrame(raf); }
+function timeout() {
+  stopTimer();
+  $("#pic").classList.add("timeout");
+  $("#clock").className = "clockbar done"; $("#secs").textContent = "0"; $("#say").textContent = "Time's up! Counts as “not sure”.";
+  $("#spark").style.left = "0%"; $("#spark").textContent = "💨";
+  guess("none");
+}
+
+/* rounds */
+function showPic() {
+  const p = PICS[n];
+  $$(".progress i").forEach((b, k) => b.classList.toggle("done", k < n));
+  const img = $("#img"), box = $("#pic");
+  box.classList.remove("broken", "timeout");
+  $("#clock").className = "clockbar paused"; $("#secs").textContent = LIMIT; $("#say").textContent = "Loading the picture…";
+  $("#fuse").className = "fuse"; $("#fusebar").style.transform = "scaleX(1)"; $("#spark").style.left = "100%"; $("#spark").textContent = "🔥";
+  $$("[data-g]").forEach(b => { b.disabled = false; b.classList.remove("picked"); });
+  $("#answer").className = "answer"; $("#next").className = "primary next";
+  img.onerror = () => { box.classList.add("broken"); stopTimer(); };
+  img.onload = () => { shownAt = performance.now(); startTimer(); };   // the clock starts only once the picture is visible
+  img.alt = `Picture ${n + 1} of ${PICS.length}: a mountain valley with a river`;
+  img.src = FP(p.file);
+  if (img.complete && img.naturalWidth) img.onload();
+}
+
+function guess(g) {
+  if ($("[data-g]").disabled || !$("#s-guess").classList.contains("on")) return;
+  const late = g === "none";
+  if (!late) {
+    stopTimer();
+    $("#clock").className = "clockbar"; $("#say").textContent = ["Locked in! 🔒", "Decided. ✅", "Nice reflexes ⚡", "Done! 🏁"][n % 4];
+  }
+  const p = PICS[n], secs = late ? LIMIT : (performance.now() - shownAt) / 1000, right = g === p.truth;
+  results.push({ g, right, secs, late });
+  $$("[data-g]").forEach(b => { b.disabled = true; b.classList.toggle("picked", b.dataset.g === g); });
+  $("#answer").innerHTML =
+    (late
+      ? `<b>It was ${p.truth === "ai" ? "made by AI" : "a real photo"}.</b><div class="small">${p.detail}</div>`
+      : `<b>${p.what}.</b> ${right ? "You said so too." : "You said " + (g === "ai" ? "AI" : "real") + "."}` +
+        `<div class="small">${p.detail} You decided in ${secs.toFixed(1)} of ${LIMIT} s.</div>`) +
+    `<div class="credit"><a href="${PAGE(p.file)}" target="_blank" rel="noopener">${p.credit}</a></div>`;
+  $("#answer").classList.add("on");
+  $("#next").textContent = n === PICS.length - 1 ? "See my result" : "Next picture";
+  $("#next").classList.add("on"); $("#next").focus({ preventScroll: true });
+}
+
+/* result */
+function result() {
+  clearAll(); screen("s-result");
+  if (!results.length) results = PICS.map((p, k) => ({ g: k % 2 ? p.truth : "none", right: k % 2 === 1, secs: k % 2 ? 2.4 + k : LIMIT, late: k % 2 === 0 })); // preview only
+  const right = results.filter(r => r.right).length, lateN = results.filter(r => r.late).length;
+  $("#score").innerHTML = `${right}<small> / ${results.length}</small>`;
+  $("#t-result").textContent = right === results.length ? "All four! But you knew it was a test." :
+    lateN ? "The clock got you, right?" : "Not as easy as it looks, right?";
+  $("#thumbs").innerHTML = results.map((r, k) => {
+    const label = PICS[k].truth === "ai" ? "AI" : "REAL";
+    const cls = r.late ? "late" : r.right ? "" : "wrong", mark = r.late ? "⏱ not sure" : (r.right ? "✓ " : "✗ ") + label;
+    return `<div><img src="${FP(PICS[k].file)}" alt="Picture ${k + 1}: ${label}"><span class="${cls}">${mark}</span><em>${r.late ? "time's up" : r.secs.toFixed(1) + " s"}</em></div>`;
+  }).join("");
+  const answered = results.filter(r => !r.late);
+  const chips = [];
+  if (answered.length) chips.push(`⚡ Fastest ${Math.min(...answered.map(r => r.secs)).toFixed(1)} s`, `🐢 Slowest ${Math.max(...answered.map(r => r.secs)).toFixed(1)} s`);
+  if (lateN) chips.push(`⏱ ${lateN}× too slow`);
+  $("#chips").innerHTML = chips.map(c => `<span>${c}</span>`).join("");
+}
+
+/* the number */
+function number() {
+  clearAll(); screen("s-number");
+  const lateN = results.filter(r => r.late).length;
+  $("#youtoo").textContent = lateN
+    ? `You ran out of time ${lateN}× — that's your “not sure”. In the survey, 7 of 100 Americans answered “not sure” too.`
+    : "";
+  const kinds = DOTS.flatMap(([c, k]) => Array(k).fill(c));
+  $("#dots").innerHTML = kinds.map(() => "<i></i>").join("");
+  const dots = $$("#dots i");
+  $("#later").classList.remove("on");
+  if (reduce) { dots.forEach((d, k) => d.className = kinds[k]); $("#later").classList.add("on"); return; }
+  const fill = k => { dots[k].className = kinds[k] + " pop"; later(() => dots[k].classList.remove("pop"), 200); };
+  let k = 0;
+  const step = () => {
+    fill(k++);
+    if (k === 57) return later(step2, 1000);          // pause on the 57
+    later(step, 26);
+  };
+  const step2 = () => { fill(k++); if (k < 100) later(step2, 16); else later(() => $("#later").classList.add("on"), 200); };
+  later(step, 400);
+}
+
+$("#start").onclick = ready;
+$$("[data-g]").forEach(b => b.onclick = () => guess(b.dataset.g));
+$("#next").onclick = () => { if (++n < PICS.length) showPic(); else result(); };
+$("#toNumber").onclick = number;
+$("#again").onclick = () => { clearAll(); results = []; screen("s-intro"); };
+addEventListener("keydown", e => {
+  if (!$("#s-guess").classList.contains("on")) return;
+  if (e.key === "r" || e.key === "R") guess("real");
+  if (e.key === "a" || e.key === "A") guess("ai");
+});
+if (q.get("step") === "result") result();
+if (q.get("step") === "number" || q.get("step") === "end") number();
+</script>
+</body>
+</html>

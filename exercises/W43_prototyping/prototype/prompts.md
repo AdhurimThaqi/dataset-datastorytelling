@@ -5,7 +5,7 @@
 | **Course rule (W43 slides)** | "The HTML file and **all prompts** go into the research documentation." |
 | **Tool** | Claude (Claude Code, model Opus 5.5), 22.10.2026 |
 | **Input** | Hand-drawn Crazy 6's sheet (`../photos/W43_crazy6.jpg`), box 1 "Guess", and the prototype card in `../in-class.md` |
-| **Output** | `v1.html`, `v2.html`: one file each, no build step, opens in any browser (needs internet for the pictures) |
+| **Output** | `v1.html`, `v2.html`, `v3.html`: one file each, no build step, opens in any browser (needs internet for the pictures) |
 | **Structure** | As taught in W43: role and goal → guardrails → experience → design reference → data, word for word → output |
 
 > **How it was made:** in the chat I asked for the prototype in one short sentence. The model already had the prototype card, the sketch and the dataset in the conversation. Prompt 1 below is the complete brief that v1 was built from, written out so that anyone can paste it into an LLM and get the same prototype.
@@ -126,6 +126,46 @@ CHANGES
 
 DO NOT CHANGE
 The pictures, the order, the survey numbers, the 100 dots, the source line.
+```
+
+## Prompt 4: v3, a separate, playful clock and a calmer end
+
+Feedback on v2 (my own review, 22.10.2026): the end screen is too cramped, because the picture tiles and the 100 dots sit right on top of each other. The time should be even more obvious, as its own element, and a bit funny.
+
+```text
+Make a copy of v2.html as v3.html. Keep the pictures, their order, the survey numbers and the source line.
+
+1. TIME AS ITS OWN ELEMENT (not on top of the picture)
+   - Above the picture, a full-width "clock bar": a big round number (5 → 1) on the left and a short,
+     funny line on the right that changes every second. Write one set of lines per picture so nothing repeats,
+     e.g. 5 "Take a good look 👀" · 4 "Check the light…" · 3 "Hmm. Too perfect?" ·
+     2 "Your thumb wants to scroll 👆" · 1 "DECIDE!! 😬".
+   - Below it, a burning fuse: a bar that shrinks with a 🔥 riding on its end.
+   - In the last 40 % of the time the clock bar turns orange and the number shakes (not with reduced motion).
+   - On a tap: the clock stops and says something short ("Locked in! 🔒").
+   - On time-out: the picture goes dark and blurred with "🫠 Too slow. The feed moved on.",
+     the clock turns grey and says "Time's up! Counts as 'not sure'."
+   - Before the first picture, a separate 3-2-1 screen with huge numbers and one line each
+     ("Thumbs on REAL and AI…", "Eyes open…", "Here it comes…").
+   - The intro shows the rule as its own block: a round "5" and "You get 5 seconds per picture."
+
+2. SPLIT THE END INTO TWO SCREENS, WITH A CTA BETWEEN THEM
+   Screen "Your result":
+   - a big score "2 / 4" and a heading that reacts:
+     all right → "All four! But you knew it was a test." · at least one time-out → "The clock got you, right?" ·
+     otherwise → "Not as easy as it looks, right?"
+   - the four pictures as a 2×2 grid with a label (✓ REAL / ✗ AI / ⏱ not sure) and the seconds taken
+   - small chips: ⚡ fastest, 🐢 slowest, ⏱ how often too slow
+   - a bridge sentence: "You're not the only one. How many Americans already see this happening around them?"
+   - CTA button at the bottom: "Show me →"
+   Screen "The number":
+   - "57" very big in the data colour, "of 100 Americans" under it, then the sentence.
+   - The 100 dots with more space around them (max. 320 px, 8 px gaps) and "1 dot = 1 person in 100".
+   - The legend in its own card, the surprise ("Only 2 in 100 don't expect it at all") as a callout,
+     and, if the reader timed out, one line linking their time-out to the 7 of 100 who said "not sure".
+   - "Play again" button, then the source line.
+
+3. Review shortcuts: ?step=result and ?step=number.
 ```
 
 ## How the pictures were chosen
