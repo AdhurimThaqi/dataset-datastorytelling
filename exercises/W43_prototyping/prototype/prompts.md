@@ -1,71 +1,108 @@
 # Prompts for the prototype (W43 → W44 research documentation)
 
-- **Course rule (W43 slides):** "The HTML file and **all prompts** go into the research documentation."
-- **Tool:** Claude (Claude Code, model Opus 5.5), 22.10.2026, in my repo.
-- **Output:** `v1.html`. One file, no build step, opens in any browser. It needs internet for the four pictures.
-- **Input:** my hand-drawn Crazy 6's sheet (`../photos/W43_crazy6.jpg`), box 1 "Guess", and the prototype card in `../in-class.md`.
+| | |
+|---|---|
+| **Course rule (W43 slides)** | "The HTML file and **all prompts** go into the research documentation." |
+| **Tool** | Claude (Claude Code, model Opus 5.5), 22.10.2026 |
+| **Input** | Hand-drawn Crazy 6's sheet (`../photos/W43_crazy6.jpg`), box 1 "Guess", and the prototype card in `../in-class.md` |
+| **Output** | `v1.html`: one file, no build step, opens in any browser (needs internet for the pictures) |
+| **Structure** | As taught in W43: role and goal → guardrails → experience → design reference → data, word for word → output |
 
-Every prompt is listed below in order, as I typed it. Changes I made by hand are listed after the prompts.
+> **How it was made:** in the chat I asked for the prototype in one short sentence. The model already had the prototype card, the sketch and the dataset in the conversation. Prompt 1 below is the complete brief that v1 was built from, written out so that anyone can paste it into an LLM and get the same prototype.
 
 ---
 
-## Prompt 1 (me, as typed)
+## Prompt 1: build v1
 
 ```text
-ok u know what we need to do now - we need to generate a html file or whatever make sure its something
-good please and it fulfills whats required - thank you
-```
+ROLE AND GOAL
+You are a front-end developer and data-visualisation designer. Build a small, clickable prototype
+of ONE moment of a data story, so that I can test it with real people this week.
+Course: Data Storytelling (HSLU). Target group: young adults in Switzerland (20–35) who use AI weekly.
+The moment comes from my hand sketch (Crazy 6's, box 1 "Guess"): the reader first guesses whether a
+picture is real or made by AI, and only then sees the survey number.
 
-The context the model already had: the W43 slides, my prototype card and the Crazy 6's sheet.
-So that the prompt follows the slide structure (guardrails → experience → design reference → data, word for word),
-the brief the model worked from is written out here in full:
+HYPOTHESIS TO TEST
+A reader who first fails or hesitates at the guess will feel that the real-vs-fake problem is shared,
+not a personal weakness. I am wrong if testers treat it as a quiz score and do not connect the number
+to themselves.
 
-```text
 GUARDRAILS
-- One HTML file, no frameworks, no build step. Phone first (390 px wide), also works on a laptop.
-- One aspect only: "People are struggling to tell what's real from what's fake". No other question from the survey.
-- Only numbers from the CSV (latest wave 2026-09-10, total). Do not invent numbers. Show every rounding.
-- Keep "not sure" and "no answer" visible. No red/green, no good/bad framing of the guesses.
-- No quiz feeling: the score is small, the 57 is big.
-- Pictures with a clear licence and a neutral subject (no people, no politics), credited on screen.
+- Deliver exactly one self-contained HTML file (inline CSS and JavaScript, no frameworks, no build step).
+- Phone first (390 px wide), but it must also work on a laptop. Light and dark mode.
+- One aspect of the data only. Do not add other questions or numbers from the survey.
+- Use only the numbers given under DATA. Do not invent, average or re-calculate anything.
+  Round to whole people and show every rounding in the source line.
+- Keep "not sure" and "no answer" visible as their own categories.
+- No red/green, no right/wrong colours that match the colour of the data. The score stays small;
+  the survey number is the hero.
+- Pictures: a neutral subject (no people, no politics, no brands) with a clear licence, credited on screen.
+  All pictures show the same kind of scene, so the subject gives nothing away.
+- Accessible: real buttons, keyboard shortcuts (R = real, A = AI), alt texts that do not reveal the answer,
+  respect "prefers-reduced-motion".
+- Nothing is stored or sent anywhere.
 
-EXPERIENCE (the longest part)
-1. Intro: "Real or AI?" One sentence: four mountain valleys, some photos, some made by AI. One button.
-2. Four rounds. Each: one picture, two big buttons REAL / AI. After the tap: what it really was, where it is from,
-   and how many seconds the reader took. Then "Next".
-3. Reveal: small: "You got X of 4", the four pictures with ✓/✗, the reader's longest pause.
-   Big: "57 of 100 Americans say they already see people around them struggling to tell what's real from what's fake."
-   100 dots fill one by one, pause on the 57th, then the rest fill in. Legend with all six answers.
-4. One closing line that surprises: only 2 in 100 don't expect it at all.
-5. Source line with the question word for word, the survey, the date, n and the margin of error.
+EXPERIENCE (in this order)
+1. Intro: title "Real or AI?" and one or two short sentences: four mountain valleys, some are photos,
+   some were made by AI, trust your gut. One "Start" button.
+2. Four rounds, always in the same order (2 AI, 2 real, mixed). Each round: progress bar, one large
+   picture, two large buttons REAL / AI. After the tap: what the picture really was, where it comes from,
+   how many seconds the reader took to decide, the credit, and a "Next" button.
+3. Reveal, first small: "You got X of 4", the four pictures as thumbnails marked ✓/✗, and the reader's
+   longest pause ("Your longest pause: 6.1 s on picture 3").
+4. Reveal, then big: "57 of 100 Americans say they already see people around them struggling to tell
+   what's real from what's fake because of AI." Below it 100 dots (one dot = one person in 100) fill in
+   one by one, stop briefly at the 57th, then the rest fill in. Then a legend with all answers.
+5. One closing line as the surprise: only 2 in 100 don't expect it at all.
+6. Source line: the question word for word, the survey, the dates, n, the margin of error, the roundings,
+   and the picture credits. A "Try again" button.
+Add two review shortcuts: ?step=end jumps to the reveal, ?theme=dark / ?theme=light forces a theme.
 
 DESIGN REFERENCE
-- The calm look of my course site (index.html / w41.html): off-white surface, system font, thin lines, one accent.
-- The 100-dot "unit chart" idea from my W38 mappings: one dot = one person in 100.
+- My course website: calm off-white surface, system font, thin grey lines, rounded cards, one strong colour.
+- Unit chart / "100 people" dot grid (as in my W38 mapping exercise): one dot = one person in 100.
+- Tone of the text: short, direct, friendly, no jargon. English.
 
-DATA (word for word from the CSV)
-Question: "Thinking about your local community, how much are you seeing each of the following changes because of AI?
-People are struggling to tell what's real from what's fake"
-total, 2026-09-10: have_seen 57.13 · starting 24.39 · expect_soon 8.67 · dont_expect 1.98 · not_sure 6.94 · no_answer 0.89
-Survey: Americans on AI, Athena Insights with NORC, 10–14 Sep 2026, n = 1,083, margin of error about ±4 points.
+DATA (word for word; use nothing else)
+Question: "Thinking about your local community, how much are you seeing each of the following changes
+because of AI? People are struggling to tell what's real from what's fake"
+Subgroup: total (all US adults). Wave: 2026-09-10.
+have_seen 57.13 · starting 24.39 · expect_soon 8.67 · dont_expect 1.98 · not_sure 6.94 · no_answer 0.89
+Survey: "Americans on AI", Athena Insights with NORC at the University of Chicago,
+fieldwork 10–14 Sep 2026, n = 1,083, margin of error about ±4 percentage points.
+
+PICTURES (Wikimedia Commons)
+1 AI  · "Scenic Valley in the Afternoon (Ideogram 2.0).webp" · public domain
+2 Real · "2021 in Val Bavona to south.jpg" · SchmalspurDVZO, CC BY-SA 4.0
+3 AI  · "Late Afternoon Cloudy Valley (SD3.5).webp" · public domain
+4 Real · "Bavona river near Roseto in Val Bavona.jpg" · SchmalspurDVZO, CC BY-SA 4.0
+Load them through https://commons.wikimedia.org/wiki/Special:FilePath/<file name>?width=960
+and show a short message if a picture cannot load.
+
+OUTPUT
+1. The complete HTML file.
+2. A list of every rounding you made, with the original value.
+3. A list of everything you had to guess or decide yourself.
 ```
 
-## Pictures (chosen during prompt 1)
+## Prompt 2: corrections to v1
 
-Searched on Wikimedia Commons. AI pictures come from the category "AI-generated landscapes". Real photos come from a search for Swiss river valleys.
-I picked pictures with the same subject (a valley with a river, afternoon light) so the reader can't guess from the subject.
+```text
+Three corrections, keep everything else the same:
+1. The thumbnails of wrong guesses at the end are orange, the same colour as the 57. That mixes up
+   "you were wrong" with "people who see it". Make wrong guesses black with a ✗ instead.
+2. The 100-dot grid is too big on a phone. Limit it to about 260 px wide.
+3. If someone gets all four right, the heading "If that was harder than you thought…" doesn't fit.
+   In that case show: "You got all four. But it was only four pictures, and you were looking closely."
+```
 
-| # | Truth | File on Wikimedia Commons | Licence |
-|---|---|---|---|
-| 1 | AI (Ideogram 2.0) | Scenic Valley in the Afternoon (Ideogram 2.0).webp | Public domain |
-| 2 | Real, Val Bavona TI | 2021 in Val Bavona to south.jpg | CC BY-SA 4.0, SchmalspurDVZO |
-| 3 | AI (Stable Diffusion 3.5) | Late Afternoon Cloudy Valley (SD3.5).webp | Public domain |
-| 4 | Real, Val Bavona TI | Bavona river near Roseto in Val Bavona.jpg | CC BY-SA 4.0, SchmalspurDVZO |
+## How the pictures were chosen
+- **AI pictures:** from the Wikimedia Commons category "AI-generated landscapes".
+- **Real photos:** from a Commons search for Swiss river valleys (Val Bavona, Ticino).
+- **Why these four:** all four show the same scene (a valley with a river, afternoon light), so the subject gives nothing away.
 
-## Corrections after the first version (v1 is the result)
-- The "wrong" tiles at the end were orange, the same colour as the 57. That mixed up "you were wrong" with "people who see it". I changed them to black with ✗.
-- The dot grid was too big on a phone; I made it smaller.
-- If someone gets all four right, the heading said "harder than you thought". It now says: "You got all four. But it was only four pictures, and you were looking closely."
+## Checks
+All numbers checked against `exercises/W39_data/survey_all_waves_all_subgroups.csv` (see `README.md`): 0 mismatches, and the dots add up to 100.
 
-## Next prompts go here
-`v2.html`, `v3.html` …: one change per prompt, saved as a new file. Write down each prompt here **as typed**.
+## Next prompts (v2, v3 …)
+One change per prompt, based on what testers said (`test.md`). Save each version as a new file and add the prompt here.
