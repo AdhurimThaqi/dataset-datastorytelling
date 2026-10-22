@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Real or AI?</title>
+<!--
+  Prototype v2 · W43 Crazy 6's box 1 "Guess" · v2 = visible time pressure (lecturer feedback 22.10.2026) · direction A "Real or AI?"
+  HSLU I.BA_DAS, Adhurim Thaqi (solo). Built with Claude (LLM), prompts in prompts.md.
+  One aspect: 57 of 100 Americans already see people around them struggling to tell real from fake.
+  Data: Americans on AI (Athena Insights / NORC), total, wave 10-14 Sep 2026, n = 1,083.
+  Review shortcuts: v2.html?step=end (jump to the reveal) · ?theme=dark / ?theme=light · ?limit=8 (seconds per picture)
+-->
+<style>
+:root{--surface:#fcfcfb;--panel:#fff;--ink:#0b0b0b;--ink2:#52514e;--muted:#8a8984;--line:#e6e5e0;--soft:#f3f2ee;
+--seen:#d9531e;--starting:#f2b393;--rest:#d7d6d0;--na:#ecebe6;--accent:#2a78d6;--ok:#2a78d6}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--surface:#1a1a19;--panel:#222221;--ink:#fff;--ink2:#c3c2b7;--muted:#8f8e86;--line:#34332f;--soft:#2a2a28;
+--seen:#f07a45;--starting:#8a4a2c;--rest:#55544f;--na:#3a3936;--accent:#3987e5;--ok:#3987e5}}
+:root[data-theme="dark"]{--surface:#1a1a19;--panel:#222221;--ink:#fff;--ink2:#c3c2b7;--muted:#8f8e86;--line:#34332f;--soft:#2a2a28;
+--seen:#f07a45;--starting:#8a4a2c;--rest:#55544f;--na:#3a3936;--accent:#3987e5;--ok:#3987e5}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--surface);color:var(--ink);font:17px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:480px;margin:auto;padding:20px 16px 40px;min-height:100svh;display:flex;flex-direction:column}
+section{display:none;flex:1;flex-direction:column}
+section.on{display:flex;animation:in .35s ease}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+h1{font-size:34px;line-height:1.1;margin:.4em 0 .3em;letter-spacing:-.01em}
+h2{font-size:24px;line-height:1.2;margin:.3em 0}
+p{margin:.5em 0}
+.ink2{color:var(--ink2)}.small{font-size:14px;color:var(--ink2)}.tiny{font-size:12px;color:var(--muted)}
+.kicker{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0}
+button{font:inherit;cursor:pointer;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:14px 18px;min-height:52px}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.primary{background:var(--ink);color:var(--surface);border-color:var(--ink);font-weight:600;width:100%}
+.spacer{flex:1}
+.progress{display:flex;gap:6px;margin:4px 0 14px}.progress i{flex:1;height:4px;border-radius:2px;background:var(--line)}.progress i.done{background:var(--ink)}
+.pic{position:relative;border-radius:16px;overflow:hidden;background:var(--soft);aspect-ratio:4/3;border:1px solid var(--line)}
+.pic img{width:100%;height:100%;object-fit:cover;display:block;transition:filter .3s}
+.pic .err{position:absolute;inset:0;display:none;align-items:center;justify-content:center;text-align:center;padding:20px;color:var(--ink2);font-size:14px}
+.pic.broken .err{display:flex}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.choices button{font-size:20px;font-weight:700;letter-spacing:.04em}
+.choices button[disabled]{opacity:.45;cursor:default}
+.choices button.picked{opacity:1;border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.answer{margin-top:14px;padding:14px 16px;border-radius:12px;background:var(--soft);display:none}
+.answer.on{display:block;animation:in .3s ease}
+.answer b{font-size:19px}
+.answer .credit{font-size:12px;color:var(--muted);margin-top:6px}
+.answer .credit a{color:inherit}
+.next{margin-top:14px;display:none}.next.on{display:block}
+/* v2: timer */
+.timer{position:absolute;top:10px;right:10px;width:54px;height:54px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;
+  display:flex;align-items:center;justify-content:center;font:800 24px/1 system-ui,sans-serif;font-variant-numeric:tabular-nums;backdrop-filter:blur(4px)}
+.timer svg{position:absolute;inset:0;transform:rotate(-90deg)}
+.timer circle{fill:none;stroke:#fff;stroke-width:4;stroke-linecap:round}
+.timer.hurry{background:rgba(217,83,30,.92);animation:pulse .5s ease-in-out infinite alternate}
+.timer.off{display:none}
+@keyframes pulse{to{transform:scale(1.12)}}
+.fuse{height:6px;border-radius:3px;background:var(--line);margin-top:10px;overflow:hidden}
+.fuse i{display:block;height:100%;width:100%;background:var(--ink);transform-origin:left;transform:scaleX(1)}
+.fuse.hurry i{background:var(--seen)}
+.pic.timeout img{filter:grayscale(1) brightness(.6)}
+.pic .tout{position:absolute;inset:0;display:none;align-items:center;justify-content:center;color:#fff;font:800 28px/1.1 system-ui,sans-serif;text-align:center}
+.pic.timeout .tout{display:flex}
+/* reveal */
+.you{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:10px 0 4px}
+.you div{border-radius:8px;overflow:hidden;position:relative;aspect-ratio:1}
+.you img{width:100%;height:100%;object-fit:cover}
+.you span{position:absolute;left:0;right:0;bottom:0;font-size:11px;font-weight:700;text-align:center;padding:3px 0;background:rgba(0,0,0,.6);color:#fff}
+.you span.wrong{background:rgba(0,0,0,.85);text-decoration:line-through}.you span.late{background:rgba(110,109,104,.92)}
+.big{font-size:64px;font-weight:800;line-height:1;letter-spacing:-.03em;margin:.15em 0 0}
+.big small{font-size:22px;font-weight:600;letter-spacing:0;color:var(--ink2)}
+.dots{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin:16px 0 10px;max-width:260px}
+.dots i{aspect-ratio:1;border-radius:50%;background:var(--na);transition:background .25s,transform .25s}
+.dots i.seen{background:var(--seen)}.dots i.starting{background:var(--starting)}.dots i.rest{background:var(--rest)}
+.dots i.pop{transform:scale(1.25)}
+.legend{list-style:none;padding:0;margin:6px 0 0;font-size:14px}
+.legend li{display:flex;gap:8px;align-items:baseline;margin:3px 0}
+.legend li::before{content:"";width:11px;height:11px;border-radius:50%;flex:none;background:var(--c);transform:translateY(1px)}
+.legend b{min-width:2.2em;text-align:right}
+.later{opacity:0;transition:opacity .6s}.later.on{opacity:1}
+.source{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+.source a{color:inherit}
+.row{display:flex;gap:10px;margin-top:18px}.row button{flex:1}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+
+<!-- 0 · intro -->
+<section id="s-intro" class="on" aria-labelledby="t-intro">
+  <p class="kicker">A tiny test · 1 minute</p>
+  <h1 id="t-intro">Real or AI?</h1>
+  <p class="ink2">You'll see four mountain valleys. Some are photos. Some were made by AI.</p>
+  <p class="ink2">Trust your gut and tap what you think.</p>
+  <p style="font-size:20px;font-weight:700;margin-top:18px">⏱ You only get <span id="lim">5</span> seconds per picture.</p>
+  <p class="ink2">That's about how long you look at a post before you scroll on.</p>
+  <div class="spacer"></div>
+  <button class="primary" id="start">Start</button>
+  <p class="tiny" style="text-align:center;margin-top:10px">Nothing is saved. No answer in time counts as “not sure”. Keys: <b>R</b> = Real, <b>A</b> = AI.</p>
+</section>
+
+<!-- 1–4 · guess -->
+<section id="s-guess" aria-live="polite">
+  <div class="progress" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+  <p class="kicker" id="count">Picture 1 of 4</p>
+  <div class="pic" id="pic"><img id="img" alt=""><div class="timer" id="timer" aria-hidden="true"><svg viewBox="0 0 54 54"><circle id="ring" cx="27" cy="27" r="24"/></svg><span id="secs">5</span></div><div class="tout">Time's up</div><div class="err">The picture couldn't load.<br>This prototype needs an internet connection.</div></div>
+  <div class="fuse" id="fuse" aria-hidden="true"><i id="fusebar"></i></div>
+  <div class="choices">
+    <button data-g="real">REAL</button>
+    <button data-g="ai">AI</button>
+  </div>
+  <div class="answer" id="answer"></div>
+  <button class="primary next" id="next">Next</button>
+</section>
+
+<!-- 5 · the number -->
+<section id="s-end" aria-labelledby="t-end">
+  <p class="kicker" id="score"></p>
+  <h2 id="t-end">If that was harder than you thought, you're not the only one.</h2>
+  <div class="you" id="you" aria-hidden="true"></div>
+  <p class="small" id="pause"></p>
+
+  <p class="big" id="bignum">57 <small>of 100 Americans</small></p>
+  <p>say they <b>already see people around them struggling to tell what's real from what's fake</b> because of AI.</p>
+
+  <div class="dots" id="dots" role="img" aria-label="100 dots: 57 already see it, 24 are starting to see it, 9 expect it soon, 2 don't expect it, 7 not sure, 1 no answer."></div>
+
+  <div class="later" id="later">
+    <ul class="legend">
+      <li style="--c:var(--seen)"><b>57</b> already see it in their community</li>
+      <li style="--c:var(--starting)"><b>24</b> are starting to see it</li>
+      <li style="--c:var(--rest)"><b>9</b> expect it soon</li>
+      <li style="--c:var(--rest)"><b>2</b> don't expect it</li>
+      <li style="--c:var(--na)"><b>8</b> not sure (7) or no answer (1)</li>
+    </ul>
+    <p style="margin-top:14px">Only <b>2 in 100</b> don't expect it at all.</p>
+    <div class="row"><button id="again">Try again</button></div>
+    <div class="source">
+      Question: "Thinking about your local community, how much are you seeing each of the following changes because of AI? People are struggling to tell what's real from what's fake."<br>
+      Data: <i>Americans on AI</i>, Athena Insights with NORC at the University of Chicago, all US adults, survey 10–14 Sep 2026, n = 1,083, margin of error about ±4 points. Percentages rounded to whole people: 57.13 → 57, 24.39 → 24, 8.67 → 9, 1.98 → 2, 6.94 → 7, 0.89 → 1.<br>
+      Pictures: Wikimedia Commons, see credits under each answer. Prototype v2 by Adhurim Thaqi, HSLU Data Storytelling, built with Claude.
+    </div>
+  </div>
+</section>
+
+</main>
+<script>
+// The four pictures. Order is fixed so every tester sees the same thing.
+const FP = n => "https://commons.wikimedia.org/wiki/Special:FilePath/" + encodeURIComponent(n) + "?width=960";
+const PAGE = n => "https://commons.wikimedia.org/wiki/File:" + encodeURIComponent(n);
+const PICS = [
+  { file: "Scenic Valley in the Afternoon (Ideogram 2.0).webp", truth: "ai",
+    what: "Made by AI", detail: "Generated with Ideogram 2.0 from a text prompt.", credit: "Public domain" },
+  { file: "2021 in Val Bavona to south.jpg", truth: "real",
+    what: "A real photo", detail: "Val Bavona, Ticino, Switzerland, 2021.", credit: "Photo: SchmalspurDVZO, CC BY-SA 4.0" },
+  { file: "Late Afternoon Cloudy Valley (SD3.5).webp", truth: "ai",
+    what: "Made by AI", detail: "Generated with Stable Diffusion 3.5 from a text prompt.", credit: "Public domain" },
+  { file: "Bavona river near Roseto in Val Bavona.jpg", truth: "real",
+    what: "A real photo", detail: "The Bavona river near Roseto, Ticino, Switzerland.", credit: "Photo: SchmalspurDVZO, CC BY-SA 4.0" },
+];
+// The survey answers for "People are struggling to tell what's real from what's fake", total, wave 2026-09-10.
+// Raw %: have_seen 57.13 · starting 24.39 · expect_soon 8.67 · dont_expect 1.98 · not_sure 6.94 · no_answer 0.89
+const DOTS = [["seen", 57], ["starting", 24], ["rest", 9 + 2], ["na", 7 + 1]];
+
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const q = new URLSearchParams(location.search);
+if (q.get("theme")) document.documentElement.dataset.theme = q.get("theme");
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+// preload
+PICS.forEach(p => { const i = new Image(); i.src = FP(p.file); });
+
+const LIMIT = Math.max(2, Math.min(30, +q.get("limit") || 5));   // seconds per picture (v2: time pressure)
+$("#lim").textContent = LIMIT;
+const RING = 2 * Math.PI * 24;
+let n = 0, shownAt = 0, results = [], raf = 0, ticking = false;
+
+function startTimer() {
+  ticking = true;
+  const ring = $("#ring"); ring.style.strokeDasharray = RING;
+  $("#timer").className = "timer"; $("#fuse").className = "fuse";
+  const tick = () => {
+    if (!ticking) return;
+    const left = Math.max(0, LIMIT - (performance.now() - shownAt) / 1000), f = left / LIMIT;
+    $("#secs").textContent = Math.ceil(left);
+    ring.style.strokeDashoffset = RING * (1 - f);
+    $("#fusebar").style.transform = `scaleX(${f})`;
+    const hurry = left <= 2;
+    $("#timer").classList.toggle("hurry", hurry && !reduce); $("#fuse").classList.toggle("hurry", hurry);
+    if (left <= 0) return timeout();
+    raf = requestAnimationFrame(tick);
+  };
+  raf = requestAnimationFrame(tick);
+}
+function stopTimer() { ticking = false; cancelAnimationFrame(raf); $("#timer").classList.add("off"); }
+
+function timeout() {
+  stopTimer();
+  $("#pic").classList.add("timeout");
+  guess("none");
+}
+function screen(id) { $$("section").forEach(s => s.classList.toggle("on", s.id === id)); window.scrollTo(0, 0); }
+
+function showPic() {
+  const p = PICS[n];
+  $("#count").textContent = `Picture ${n + 1} of ${PICS.length}`;
+  $$(".progress i").forEach((b, k) => b.classList.toggle("done", k < n));
+  const img = $("#img"), box = $("#pic");
+  box.classList.remove("broken");
+  box.classList.remove("timeout");
+  img.onerror = () => { box.classList.add("broken"); stopTimer(); };
+  // the clock starts only once the picture is visible
+  img.onload = () => { shownAt = performance.now(); startTimer(); };
+  img.src = FP(p.file);
+  img.alt = `Picture ${n + 1}: a mountain valley with a river`;
+  $$("[data-g]").forEach(b => { b.disabled = false; b.classList.remove("picked"); });
+  $("#answer").className = "answer"; $("#next").className = "primary next";
+  $("#timer").className = "timer"; $("#secs").textContent = LIMIT; $("#fusebar").style.transform = "scaleX(1)";
+  shownAt = performance.now();
+  if (img.complete && img.naturalWidth) img.onload();
+}
+
+function guess(g) {
+  if ($("[data-g]").disabled) return;
+  stopTimer();
+  const p = PICS[n], late = g === "none", secs = late ? LIMIT : (performance.now() - shownAt) / 1000, right = g === p.truth;
+  results.push({ g, right, secs, late });
+  $$("[data-g]").forEach(b => { b.disabled = true; b.classList.toggle("picked", b.dataset.g === g); });
+  $("#answer").innerHTML =
+    (late
+      ? `<b>Time's up.</b> That counts as “not sure”. It was <b>${p.truth === "ai" ? "made by AI" : "a real photo"}</b>.<div class="small">${p.detail}</div>`
+      : `<b>${p.what}.</b> ${right ? "You said so too." : "You said " + (g === "ai" ? "AI" : "real") + "."}` +
+        `<div class="small">${p.detail} You decided in ${secs.toFixed(1)} of ${LIMIT} s.</div>`) +
+    `<div class="credit"><a href="${PAGE(p.file)}" target="_blank" rel="noopener">${p.credit}</a></div>`;
+  $("#answer").classList.add("on");
+  $("#next").textContent = n === PICS.length - 1 ? "See what others said" : "Next picture";
+  $("#next").classList.add("on"); $("#next").focus({ preventScroll: true });
+}
+
+function end() {
+  screen("s-end");
+  const right = results.filter(r => r.right).length;
+  $("#score").textContent = results.length ? `You got ${right} of ${results.length}` : "Real or AI?";
+  $("#you").innerHTML = results.map((r, k) =>
+    `<div><img src="${FP(PICS[k].file)}" alt=""><span class="${r.late ? "late" : r.right ? "" : "wrong"}">${r.late ? "⏱" : r.right ? "✓" : "✗"} ${PICS[k].truth === "ai" ? "AI" : "REAL"}</span></div>`).join("");
+  if (right === results.length && right) $("#t-end").textContent = "You got all four. But it was only four pictures, and you knew it was a test.";
+  if (results.length) {
+    const slow = results.reduce((a, r, k) => r.secs > a.secs ? { secs: r.secs, k } : a, { secs: 0, k: 0 });
+    const late = results.filter(r => r.late).length;
+    $("#pause").innerHTML = late
+      ? `You ran out of time on <b>${late} of ${results.length}</b>. In the survey, 7 of 100 Americans also answered “not sure”.`
+      : `Your longest pause: <b>${slow.secs.toFixed(1)} of ${LIMIT} s</b> on picture ${slow.k + 1}.`;
+  }
+  // 100 dots, filled in order
+  const kinds = DOTS.flatMap(([c, k]) => Array(k).fill(c));
+  $("#dots").innerHTML = kinds.map(() => "<i></i>").join("");
+  const dots = $$("#dots i");
+  $("#later").classList.remove("on");
+  const fill = (k) => { dots[k].className = kinds[k] + " pop"; setTimeout(() => dots[k].classList.remove("pop"), 200); };
+  if (reduce) { dots.forEach((_, k) => dots[k].className = kinds[k]); $("#later").classList.add("on"); return; }
+  let k = 0;
+  const t = setInterval(() => {
+    fill(k++);
+    if (k === 57) { clearInterval(t); setTimeout(() => {           // pause on the 57
+      const t2 = setInterval(() => { fill(k++); if (k === 100) { clearInterval(t2); $("#later").classList.add("on"); } }, 18);
+    }, 900); }
+  }, 28);
+}
+
+$("#start").onclick = () => { n = 0; results = []; screen("s-guess"); showPic(); };
+$$("[data-g]").forEach(b => b.onclick = () => guess(b.dataset.g));
+$("#next").onclick = () => { if (++n < PICS.length) showPic(); else end(); };
+$("#again").onclick = () => { stopTimer(); screen("s-intro"); };
+addEventListener("keydown", e => {
+  if (!$("#s-guess").classList.contains("on")) return;
+  if (e.key === "r" || e.key === "R") guess("real");
+  if (e.key === "a" || e.key === "A") guess("ai");
+});
+if (q.get("step") === "end") end();
+</script>
+</body>
+</html>

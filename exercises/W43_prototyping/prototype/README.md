@@ -1,6 +1,11 @@
 # Prototype: "Real or AI?" (Crazy 6's box 1 · Guess)
 
-**Open it:** [`v1.html`](v1.html), online at `https://adhurimthaqi.github.io/dataset-datastorytelling/exercises/W43_prototyping/prototype/v1.html`
+**Open it (newest):** [`v2.html`](v2.html), online at `https://adhurimthaqi.github.io/dataset-datastorytelling/exercises/W43_prototyping/prototype/v2.html`
+
+| Version | What changed | Why |
+|---|---|---|
+| v1 | First build: 4 pictures → guess → 57 of 100 as dots | Crazy 6's box 1 |
+| v2 | Visible 5-second countdown; no answer in time = "not sure" | Lecturer test: "I like the time pressure, but make it more obvious" |
 
 - **One aspect:** 57 of 100 Americans say they already see people around them struggling to tell what's real from what's fake.
 - **One interaction:** guess Real or AI on four pictures, then see the 57 as 100 dots.
@@ -8,7 +13,8 @@
 
 | File | What |
 |---|---|
-| `v1.html` | The prototype, one file. Shortcuts: `?step=end` (straight to the reveal), `?theme=dark` |
+| `v2.html` | Newest version. Shortcuts: `?step=end` (straight to the reveal), `?theme=dark`, `?limit=8` (seconds per picture) |
+| `v1.html` | First version, kept for comparison |
 | `prompts.md` | All prompts and the brief (needed for W44) |
 | `test.md` | Test script and a sheet to write down what testers say |
 

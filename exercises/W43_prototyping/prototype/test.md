@@ -1,4 +1,4 @@
-# Test: "Real or AI?" v1
+# Test: "Real or AI?" (v1 → v2)
 
 **From the prototype card**
 - **Hypothesis:** a reader who first fails (or hesitates) at the guess will feel that the real-vs-fake problem is shared, not a personal weakness.
@@ -33,3 +33,11 @@
 | Surprise | | | |
 
 **What I change in v2 because of this:**
+
+---
+
+## Test 0 · lecturer, in class, 22.10.2026 (v1)
+- **Verdict:** "It's good."
+- **Liked:** the time pressure (v1 measured the seconds and showed them after each answer).
+- **Change:** make the time pressure more obvious.
+- **Done in v2:** a visible 5-second countdown, a shrinking bar, and "time's up = not sure" (see `prompts.md`, prompt 3).

@@ -5,7 +5,7 @@
 | **Course rule (W43 slides)** | "The HTML file and **all prompts** go into the research documentation." |
 | **Tool** | Claude (Claude Code, model Opus 5.5), 22.10.2026 |
 | **Input** | Hand-drawn Crazy 6's sheet (`../photos/W43_crazy6.jpg`), box 1 "Guess", and the prototype card in `../in-class.md` |
-| **Output** | `v1.html`: one file, no build step, opens in any browser (needs internet for the pictures) |
+| **Output** | `v1.html`, `v2.html`: one file each, no build step, opens in any browser (needs internet for the pictures) |
 | **Structure** | As taught in W43: role and goal → guardrails → experience → design reference → data, word for word → output |
 
 > **How it was made:** in the chat I asked for the prototype in one short sentence. The model already had the prototype card, the sketch and the dataset in the conversation. Prompt 1 below is the complete brief that v1 was built from, written out so that anyone can paste it into an LLM and get the same prototype.
@@ -94,6 +94,38 @@ Three corrections, keep everything else the same:
 2. The 100-dot grid is too big on a phone. Limit it to about 260 px wide.
 3. If someone gets all four right, the heading "If that was harder than you thought…" doesn't fit.
    In that case show: "You got all four. But it was only four pictures, and you were looking closely."
+```
+
+## Prompt 3: v2, visible time pressure (after the first test)
+
+Test feedback (lecturer, 22.10.2026): *"It's good. I like the time pressure, but it should be more obvious."*
+In v1 the time was only measured and shown afterwards. v2 makes it visible.
+
+```text
+Make a copy of v1.html as v2.html and change only the time pressure. Keep everything else.
+
+GOAL
+The reader should feel the time pressure while looking at the picture, not only read about it afterwards.
+Testers said the timing was the most interesting part but it was hidden.
+
+CHANGES
+1. Intro: add one bold line "⏱ You only get 5 seconds per picture." and one line that explains why:
+   "That's about how long you look at a post before you scroll on." Add to the small print:
+   "No answer in time counts as 'not sure'."
+2. On each picture: a round countdown in the top-right corner (big number 5 → 1 with a ring that empties)
+   and a thin bar under the picture that shrinks. In the last 2 seconds both turn orange and the circle pulses
+   (no pulsing when the user prefers reduced motion).
+3. The clock only starts when the picture has loaded, so a slow connection does not eat the time.
+4. When time runs out: the buttons lock, the picture turns dark grey with "Time's up", and the answer says
+   "Time's up. That counts as 'not sure'. It was made by AI / a real photo."
+5. Reveal: timed-out pictures get a ⏱ label in grey (not orange: orange is the colour of the 57).
+   If the reader ran out of time at least once, replace the "longest pause" line with:
+   "You ran out of time on X of 4. In the survey, 7 of 100 Americans also answered 'not sure'."
+   Otherwise: "Your longest pause: X of 5 s on picture N."
+6. Add the shortcut ?limit=<seconds> (2–30) so I can test other time limits.
+
+DO NOT CHANGE
+The pictures, the order, the survey numbers, the 100 dots, the source line.
 ```
 
 ## How the pictures were chosen
