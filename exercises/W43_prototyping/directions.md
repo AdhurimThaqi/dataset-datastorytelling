@@ -82,7 +82,7 @@ Wireframe: `wireframes/B.svg`
   - "none of these" → a separate zone **of the same size**
   - age → lane
   - 2nd question → the floor flips and the dots re-sort (no crosstab, so no dot "moves with" a person)
-  - visitors' own positions → a tally on a **separate** wall, never merged into the US dots (brief §05)
+  - visitors' own positions → a tally on a **separate** wall, never merged into the US dots (brief section 05)
 - **Who leads:** the audience leads with their body, inside an authored loop that the author runs.
 - **What a non-participant gets:** a passer-by who never steps on still sees the loop 1 → 2 → 4 → 5 with the US numbers.
   People in company can talk about each other's spots.

@@ -314,7 +314,7 @@ B_FRAMES = [
      f"no answer {pc(A['no_answer'])}.", b5),
     ("6 · A room next to a country", "author", "Close: US dots on one wall, today's room tally on the other. "
      "Passers-by who never step on still see the loop 1 → 2 → 4 → 5.",
-     "own visitor answers: never mixed into the dataset (project brief §05).", b6),
+     "own visitor answers: never mixed into the dataset (project brief section 05).", b6),
 ]
 
 

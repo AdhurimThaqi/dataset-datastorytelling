@@ -1,4 +1,4 @@
-# Three sentences before we sketch (W42 §6)
+# Three sentences before we sketch (W42 section 6)
 
 Taken from `../W41_concept/concept.md`, `../W41_concept/user-survey.md` and `../W40_interviews/`. No new claims.
 Numbers: latest NORC wave, 10–14 Sep 2026, n = 1,083 (run `python data_cut.py`).

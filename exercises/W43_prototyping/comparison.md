@@ -20,7 +20,7 @@
 
 | | A | B | C |
 |---|---|---|---|
-| **Hand-in format** (brief §06) | interactive prototype | animatic | branched animatic |
+| **Hand-in format** (brief section 06) | interactive prototype | animatic | branched animatic |
 | **Tech** | 1 HTML page, plain JS/SVG; data as JSON generated from the CSV. **The AI draft already runs.** | projector + floor tracking (depth camera / pressure mats), or Wizard-of-Oz with paper. Animatic = video of the room states. | video/animation tool (Figma, After Effects, or HTML with 2 branches). Script, voice, timing. |
 | **New waves** (R13) | rebuild = run `build.py` | re-render the animatic | re-record the lines with new numbers |
 | **Effort until W51** | low–medium | high (hardware, space) | medium (writing-heavy) |
@@ -38,12 +38,12 @@
 - **Borrow from C:**
   - the "dinner table" framing for step 6, so it's easier to retell (C3 is A's weakest point)
   - C's rule "only speak a gap if it beats the margin of error", which A already uses in the tab text
-- **Keep B as the "only described" exhibition variant** (concept §8). Its "348 of 1,000 stand here with you" line can be A's step-4 sentence.
+- **Keep B as the "only described" exhibition variant** (concept section 8). Its "348 of 1,000 stand here with you" line can be A's step-4 sentence.
 - **Reconsider if:**
   - O1 comes back as "exhibition". → Then B (or C on a table screen) becomes the main direction, and A turns into its web companion.
   - The hand-sketch critique on 22.10 shows people prefer C's retelling.
 - **Before W44:** settle the closing wording.
   - "Under 35 are the *most* likely to think it can be shaped" (concept v1) isn't supported: 18–34 vs 35–49 is inside the margin.
-  - Use "younger adults are more likely than older adults" instead (see `ai-draft/checks.md` §2).
+  - Use "younger adults are more likely than older adults" instead (see `ai-draft/checks.md` section 2).
 
 **Decision (group, date):** _______________________

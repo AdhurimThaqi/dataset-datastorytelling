@@ -1,4 +1,4 @@
-# Three checks before we trust the draft (W42 §9.3)
+# Three checks before we trust the draft (W42 section 9.3)
 
 **Draft:** `index.html` (direction A), built by `build.py` from `template.html` + the official CSV.
 - Open it in a browser: double-click `index.html`.
@@ -21,7 +21,7 @@ Source: `exercises/W39_data/survey_all_waves_all_subgroups.csv`, line numbers as
 
 - **Extra check, by code:**
   - every value embedded in `index.html` (12 subgroups × sentiment, agency and real/fake codes) was compared with the CSV by a script on 20.10.2026: **0 mismatches**
-  - a missing CSV row is shown as 0 (see §2)
+  - a missing CSV row is shown as 0 (see section 2)
 - To reproduce: `python ../data_cut.py` prints the same values.
 
 ## 2 · Read the AI's list: filters, averages, roundings, guesses
@@ -81,8 +81,8 @@ Source: `exercises/W39_data/survey_all_waves_all_subgroups.csv`, line numbers as
 - [x] **`index.html` / `template.html` contain no interview content at all.** Checked by search on 20.10.2026 for every quote keyword from `../W40_interviews/` (TikTok, Pope, dinner, boss, "Nobody asks", P1–P3): 0 hits.
 - [x] **The page stores nothing:** no cookies, no localStorage, no network requests (the page loads no external scripts). The visitor's answers live only in page memory and are gone on reload.
 - [x] **Only the official aggregated dataset** (weighted % per subgroup) went into the draft, no individual respondents.
-- Follow the HSLU rules on AI tools. The prompt and the result are saved here as research documentation (W42 §9.4).
+- Follow the HSLU rules on AI tools. The prompt and the result are saved here as research documentation (W42 section 9.4).
 
-## Still to do (W42 §9.4: "it's still a sketch")
+## Still to do (W42 section 9.4: "it's still a sketch")
 - [ ] Make a second version with a different example (e.g. a different look borrowed from another reference) and compare. Note what doesn't work.
 - [ ] Re-run the prompt with the photo of the **hand sketch** of A instead of the wireframe.

@@ -1,6 +1,6 @@
 # W38 · Data Mapping mini-project (homework → reviewed in W40)
 
-Source: script W38 §05 + "Datasets — Data Mapping mini-project" (visualcontext.net).
+Source: script W38 section 05 + "Datasets — Data Mapping mini-project" (visualcontext.net).
 
 ## Task
 In how many ways can the same dataset be mapped?
