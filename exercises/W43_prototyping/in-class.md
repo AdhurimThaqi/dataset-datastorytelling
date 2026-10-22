@@ -9,7 +9,9 @@ Rule of the day: **one direction · one aspect of the data · one interaction ·
 - At least one box is an interaction never seen in a data visualisation.
 - Stuck? Take a verb: guess · sort · drag · place yourself · choose · compare · wait · reveal · answer · hold.
 - Then vote: two dots each on the most promising boxes (only one on your own sheet).
-- 📷 Photo of the sheet → `photos/W43_crazy6.jpg`
+- 📷 Photo of the sheet → `photos/W43_crazy6.jpg` ✅ (drawn in class, 22.10.2026)
+
+![My Crazy 6's sheet, drawn by hand](photos/W43_crazy6.jpg)
 
 ### How this differs from Milestone 2
 - **Milestone 2 (done):** three whole stories (A, B, C), 6 frames each, start to end → *which story and format?*
