@@ -11,6 +11,26 @@ Rule of the day: **one direction · one aspect of the data · one interaction ·
 - Then vote: two dots each on the most promising boxes (only one on your own sheet).
 - 📷 Photo of the sheet → `photos/W43_crazy6.jpg`
 
+### How this differs from Milestone 2
+- **Milestone 2 (done):** three whole stories (A, B, C), 6 frames each, start to end → *which story and format?*
+- **Crazy 6's (today):** zoom into **one moment** of the chosen direction (A, frames 1–2: "Real or AI?" → the number)
+  and sketch **6 different interactions** for just that moment → *how should this one moment work?*
+- The winning box becomes the small HTML prototype that gets built and tested.
+
+### Six box ideas (reference, the sheet itself is drawn by hand)
+The aspect: **"57 of 100 Americans have seen people struggling to tell what's real from what's fake."**
+
+| # | Verb | Sketch | The reader … | … and then sees … |
+|---|---|---|---|---|
+| 1 | Guess | phone, image, two buttons REAL / AI | guesses if the image is real or AI | "57 of 100 Americans struggle with this too" |
+| 2 | Place yourself | row of 100 dots, a slider | drags their own dot to "I've seen this happen" | 57 dots light up next to theirs |
+| 3 | Sort | 6 headline cards, two piles REAL / FAKE | sorts 6 headlines into real and fake | their own score next to the 57 of 100 |
+| 4 | Estimate | empty bar, a hand drawing on it | estimates how many Americans struggle with fakes | the real number (57) next to their guess |
+| 5 | Hold | blurred image, a finger pressing | holds down to slowly unblur an image | "57 of 100 couldn't tell either" when it turns sharp |
+| 6 | Wait (never seen in a data vis) | phone with a message bubble "look at this video 😳" | receives a fake "message from a friend" with a video | that 57 of 100 Americans have had exactly this moment |
+
+Favourites: **1** (closest to direction A) and **6** (the most original). The prototype card below is written for box 1.
+
 ## 2 · Prototype card (A5, for the winning box)
 Draft for direction A. **Check it against what you wrote on paper and correct it to match.**
 
