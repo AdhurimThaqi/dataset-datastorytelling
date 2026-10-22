@@ -1,6 +1,6 @@
-# Interview 03 — Retail worker, 34, rarely uses AI
+# Interview 03 — Retail worker, 52, rarely uses AI
 
-- **Who:** P3, man, 34, retail worker. Uses AI only occasionally, mostly meets it through social media and online services; uncertain about it.
+- **Who:** P3, man, 52, retail worker. Uses AI only occasionally, mostly meets it through social media and online services; uncertain about it.
 - **Why this person:** contrast case: rare user (the majority of US adults use AI rarely, see desk research S8). *Planned was someone 50+; not reached yet.*
 - **Date:** October 2026 · **Interviewer:** Adhurim Thaqi (solo project, notes written up after the interview)
 
