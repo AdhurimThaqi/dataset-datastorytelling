@@ -18,6 +18,11 @@ Rule of the day: **one direction · one aspect of the data · one interaction ·
 - The winning box becomes the small HTML prototype that gets built and tested.
 
 ### Six box ideas (reference, the sheet itself is drawn by hand)
+
+Digital reference sheet: `wireframes/crazy6.svg` (made by `make_crazy6.py`). Redraw it by hand; this is not the paper sheet.
+
+![Crazy 6s reference](wireframes/crazy6.svg)
+
 The aspect: **"57 of 100 Americans have seen people struggling to tell what's real from what's fake."**
 
 | # | Verb | Sketch | The reader … | … and then sees … |
