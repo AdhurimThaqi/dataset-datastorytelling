@@ -2,8 +2,8 @@
 
 - **Who:** P2, office worker in logistics / administration (not IT), ~30, uses Copilot at work daily, ChatGPT privately sometimes
 - **Why this person:** primary target group (R6), the work side: AI at the job, time pressure
-- **Date / place / duration:** [date] · video call · ~25 min
-- **Interviewer / note-taker:** [name] / [name]
+- **Date / place / duration:** [15.10.2026] · video call · ~25 min
+- **Interviewer / note-taker:** [Adhurim] / [Thaqi]
 
 | What was said (verbatim quote) | What we observed / context | What it means for us (insight) |
 |---|---|---|

@@ -2,8 +2,8 @@
 
 - **Who:** P1, business student (HSLU Wirtschaft), 22, uses ChatGPT several times a week for studying
 - **Why this person:** primary target group (R6): weekly AI user, no technical background
-- **Date / place / duration:** [] · campus café, HSLU · ~20 min
-- **Interviewer / note-taker:** [name] / [name]
+- **Date / place / duration:** [10.10.2026] · campus café, HSLU · ~20 min
+- **Interviewer / note-taker:** [Adhurim] / [Thaqi]
 
 | What was said (verbatim quote) | What we observed / context | What it means for us (insight) |
 |---|---|---|

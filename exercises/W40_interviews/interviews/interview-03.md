@@ -2,8 +2,8 @@
 
 - **Who:** P3, family member, ~58, works in retail, rarely uses AI knowingly
 - **Why this person:** contrast case / secondary target group (R7): the most concerned age group in the data
-- **Date / place / duration:** [date] · at home · ~20 min
-- **Interviewer / note-taker:** [name] / [name]
+- **Date / place / duration:** [20.10.2026] · at home · ~20 min
+- **Interviewer / note-taker:** [Adhurim] / [Thaqi]
 
 | What was said (verbatim quote) | What we observed / context | What it means for us (insight) |
 |---|---|---|
