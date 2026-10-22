@@ -60,6 +60,11 @@ ACCEPTANCE  1. Understood without our help
 ```
 
 ## 3 · Build and test (rest of the lesson)
+
+**Built:** [prototype v1, "Real or AI?"](https://adhurimthaqi.github.io/dataset-datastorytelling/exercises/W43_prototyping/prototype/v1.html).
+Four valley pictures (2 AI, 2 real) → guess → "57 of 100" as 100 dots.
+All prompts are in [`prototype/prompts.md`](https://github.com/AdhurimThaqi/dataset-datastorytelling/blob/main/exercises/W43_prototyping/prototype/prompts.md) and the test script in [`prototype/test.md`](https://github.com/AdhurimThaqi/dataset-datastorytelling/blob/main/exercises/W43_prototyping/prototype/test.md).
+
 - Build **one HTML file** with an LLM: guardrails → experience (longest part) → one design reference → the data word for word.
   Interaction first, one change per prompt, save `v1.html`, `v2.html` …, check every number against the source.
 - Test with a stranger: one sentence of introduction, three minutes of silence, then *"What did you take away?"*

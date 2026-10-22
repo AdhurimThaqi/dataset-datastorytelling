@@ -1,0 +1,35 @@
+# Test: "Real or AI?" v1
+
+**From the prototype card**
+- **Hypothesis:** a reader who first fails (or hesitates) at the guess will feel that the real-vs-fake problem is shared, not a personal weakness.
+- **We are wrong if** readers treat it as a quiz score and don't connect the number to themselves.
+
+## How (about 5 minutes per person)
+1. Say one sentence only: *"This is a small prototype about AI. Please go through it and think out loud."*
+2. Hand over the phone with `v1.html` open. **Stay silent for 3 minutes.** Don't help, don't explain.
+3. Then ask:
+   - "What did you take away?"
+   - "What was the number at the end?" (Does the 57 stick?)
+   - "Did it feel like a quiz, or like it was about you?"
+   - "Was anything unclear?"
+4. Two minutes later, ask again: "Which number do you still remember?"
+
+## Acceptance (from the card)
+1. Understood without my help
+2. Every number is on the source page
+3. Surprise: something none of us expected
+
+## Notes
+
+| | Tester 1 | Tester 2 | Tester 3 |
+|---|---|---|---|
+| Who (age, AI use) | | | |
+| Score / longest pause | | | |
+| Said out loud while using it | | | |
+| "What did you take away?" | | | |
+| Number remembered (right away / after 2 min) | | | |
+| Quiz or about them? | | | |
+| Unclear | | | |
+| Surprise | | | |
+
+**What I change in v2 because of this:**
