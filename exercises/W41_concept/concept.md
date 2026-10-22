@@ -1,4 +1,4 @@
-# Concept — v1 (12.10.2026)
+# Concept — v1.1 (22.10.2026, updated with the interviews)
 
 **Working title:** *Worried, but it's coming anyway*
 
@@ -10,22 +10,23 @@
 ## 2 · Target group and their task
 - **Who:** students and young professionals in Switzerland, 20–35, weekly AI users, opinion not settled. (R6)
 - **Their task:** "Find out whether how I feel about AI is normal, and have one sentence I can use when the topic comes up." (R6, S5)
-- **Secondary:** 50+ rarely-users get the same path. The age comparison gives them their own reference point. (R7, S3)
+- **Secondary:** 50+ rarely-users get the same path. The age comparison gives them their own reference point. (R7) [A: no 50+ interview yet → add one before W48]
 
 ## 3 · Key message (one sentence, no judgement about AI)
-> **Most people are worried about AI, and most of them think it's coming anyway. People under 35 are the most likely to think it can still be shaped.**
+> **Most people are worried about AI, and most of them think it's coming anyway. Younger adults are more likely than older adults to think it can still be shaped.**
 - Why this message: it is the strongest tension in the data (R17, S2), and it stays true across all waves (R13, R18).
-- The second half is the "surprise" for our users (R10c, S3). **Check after every new wave** that the age gap is still bigger than the margin of error. (R12)
+- Wording: "more likely than older adults", not "the most likely" — 18–34 vs 35–49 is inside the margin of error (see `../W43_prototyping/ai-draft/checks.md`).
+- The second half is a data finding (R10c). **Check after every new wave** that the age gap is still bigger than the margin of error. (R12)
 
 ## 4 · How it works (the path)
 Who leads: **alternating**. The author opens and closes, and the visitor acts in the middle.
 Why: the message lands even without interaction, and the visitor's own answer makes it relevant. (R10b, S4)
 1. **Hook, authored:** "Real or AI?" One image or quote. The visitor guesses, then sees "4 in 5 Americans say people around them struggle with exactly this." (S1)
 2. **You answer, visitor:** the survey's own sentiment question (excited ↔ concerned), with "none of these" as an option. The answer is not stored. "None of these" counts as a full answer, because people often feel both. (R11, R12, R15, S6)
-3. **You vs. them, visitor:** your answer next to the US distribution, then by age group. Party and race are available behind a toggle but not shown by default. The core moment: "you're not alone, most people feel this". (R9, R14, S3, S4, S7)
-4. **The turn, authored:** the second question ("can society still shape it, or is it inevitable?"). The visitor answers, then sees that most of the worried also say "inevitable", but the young less so. (R17, S2, S3)
-5. **Close, authored:** the key message as one sentence to take home, plus the note "US data, latest wave, updated every two weeks". (R13, S5)
-- **If someone clicks nothing:** steps 1, 4 and 5 still play as an animatic with the total numbers. The core message gets through. ("If I need to click a lot I'll stop" — P3) (R2, R10b)
+3. **You vs. them, visitor:** your answer next to the US distribution, then by age group. Party and race are available behind a toggle but not shown by default. One line says where the numbers come from: "1,083 US adults, a representative survey, not the loudest comments". The core moment: "you're not alone, most people feel this". (R9, R14, S4, S5, S7)
+4. **The turn, authored:** the second question ("can society still shape it, or is it inevitable?"). The visitor answers, then sees that two in three say "inevitable", and younger adults less so than older ones. (R17, S2) [no crosstab: we say "two majorities", not "the worried are the ones who say inevitable"]
+5. **Close, authored:** the key message as one sentence to take home, plus the note "US data, latest wave, updated every two weeks". The close also names the limit: the data shows that most people struggle with fakes, it doesn't teach how to spot them (P3). (R13, S5)
+- **If someone clicks nothing:** steps 1, 4 and 5 still play as an animatic with the total numbers. The core message gets through. (R2, R10b)
 
 ## 5 · Data basis
 - **Used:**
@@ -46,8 +47,8 @@ Why: the message lands even without interaction, and the visitor's own answer ma
 ## 7 · How we know it worked (goal → signal → metric, W48 user test, 5 people from R6)
 - Find your place → they point to their own age group and say "more / less worried than average" → **≥ 4 of 5** without help. (R10a)
 - Understand the tension → they retell the key message in their own words → **≥ 3 of 5**. (R10b, S2, S5)
-- Surprise → they name the age gap on "can be shaped" (or another real difference) as unexpected → **≥ 3 of 5**. (R10c, S3)
-- Swap these for the criteria from `../W40_interviews/criteria.md` once the interviews exist.
+- Surprise → they say the numbers come from a representative survey, not from comments → **≥ 3 of 5**. (R10c, S7)
+- Criteria and source quotes: `../W40_interviews/criteria.md`.
 
 ## 8 · Scope of the prototype
 - **Built:** an interactive web prototype (HTML + D3/Plotly or Figma) with the 5 steps, real data from the latest wave, and a click-nothing autoplay. (R2, R15)
@@ -57,7 +58,7 @@ Why: the message lands even without interaction, and the visitor's own answer ma
 - **Not built:** dashboard, all questions, accounts, saving answers. (R20)
 
 ## 9 · Risks and open questions
-- **The interviews are a draft fill-in.** If the real notes contradict S1 (hook), S3 (age axis) or S4 (bridge), steps 1 and 3 change.
+- **Only 3 interviews, all in Switzerland, nobody 50+.** S1, S4 and S5 are clearly supported; the age axis rests on the survey data, not on the interviews. → Add a 50+ interview before W48.
 - **Small subgroup samples:** in the latest wave, 18–34 has only n = 203 (65+: 340, Black non-Hispanic: 122, from `data.json`). That means roughly ±7 pts or more per group.
   The age gap on "can be shaped" (~19 pts) holds, but smaller gaps may not. → Re-check every wave. (R12)
 - **The message could flip:** if a future wave closes the age gap, the second half of the key message disappears. → The first half stands on its own. (R13)

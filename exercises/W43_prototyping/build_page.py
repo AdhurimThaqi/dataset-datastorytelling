@@ -17,6 +17,19 @@ WIREFRAMES = (
                   for k, t in [("A", "A · Real or AI? (web)"), ("B", "B · Stand where you feel (exhibition)"),
                                ("C", "C · Dinner table (branched animatic)")])
 )
+def sketches():
+    photos = sorted(f.name for f in (HERE / "photos").iterdir() if f.suffix.lower() in (".jpg", ".jpeg", ".png"))
+    out = ("# Hand sketches (the milestone)\n\n"
+           "Drawn by hand in a notebook, two frames per double page, then photographed. "
+           "Corrections are left visible on purpose.\n\n")
+    out += "\n\n".join(f"### {f.rsplit('.', 1)[0].replace('_', ' ')}\n\n[![{f}]({BASE}photos/{f})]({BASE}photos/{f})" for f in photos) \
+        if photos else "_No photos yet._"
+    out += ("\n\n---\n\n> **Disclosure:** before sketching, an AI image tool was used to make a storyboard reference "
+            f"([view it]({BASE}ai-reference/AI_storyboard_A_B_C.png)). The W42 script recommends sketching first; "
+            "this order is noted in the process log. The sketches above are drawn by hand.")
+    return out
+
+
 AI_DRAFT = (
     "# AI draft (optional W42 step)\n\n"
     f"**[Open the draft of direction A →]({BASE}ai-draft/index.html)** · made *after* the wireframes, "
@@ -24,6 +37,7 @@ AI_DRAFT = (
 )
 
 DOCS = [
+    ("sketches", "Hand sketches", "The milestone: photos", None),
     ("directions", "Directions", "Three sentences + A, B, C", ["three-sentences.md", "directions.md"]),
     ("wireframes", "Wireframes", "6 frames per direction", None),
     ("compare", "Comparison", "Criteria, feasibility, recommendation", ["comparison.md"]),
@@ -32,7 +46,9 @@ DOCS = [
 
 
 def load(key, files):
-    if key == "wireframes":
+    if key == "sketches":
+        text = sketches()
+    elif key == "wireframes":
         text = WIREFRAMES
     else:
         text = (AI_DRAFT if key == "ai" else "") + "\n\n---\n\n".join(
@@ -62,7 +78,7 @@ a{{color:var(--accent)}}
 .kicker{{color:var(--ink2);font-size:13px;letter-spacing:.06em;text-transform:uppercase;margin:0}}
 h1{{margin:.2em 0 .3em;line-height:1.15}}
 .lede{{color:var(--ink2);margin:0 0 24px}}
-nav{{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;position:sticky;top:0;background:var(--surface);padding:10px 0;z-index:1}}
+nav{{display:grid;grid-template-columns:repeat({len(DOCS)},1fr);gap:10px;position:sticky;top:0;background:var(--surface);padding:10px 0;z-index:1}}
 nav button{{text-align:left;font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer}}
 nav button span{{display:block;color:var(--ink2);font-size:13px;line-height:1.35;margin-top:2px}}
 nav button[aria-selected="true"]{{border-color:var(--accent);box-shadow:inset 0 -3px 0 var(--accent)}}

@@ -75,6 +75,8 @@ Source: `exercises/W39_data/survey_all_waves_all_subgroups.csv`, line numbers as
 
 ## 3 · Protect people: no names, quotes or personal data
 
+> Note (22.10.2026): the two interview points in `prompt.md` came from the earlier draft interview notes. The final interviews are in `../../W40_interviews/interviews/`; the prompt is kept as it was actually used.
+
 - [x] **`prompt.md` contains no names, no ages, no study programme and no verbatim interview quotes.** The two interview points are rewritten in our own words ("an older interviewee felt left out of the decision about AI"; "a younger one could not tell whether a video online was real").
 - [x] **`index.html` / `template.html` contain no interview content at all.** Checked by search on 20.10.2026 for every quote keyword from `../W40_interviews/` (TikTok, Pope, dinner, boss, "Nobody asks", P1–P3): 0 hits.
 - [x] **The page stores nothing:** no cookies, no localStorage, no network requests (the page loads no external scripts). The visitor's answers live only in page memory and are gone on reload.

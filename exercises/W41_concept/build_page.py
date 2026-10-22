@@ -14,8 +14,7 @@ DOCS = [
     ("concept", "Concept", "This is how we solve it, and this is why.", "concept.md"),
 ]
 
-QUOTE_NOTE = ("> Quotes in this version are working wording and will be replaced "
-              "with the final interview notes.\n\n")
+QUOTE_NOTE = ""
 
 
 def load(name):

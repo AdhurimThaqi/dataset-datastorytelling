@@ -9,7 +9,8 @@ about 2 in 3 Americans are concerned about AI (68.8 %, `ai_sentiment`), and abou
 "people like me can shape how much AI is part of our lives". Among 18–34 it is 26.7 %, among 65+ 8.1 %.
 
 **People told us …**
-"Nobody asks us if we want that." (interview 03, 50+, about AI in the news)
+"I couldn't tell whether it was genuine, and I didn't know how to check it." (interview 03, about a video shared by someone he knows)
+— and: "The challenge is knowing whether the people commenting represent the wider population or just a very vocal group." (interview 02)
 
 **Our question: How might we …?**
 How might we let young adults find out whether their feeling about AI is "normal", and show them

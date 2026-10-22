@@ -4,7 +4,7 @@
 - **R1 · In our words:** "Americans on AI" turns US public opinion on AI into percentages every two weeks. We design *one* way into that data
   that lets a non-expert feel where public opinion stands, and where they stand themselves.
 - **R2 · Format:** animatic, branched animatic, or interactive prototype, plus a short justification of our decisions. Web or exhibition.
-- **R3 · Frame:** groups of 2–3, HSLU I.BA_DAS, final presentation to Interactive Things on **17.12.2026**. We make a prototype, not a product.
+- **R3 · Frame:** solo project (Adhurim Thaqi; the brief says groups of 2–3, solo to be confirmed with the lecturers), HSLU I.BA_DAS, final presentation to Interactive Things on **17.12.2026**. We make a prototype, not a product.
 
 ## Client vs. end users (not the same)
 - **R4 · Client:** Interactive Things (Zurich), which builds the official platform. **Data owner:** Athena Insights (fieldwork: NORC).
