@@ -168,10 +168,51 @@ Make a copy of v2.html as v3.html. Keep the pictures, their order, the survey nu
 3. Review shortcuts: ?step=result and ?step=number.
 ```
 
+## Prompt 5: v4, a random picture pool (29.10.2026)
+
+Feedback on v3 (three testers, see `test.md`): positive, the timing works, it's fun and clear. But after several plays it gets predictable, because it's always the same four pictures.
+In the chat I asked: *"start v4 with the random picture pool"*. The model already had the test notes and `../../W44_plan/concept-refinement.md` in the conversation. Written out as a full brief:
+
+```text
+Make a copy of v3.html as v4.html. Keep the clock, the 3-2-1 screen, the result screen, the survey numbers,
+the 100 dots and the source line. Change only how the pictures are chosen.
+
+1. A POOL INSTEAD OF FOUR FIXED PICTURES
+   - At least 12 pictures, half real, half AI, all mountain valleys with a river (same scene, so the subject
+     gives nothing away). Only from Wikimedia Commons, with a licence you have checked:
+     AI pictures public domain / CC0, photos CC BY or CC BY-SA, credit shown after each answer.
+   - Leave out any picture with a visible watermark or AI badge, any that looks like an illustration,
+     and any with an open deletion request on Commons.
+2. A RANDOM DRAW EVERY ROUND
+   - Each round: exactly 2 real + 2 AI, in random order. The round is still 4 pictures × 5 seconds.
+   - Remember (in localStorage, per viewer) which pictures were already shown. No repeats until the pool
+     is used up; then start over, but never repeat the round just played.
+   - If storage is blocked (private mode), it must still work, just random.
+   - Preload only the four pictures of the current round.
+3. TEXT
+   - Intro: "Two are photos. Two were made by AI." and "New pictures every round (16 in the pool)."
+   - The end button: "Play again · new pictures".
+   - The source line lists the picture authors and licences.
+4. Review shortcut ?reset to forget the pictures already seen.
+5. Test it: 2+2 in every round, no repeat from the round before, all pictures covered before any repeat,
+   and every picture URL loads.
+```
+
+**What was checked (29.10.2026):**
+- the draw logic in Node.js: 2,000 simulated viewers × 12 rounds. Always 2 real + 2 AI, no repeat from the round before, all 16 pictures shown within the first 4 rounds, and it still works with storage blocked.
+- all 16 picture links load from Wikimedia (HTTP 200)
+- licences and authors read from the Commons file pages
+
 ## How the pictures were chosen
 - **AI pictures:** from the Wikimedia Commons category "AI-generated landscapes".
+  - From v4, all 8 come from one Commons user (VulcanSphere), who generated the same valley prompt with different models (Imagen 3.0, Reve, HiDream, AuraFlow, FLUX, Stable Diffusion 3.5). All are public domain (CC0).
 - **Real photos:** from a Commons search for Swiss river valleys (Val Bavona, Ticino).
-- **Why these four:** all four show the same scene (a valley with a river, afternoon light), so the subject gives nothing away.
+  - From v4 there are 8, by SchmalspurDVZO (CC BY-SA 4.0), Alain Rouiller (CC BY-SA 2.0) and Adrian Michael (CC BY-SA 3.0).
+- **Why this scene:** every picture shows the same scene (a valley with a river), so the subject gives nothing away.
+- **Left out in v4:**
+  - the Ideogram 2.0 valley from v1–v3, because it has a deletion request on Commons (Sept 2026)
+  - the Imagen 4.0 valley, which has a visible "ai" badge in the corner
+  - the SD1.5 and FLUX poster images, which look like illustrations
 
 ## Checks
 All numbers checked against `exercises/W39_data/survey_all_waves_all_subgroups.csv` (see `README.md`): 0 mismatches, and the dots add up to 100.
