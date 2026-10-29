@@ -24,6 +24,15 @@
 
 These are nice to have and come in sprint 2, if there is time. See the backward plan in the implementation plan.
 
+## Status 29.10 (started early)
+- **Tasks 1–4 done:** `exercises/W45_sprint1/v5.html`
+- **Checks:**
+    - `check.py`: 71 checks, 0 mismatches
+    - a click-through from the intro to the close in a simulated browser, without a script error
+- **Still open:**
+    - task 1 on a real phone
+    - task 5, the tester
+
 ## Sprint review (fill in on 12.11)
 
 - Sprint goal reached? ☐ yes ☐ partly ☐ no

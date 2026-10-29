@@ -203,6 +203,43 @@ the 100 dots and the source line. Change only how the pictures are chosen.
 - all 16 picture links load from Wikimedia (HTTP 200)
 - licences and authors read from the Commons file pages
 
+## Prompt 6: v5, the whole story in one file (sprint 1, 29.10.2026)
+
+In the chat I asked: *"do everything necessary and required, we want to build a good product"*. The model already had the sprint plan (`../../W44_plan/documentation/02_sprint-plan.md`), v4 and the W43 AI draft in the conversation. Written out as a full brief:
+
+```text
+Build v5: all six steps of direction A in ONE file, following sprint 1. Put it in exercises/W45_sprint1/.
+
+1. STRUCTURE
+   - template.html (the page, no numbers) + build.py (reads the CSV through data_cut.py, writes v5.html
+     with every number as JSON) + check.py (compares every number in v5.html with the CSV).
+2. STEPS (keep the v4 design: off-white surface, system font, rounded cards, one strong colour per screen)
+   1 Hook: the v4 Real-or-AI game, unchanged (pool of 16, 2 + 2 per round, 5-second clock).
+   2 Reveal: 57 of 100 as 100 dots, legend, "only 2 in 100 don't expect it". Button "Now you →".
+   3 Your answer: the sentiment question and its answer labels word for word from data.json.
+   4 You vs. America: 1,000 dots + the visitor's outlined dot; tabs: all US adults and the 4 age groups.
+     Say "more" or "less" only if the gap beats the combined margin of error, otherwise "about the same".
+   5 The turn: the agency question word for word; then "2 in 3 say it's coming anyway", a stacked bar
+     with the visitor marked, and "can shape" by age as bars with the gap rule (18–34 vs 65+).
+   6 Close: the key message (second sentence only while the age gap is real), the visitor's path
+     (eyes / feel / think), all numbers as a table, the full source, "Play again · new pictures".
+   A thin 6-step progress bar on every screen.
+3. GUARDRAILS
+   - No hand-typed survey number anywhere in the template. "Not sure" and "no answer" stay visible.
+   - Neutral towards AI. US adults, not Swiss opinions: say so on the last screen.
+   - Nothing is saved or sent, except the list of pictures already seen (localStorage, as in v4).
+   - Review shortcuts ?step=1…6, &a=, &b=, &g=, ?theme=, ?limit=, ?reset.
+4. TEST
+   - check.py: 0 mismatches, and it must catch a planted wrong number.
+   - Click through intro → close in a browser without a script error; screenshot every step.
+```
+
+**What was checked (29.10.2026):**
+- `check.py`: 71 checks, 0 mismatches. A planted wrong number and a hand-typed number were both caught.
+- a click-through in jsdom, twice (once with two clock time-outs): every step reached, no script error
+- screenshots of every step in headless Edge, light and dark mode
+- Not yet: a real phone and a real tester (sprint task 5).
+
 ## How the pictures were chosen
 - **AI pictures:** from the Wikimedia Commons category "AI-generated landscapes".
   - From v4, all 8 come from one Commons user (VulcanSphere), who generated the same valley prompt with different models (Imagen 3.0, Reve, HiDream, AuraFlow, FLUX, Stable Diffusion 3.5). All are public domain (CC0).
@@ -217,5 +254,5 @@ the 100 dots and the source line. Change only how the pictures are chosen.
 ## Checks
 All numbers checked against `exercises/W39_data/survey_all_waves_all_subgroups.csv` (see `README.md`): 0 mismatches, and the dots add up to 100.
 
-## Next prompts (v5 …)
+## Next prompts (v6 …)
 One change per prompt, based on what testers said (`test.md`). Save each version as a new file and add the prompt here.

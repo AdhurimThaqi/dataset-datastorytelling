@@ -71,6 +71,8 @@ I work alone, so every contribution below is mine. AI tools I used (Claude) are 
   - prototype v4, with prompt 5 added to `prompts.md`
   - the test results in `test.md`
   - the home page now links v4
+  - `W44_plan/documentation/`: the two documents the W44 slides ask for (implementation plan, sprint plan) and a research appendix, as PDF
+  - **Sprint 1 started early:** `W45_sprint1/v5.html` puts all six steps into one file (hook → 57 → your answer → you among 1,000 → the turn → the key message). Every number comes from `build.py`, and `check.py` finds 0 mismatches. Still open: a test on a real phone, with one tester.
 - **Coaching (Gordan):** _feedback: ____________________
 - **Still open from last week:**
   - web vs. exhibition (the plan assumes web, phone first)

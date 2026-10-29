@@ -1,0 +1,671 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Worried, but it's coming anyway</title>
+<!--
+  Prototype v5 · sprint 1 · direction A: all six steps in one file
+  1 Hook (Real or AI?) · 2 Reveal (57 of 100) · 3 Your answer · 4 You vs. America · 5 The turn · 6 Close
+  The hook is v4 (random pool of 16 pictures). Steps 3–6 come from the W43 AI draft, redesigned in the v4 style.
+  HSLU I.BA_DAS, Adhurim Thaqi (solo). Built with Claude (LLM), prompts in ../W43_prototyping/prototype/prompts.md.
+  THIS FILE IS GENERATED: edit template.html, then run `python build.py`. Every number comes from the CSV (see check.py).
+  Review shortcuts: ?step=1…6 (or intro / result / number / ask / you / turn / close) · &a=<feeling code> · &b=<view code>
+                    · &g=<group> · ?theme=dark / light · ?limit=8 (seconds per picture) · ?reset (forget seen pictures)
+-->
+<style>
+:root{--surface:#fcfcfb;--panel:#fff;--ink:#0b0b0b;--ink2:#52514e;--muted:#8a8984;--line:#e6e5e0;--soft:#f3f2ee;
+--seen:#d9531e;--starting:#f2b393;--rest:#d7d6d0;--na:#ecebe6;--accent:#2a78d6;--hot:#d9531e;--late:#6e6d68;
+--vexc:#1c5cab;--sexc:#86b6ef;--scon:#ee9b72;--vcon:#b84a1d;--none:#bdbcb6;--noans:#e2e1dc;--shape:#2a78d6;--inev:#eb6834}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--surface:#1a1a19;--panel:#222221;--ink:#fff;--ink2:#c3c2b7;--muted:#8f8e86;--line:#34332f;--soft:#2a2a28;
+--seen:#f07a45;--starting:#8a4a2c;--rest:#55544f;--na:#3a3936;--accent:#3987e5;--hot:#f07a45;--late:#8f8e86;
+--vexc:#86b6ef;--sexc:#256abf;--scon:#c4501f;--vcon:#f2a27e;--none:#6b6a65;--noans:#45443f;--shape:#3987e5;--inev:#d95926}}
+:root[data-theme="dark"]{--surface:#1a1a19;--panel:#222221;--ink:#fff;--ink2:#c3c2b7;--muted:#8f8e86;--line:#34332f;--soft:#2a2a28;
+--seen:#f07a45;--starting:#8a4a2c;--rest:#55544f;--na:#3a3936;--accent:#3987e5;--hot:#f07a45;--late:#8f8e86;
+--vexc:#86b6ef;--sexc:#256abf;--scon:#c4501f;--vcon:#f2a27e;--none:#6b6a65;--noans:#45443f;--shape:#3987e5;--inev:#d95926}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--surface);color:var(--ink);font:17px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:480px;margin:auto;padding:14px 16px 32px;min-height:100svh;display:flex;flex-direction:column}
+section{display:none;flex:1;flex-direction:column}
+section.on{display:flex;animation:in .35s ease}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+h1{font-size:36px;line-height:1.1;margin:.4em 0 .3em;letter-spacing:-.01em}
+h2{font-size:24px;line-height:1.25;margin:.2em 0 .5em}
+p{margin:.5em 0}
+.ink2{color:var(--ink2)}.small{font-size:14px;color:var(--ink2)}.tiny{font-size:12px;color:var(--muted)}
+.kicker{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0}
+button{font:inherit;cursor:pointer;border-radius:14px;border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:14px 18px;min-height:54px}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.primary{background:var(--ink);color:var(--surface);border-color:var(--ink);font-weight:700;width:100%}
+.spacer{flex:1;min-height:20px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px}
+
+/* story progress (6 steps) */
+.story{display:flex;align-items:center;gap:10px;margin:0 0 12px}
+.story .segs{flex:1;display:flex;gap:4px}.story i{flex:1;height:3px;border-radius:2px;background:var(--line)}.story i.on{background:var(--ink2)}
+.story span{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.story.hide{visibility:hidden}
+
+/* intro */
+.rule{display:flex;gap:12px;align-items:center;margin-top:20px}
+.rule .clock{flex:none;width:58px;height:58px;border-radius:50%;background:var(--ink);color:var(--surface);display:flex;align-items:center;justify-content:center;font:800 26px/1 system-ui,sans-serif}
+.rule b{font-size:19px;display:block;line-height:1.25}
+
+/* 3-2-1 */
+#s-ready{align-items:center;justify-content:center;text-align:center}
+.count{font:900 160px/1 system-ui,sans-serif;letter-spacing:-.05em;margin:0}
+.count.pop{animation:pop .9s ease-out}
+@keyframes pop{0%{transform:scale(1.6);opacity:0}25%{opacity:1}100%{transform:scale(.9);opacity:.85}}
+
+/* guess */
+.progress{display:flex;gap:6px;margin:4px 0 10px}.progress i{flex:1;height:4px;border-radius:2px;background:var(--line)}.progress i.done{background:var(--ink)}
+.clockbar{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:16px;background:var(--soft);margin-bottom:10px;transition:background .3s,color .3s}
+.clockbar .num{flex:none;width:56px;height:56px;border-radius:50%;background:var(--ink);color:var(--surface);display:flex;align-items:center;justify-content:center;font:900 30px/1 system-ui,sans-serif;font-variant-numeric:tabular-nums}
+.clockbar .say{flex:1;font-weight:700;font-size:17px;line-height:1.25;min-height:2.5em;display:flex;align-items:center}
+.clockbar.hurry{background:var(--hot);color:#fff}
+.clockbar.hurry .num{background:#fff;color:var(--hot);animation:shake .25s linear infinite}
+.clockbar.done{background:var(--late);color:#fff}.clockbar.done .num{background:#fff;color:var(--late);animation:none}
+.clockbar.paused{opacity:.5}
+@keyframes shake{0%,100%{transform:rotate(0)}25%{transform:rotate(-8deg)}75%{transform:rotate(8deg)}}
+.fuse{position:relative;height:8px;border-radius:4px;background:var(--line);margin:0 0 12px}
+.fuse i{position:absolute;left:0;top:0;bottom:0;width:100%;border-radius:4px;background:var(--ink);transform-origin:left}
+.fuse b{position:absolute;top:50%;width:22px;height:22px;margin:-11px 0 0 -11px;font-size:18px;line-height:22px;text-align:center}
+.fuse.hurry i{background:var(--hot)}
+.pic{position:relative;border-radius:16px;overflow:hidden;background:var(--soft);aspect-ratio:4/3;border:1px solid var(--line)}
+.pic img{width:100%;height:100%;object-fit:cover;display:block;transition:filter .3s}
+.pic .err{position:absolute;inset:0;display:none;align-items:center;justify-content:center;text-align:center;padding:20px;color:var(--ink2);font-size:14px}
+.pic.broken .err{display:flex}
+.pic.timeout img{filter:grayscale(1) brightness(.55) blur(2px)}
+.pic .tout{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center;font:800 26px/1.15 system-ui,sans-serif;padding:16px}
+.pic .tout span{font-size:44px}
+.pic.timeout .tout{display:flex}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.choices button{font-size:20px;font-weight:800;letter-spacing:.04em}
+.choices button[disabled]{opacity:.4;cursor:default}
+.choices button.picked{opacity:1;border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.answer{margin-top:12px;padding:14px 16px;border-radius:14px;background:var(--soft);display:none}
+.answer.on{display:block;animation:in .3s ease}
+.answer b{font-size:18px}
+.answer .credit{font-size:12px;color:var(--muted);margin-top:6px}.answer .credit a{color:inherit}
+.next{margin-top:12px;display:none}.next.on{display:block}
+
+/* result */
+.score{font:900 84px/1 system-ui,sans-serif;letter-spacing:-.04em;margin:.1em 0 0}
+.score small{font-size:32px;color:var(--muted);font-weight:700}
+.thumbs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:22px 0 14px}
+.thumbs div{border-radius:14px;overflow:hidden;position:relative;aspect-ratio:4/3;background:var(--soft)}
+.thumbs img{width:100%;height:100%;object-fit:cover;display:block}
+.thumbs span{position:absolute;left:8px;top:8px;font-size:12px;font-weight:800;padding:4px 9px;border-radius:999px;background:rgba(255,255,255,.92);color:#0b0b0b}
+.thumbs span.wrong{background:#0b0b0b;color:#fff}
+.thumbs span.late{background:var(--late);color:#fff}
+.thumbs em{position:absolute;right:8px;bottom:8px;font-style:normal;font-size:12px;font-weight:700;color:#fff;background:rgba(0,0,0,.55);padding:3px 8px;border-radius:999px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 0}
+.chips span{font-size:14px;padding:6px 12px;border-radius:999px;background:var(--soft)}
+.bridge{font-size:19px;font-weight:600;line-height:1.35;margin:26px 0 18px}
+
+/* number */
+.big{font:900 112px/.9 system-ui,sans-serif;letter-spacing:-.05em;margin:.1em 0 .05em;color:var(--seen)}
+.big small{display:block;font-size:24px;letter-spacing:0;font-weight:700;color:var(--ink);margin-top:10px}
+.claim{font-size:19px;line-height:1.4;margin:.4em 0 0}
+.dots{display:grid;grid-template-columns:repeat(10,1fr);gap:8px;margin:30px auto 8px;width:100%;max-width:320px}
+.dots i{aspect-ratio:1;border-radius:50%;background:var(--na);transition:background .25s,transform .25s}
+.dots i.seen{background:var(--seen)}.dots i.starting{background:var(--starting)}.dots i.rest{background:var(--rest)}
+.dots i.pop{transform:scale(1.3)}
+.dotnote{text-align:center;font-size:13px;color:var(--muted);margin:0 0 26px}
+.legend{list-style:none;padding:0;margin:0;font-size:15px}
+.legend li{display:flex;gap:10px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line)}
+.legend li:last-child{border-bottom:0}
+.legend li::before{content:"";width:12px;height:12px;border-radius:50%;flex:none;background:var(--c)}
+.legend b{min-width:3.4em;flex:none;white-space:nowrap;text-align:right;font-variant-numeric:tabular-nums}
+.legend li.me{font-weight:700}
+.legend li.me::after{content:"you";margin-left:auto;font-size:11px;letter-spacing:.06em;text-transform:uppercase;border:1.5px solid var(--ink);border-radius:999px;padding:1px 7px}
+.later{opacity:0;transition:opacity .6s}.later.on{opacity:1}
+.surprise{margin-top:16px;border-left:4px solid var(--seen);background:var(--soft);border-radius:0 14px 14px 0;padding:14px 16px}
+.surprise b{font-size:20px}
+.you-too{font-size:14px;color:var(--ink2);margin-top:12px}
+.source{margin-top:26px;padding-top:12px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+.source a{color:inherit}
+
+/* 3 · your answer, 5 · the turn */
+.q{font-size:22px;line-height:1.3;font-weight:700;margin:.3em 0 .8em}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opts button{text-align:left;font-size:17px;display:flex;align-items:center;gap:12px}
+.opts button::before{content:"";width:14px;height:14px;border-radius:50%;flex:none;background:var(--c,var(--line))}
+.opts button.picked{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.opts button[disabled]:not(.picked){opacity:.45;cursor:default}
+
+/* 4 · you vs. America */
+.lead{font-size:19px;line-height:1.4;margin:.2em 0 .6em}
+.lead b{font-size:22px}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 4px}
+.tabs button{min-height:40px;padding:6px 14px;font-size:15px;border-radius:999px}
+.tabs button[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.field{width:100%;height:auto;display:block;margin:10px 0 6px}
+.note{background:var(--soft);border-radius:14px;padding:14px 16px;margin:12px 0 0;font-size:16px;line-height:1.45}
+
+/* 5 · the turn */
+.reveal{display:none}.reveal.on{display:block;animation:in .4s ease}
+.big2{font:900 72px/.95 system-ui,sans-serif;letter-spacing:-.04em;margin:.3em 0 .1em;color:var(--inev)}
+.stack{display:flex;height:34px;border-radius:10px;overflow:hidden;margin:16px 0 4px}
+.stack i{display:block;height:100%}
+.marks{position:relative;height:22px;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+.marks span{position:absolute;top:2px;transform:translateX(-50%);white-space:nowrap}
+.marks span::before{content:"▲ "}
+.ages{margin:14px 0 0}
+.ages div{display:grid;grid-template-columns:52px 1fr 76px;align-items:center;gap:10px;font-size:15px;margin:8px 0}
+.ages .t{height:18px;background:var(--soft);border-radius:5px;position:relative;overflow:hidden}
+.ages .t i{position:absolute;inset:0 auto 0 0;background:var(--shape);border-radius:0 5px 5px 0;transition:width .8s ease}
+.ages b{text-align:right;font-variant-numeric:tabular-nums}
+
+/* 6 · close */
+.message{font-size:30px;line-height:1.2;letter-spacing:-.01em;margin:.4em 0 .5em}
+.message span{color:var(--ink2)}
+.path{list-style:none;padding:0;margin:0}
+.path li{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:15px}
+.path li:last-child{border-bottom:0}
+.path li b{flex:none;width:5.5em;color:var(--muted);font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.05em;padding-top:2px}
+.row{display:flex;gap:10px;margin-top:22px}.row button{flex:1}
+details{margin-top:18px;font-size:13px;color:var(--ink2)}
+summary{cursor:pointer;padding:6px 0}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:12px;font-variant-numeric:tabular-nums}
+th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:first-child,td:first-child{text-align:left}
+#tip{position:fixed;pointer-events:none;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:6px 9px;font-size:13px;display:none;box-shadow:0 2px 8px #0002;z-index:9}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+<div class="story" id="story" aria-hidden="true"><div class="segs"><i></i><i></i><i></i><i></i><i></i><i></i></div><span id="storyLabel">1 of 6</span></div>
+
+<!-- 1 · hook: intro -->
+<section id="s-intro" class="on" aria-labelledby="t-intro">
+  <p class="kicker">A tiny test · about 2 minutes</p>
+  <h1 id="t-intro">Real or AI?</h1>
+  <p class="ink2">Four mountain valleys. Two are photos. Two were made by AI. Tap what you think.</p>
+  <div class="rule"><div class="clock" id="lim">5</div><div><b>You get <span class="limtxt">5</span> seconds per picture.</b><span class="small">About as long as you look at a post before your thumb scrolls on.</span></div></div>
+  <div class="spacer"></div>
+  <button class="primary" id="start">I'm ready</button>
+  <p class="tiny" style="text-align:center;margin-top:10px">New pictures every round (16 in the pool). Your answers aren't saved or sent anywhere. No answer in time counts as “not sure”. Keys: <b>R</b> = Real, <b>A</b> = AI.</p>
+</section>
+
+<!-- 1 · hook: 3-2-1 -->
+<section id="s-ready" aria-live="assertive">
+  <p class="count" id="cd">3</p>
+  <p class="ink2" id="cdsay">Thumbs on REAL and AI…</p>
+</section>
+
+<!-- 1 · hook: guess -->
+<section id="s-guess">
+  <div class="progress" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+  <div class="clockbar" id="clock" aria-live="polite"><div class="num" id="secs">5</div><div class="say" id="say">Take a good look 👀</div></div>
+  <div class="fuse" id="fuse" aria-hidden="true"><i id="fusebar"></i><b id="spark">🔥</b></div>
+  <div class="pic" id="pic"><img id="img" alt=""><div class="tout"><span>🫠</span>Too slow.<br>The feed moved on.</div><div class="err">The picture couldn't load.<br>This prototype needs an internet connection.</div></div>
+  <div class="choices">
+    <button data-g="real">REAL</button>
+    <button data-g="ai">AI</button>
+  </div>
+  <div class="answer" id="answer" aria-live="polite"></div>
+  <button class="primary next" id="next">Next</button>
+</section>
+
+<!-- 1 · hook: your result -->
+<section id="s-result" aria-labelledby="t-result">
+  <p class="kicker">Your result</p>
+  <p class="score" id="score">2<small> / 4</small></p>
+  <h2 id="t-result">Not as easy as it looks, right?</h2>
+  <div class="thumbs" id="thumbs"></div>
+  <div class="chips" id="chips"></div>
+  <p class="bridge">You're not the only one. How many Americans already see this happening around them?</p>
+  <div class="spacer"></div>
+  <button class="primary" id="toNumber">Show me →</button>
+</section>
+
+<!-- 2 · reveal -->
+<section id="s-number" aria-labelledby="t-number">
+  <p class="kicker">Americans on AI · <span data-dates></span></p>
+  <p class="big" id="t-number"><span id="bigN"></span><small>of 100 Americans</small></p>
+  <p class="claim">say they <b>already see people around them struggling to tell what's real from what's fake</b> because of AI.</p>
+  <div class="dots" id="dots" role="img"></div>
+  <p class="dotnote">1 dot = 1 person in 100</p>
+  <div class="later" id="later">
+    <div class="card"><ul class="legend" id="hookLegend"></ul></div>
+    <div class="surprise" id="surprise"></div>
+    <p class="you-too" id="youtoo"></p>
+    <div class="row"><button class="primary" id="toAsk">Now you →</button></div>
+    <p class="source" id="srcHook"></p>
+  </div>
+</section>
+
+<!-- 3 · your answer -->
+<section id="s-ask" aria-labelledby="t-ask">
+  <p class="kicker">Now you · the survey's own question</p>
+  <p class="q" id="t-ask"></p>
+  <div class="opts" id="opts1"></div>
+  <p class="tiny" style="margin-top:14px">Same question and same answers as for the <span data-n></span> US adults in the survey. Your answer stays on this page.</p>
+</section>
+
+<!-- 4 · you vs. America -->
+<section id="s-you" aria-labelledby="t-you">
+  <p class="kicker">You + 1,000 US adults</p>
+  <p class="lead" id="t-you"></p>
+  <div class="tabs" id="tabs" role="group" aria-label="Show a group"></div>
+  <p class="tiny" style="margin:2px 0 0">Tap your age group.</p>
+  <svg class="field" id="f1" role="img"></svg>
+  <ul class="legend" id="lg1"></ul>
+  <div class="note" id="you1"></div>
+  <p class="source" id="src4"></p>
+  <div class="spacer"></div>
+  <button class="primary" id="toTurn" style="margin-top:18px">One more question →</button>
+</section>
+
+<!-- 5 · the turn -->
+<section id="s-turn" aria-labelledby="t-turn">
+  <p class="kicker">One more question · same survey</p>
+  <p class="q" id="t-turn"></p>
+  <div class="opts" id="opts2"></div>
+  <div class="reveal" id="after2">
+    <p class="big2" id="inevBig"></p>
+    <p class="claim">of US adults say <b id="inevLabel"></b>.</p>
+    <div class="stack" id="stack" role="img"></div>
+    <div class="marks" id="marks"></div>
+    <ul class="legend" id="lg2"></ul>
+    <p class="claim" style="margin-top:22px"><b>But it depends on age.</b> Who says <i id="shapeLabel"></i>?</p>
+    <div class="ages" id="ages"></div>
+    <div class="note" id="gapTxt"></div>
+    <p class="small" id="youTurn"></p>
+    <p class="source" id="src5"></p>
+    <button class="primary" id="toClose" style="margin-top:18px">What does it add up to? →</button>
+  </div>
+</section>
+
+<!-- 6 · close -->
+<section id="s-close" aria-labelledby="t-close">
+  <p class="kicker">What it adds up to</p>
+  <h1 class="message" id="t-close"></h1>
+  <div class="card"><ul class="path" id="path"></ul></div>
+  <p class="small" style="margin-top:14px">These are US adults, not Swiss opinions. You aren't part of this survey, and nothing you chose was saved.</p>
+  <div class="row"><button id="again">Play again · new pictures</button></div>
+  <details><summary>All numbers as a table</summary><div class="tbl" id="tbl"></div></details>
+  <div class="source" id="srcAll"></div>
+</section>
+<div id="tip"></div>
+</main>
+
+<script>
+// ---------- data: injected by build.py from the official CSV (never edit numbers here) ----------
+const D = __DATA__;
+
+// ---------- pictures for the hook (Wikimedia Commons, licences checked 29.10.2026) ----------
+const FP = n => "https://commons.wikimedia.org/wiki/Special:FilePath/" + encodeURIComponent(n) + "?width=960";
+const PAGE = n => "https://commons.wikimedia.org/wiki/File:" + encodeURIComponent(n);
+const AI = (file, model) => ({ file, truth: "ai", what: "Made by AI",
+  detail: `Generated with ${model} from a text prompt.`, credit: "Public domain (CC0), generated by VulcanSphere" });
+const REAL = (file, detail, credit) => ({ file, truth: "real", what: "A real photo", detail, credit });
+const POOL = [
+  AI("Scenic Valley in the Afternoon (Imagen 3.0 001 model).jpg", "Google Imagen 3.0"),
+  AI("Scenic Valley in the Afternoon (Imagen 3.0 002 model).webp", "Google Imagen 3.0 (002)"),
+  AI("Scenic Valley in the Afternoon (Reve Image).webp", "Reve Image"),
+  AI("Scenic Valley in the Afternoon (HiDream-I1-Dev).webp", "HiDream-I1 Dev"),
+  AI("Scenic Valley in the Afternoon (AuraFlow 0.3).webp", "AuraFlow 0.3"),
+  AI("Scenic Forest Valley in the Late Afternoon (FLUX.1).jpg", "FLUX.1 Pro"),
+  AI("Sunset Valley (FLUX 1.1 Pro Raw).webp", "FLUX 1.1 Pro (raw mode)"),
+  AI("Late Afternoon Cloudy Valley (SD3.5).webp", "Stable Diffusion 3.5 Large"),
+  REAL("2021 in Val Bavona to south.jpg", "Val Bavona, Ticino, Switzerland, May 2021.", "Photo: SchmalspurDVZO, CC BY-SA 4.0"),
+  REAL("Bavona river near Roseto in Val Bavona.jpg", "The Bavona river near Roseto, Ticino, Switzerland.", "Photo: SchmalspurDVZO, CC BY-SA 4.0"),
+  REAL("2021 in Val Bavona to north.jpg", "The Bavona river near Sonlerto, Ticino, Switzerland, May 2021.", "Photo: SchmalspurDVZO, CC BY-SA 4.0"),
+  REAL("2021 in Val Bavona with waterfall Cascata di Foroglio.jpg", "The Calnègia waterfall falling into Val Bavona, Ticino, Switzerland, 2021.", "Photo: SchmalspurDVZO, CC BY-SA 4.0"),
+  REAL("Fiume Bavona nell Val Bavona a Faedo.jpg", "The Bavona river at Faedo, Ticino, Switzerland.", "Photo: SchmalspurDVZO, CC BY-SA 4.0"),
+  REAL("Val Bavona 295 (8237865500).jpg", "Val Bavona, Ticino, Switzerland, July 2012.", "Photo: Alain Rouiller, CC BY-SA 2.0"),
+  REAL("Val Bavona1 Mai 2015.JPG", "Val Bavona, Ticino, Switzerland, May 2015.", "Photo: Adrian Michael, CC BY-SA 3.0"),
+  REAL("Val Bavona2 Mai 2015.JPG", "Val Bavona, Ticino, Switzerland, May 2015.", "Photo: Adrian Michael, CC BY-SA 3.0"),
+];
+const PER_KIND = 2;                         // every round: 2 real + 2 AI
+const SEEN_KEY = "realOrAI.seen.v4";        // per-viewer memory (shared with v4), so a replay brings new pictures
+const seenStore = {
+  get() { try { const v = JSON.parse(localStorage.getItem(SEEN_KEY)); return Array.isArray(v) ? v : []; } catch { return []; } },
+  set(v) { try { localStorage.setItem(SEEN_KEY, JSON.stringify(v)); } catch {} },
+};
+function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+let PICS = [];
+function draw() {
+  let seen = seenStore.get().filter(f => POOL.some(p => p.file === f));
+  const last = PICS.map(p => p.file);
+  const pick = kind => {
+    const all = POOL.filter(p => p.truth === kind);
+    let fresh = all.filter(p => !seen.includes(p.file));
+    if (fresh.length < PER_KIND) {          // this kind is used up: start over, but never repeat the round just played
+      seen = seen.filter(f => !all.some(p => p.file === f));
+      fresh = all.filter(p => !last.includes(p.file));
+    }
+    return shuffle(fresh).slice(0, PER_KIND);
+  };
+  PICS = shuffle([...pick("real"), ...pick("ai")]);
+  seenStore.set([...seen, ...PICS.map(p => p.file)]);
+  PICS.forEach(p => { const i = new Image(); i.src = FP(p.file); });
+}
+const SAY = [
+  { 5: "Take a good look 👀", 4: "Check the light…", 3: "Hmm. Too perfect?", 2: "Your thumb wants to scroll 👆", 1: "DECIDE!! 😬" },
+  { 5: "New picture. Fresh eyes 👀", 4: "Look at the water…", 3: "Real? Fake? Real?", 2: "The feed won't wait ⏩", 1: "NOW!! 😱" },
+  { 5: "Halfway there 💪", 4: "Clouds look weird?", 3: "Trust your gut…", 2: "Tick tock ⏰", 1: "GO GO GO 🫣" },
+  { 5: "Last one! 🏁", 4: "Rocks, trees, river…", 3: "You've got this?", 2: "Scrolling in 2… 👆", 1: "CHOOSE!! 🤯" },
+];
+
+// ---------- helpers ----------
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const q = new URLSearchParams(location.search);
+if (q.get("theme")) document.documentElement.dataset.theme = q.get("theme");
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const LIMIT = Math.max(2, Math.min(30, +q.get("limit") || 5));
+const pct = v => (v > 0 && v < 0.05 ? "<0.1" : v.toFixed(1)) + " %";
+const in100 = v => Math.round(v) + " in 100";
+const plain = w => w.replace(/^about /, "");
+const S = D.labels.sentiment, A = D.labels.agency, G = D.groups;
+const SENT = [["very_excited", "--vexc"], ["somewhat_excited", "--sexc"], ["somewhat_concerned", "--scon"],
+  ["very_concerned", "--vcon"], ["none", "--none"], ["no_answer", "--noans"]];
+const AG = [["can_shape", "--shape"], ["inevitable", "--inev"], ["neither", "--none"], ["no_answer", "--noans"]];
+const AGES = ["age_18_34", "age_35_49", "age_50_64", "age_65_plus"];
+const side = c => c && c.endsWith("excited") ? "excited" : c && c.endsWith("concerned") ? "concerned" : "none";
+const sideSum = (g, s) => s === "excited" ? G[g].sentiment.very_excited + G[g].sentiment.somewhat_excited
+  : s === "concerned" ? G[g].sentiment.somewhat_concerned + G[g].sentiment.very_concerned : G[g].sentiment.none;
+// gap rule: only call it a difference if it beats the combined margin of error
+const realGap = (a, b, va, vb) => Math.abs(va - vb) > Math.hypot(G[a].moe, G[b].moe);
+const SRC = `Americans on AI, Athena Insights with NORC at the University of Chicago · US adults, ${D.dates} · n = ${D.n.toLocaleString("en")} · weighted · margin of error about ±${Math.round(D.moe)} points`;
+
+$("#lim").textContent = LIMIT; $$(".limtxt").forEach(e => e.textContent = LIMIT);
+$$("[data-dates]").forEach(e => e.textContent = D.dates);
+$$("[data-n]").forEach(e => e.textContent = D.n.toLocaleString("en"));
+if (q.has("reset")) seenStore.set([]);
+draw();
+
+let n = 0, shownAt = 0, results = [], raf = 0, ticking = false, timers = [];
+let you1 = null, you2 = null, group = "total";
+const later = (fn, ms) => timers.push(setTimeout(fn, ms));
+function clearAll() { timers.forEach(clearTimeout); timers = []; stopTimer(); }
+const STEP_OF = { "s-intro": 1, "s-ready": 1, "s-guess": 1, "s-result": 1, "s-number": 2, "s-ask": 3, "s-you": 4, "s-turn": 5, "s-close": 6 };
+function screen(id) {
+  $$("section").forEach(s => s.classList.toggle("on", s.id === id));
+  const k = STEP_OF[id];
+  $$("#story i").forEach((b, i) => b.classList.toggle("on", i < k));
+  $("#storyLabel").textContent = `${k} of 6`;
+  $("#story").classList.toggle("hide", id === "s-ready");
+  window.scrollTo(0, 0);
+}
+
+// ---------- 1 · hook ----------
+function ready() {
+  screen("s-ready");
+  const lines = ["Thumbs on REAL and AI…", "Eyes open…", "Here it comes…"];
+  [3, 2, 1].forEach((k, i) => later(() => {
+    const c = $("#cd"); c.textContent = k; c.classList.remove("pop"); void c.offsetWidth; c.classList.add("pop");
+    $("#cdsay").textContent = lines[i];
+  }, i * 800));
+  later(() => { n = 0; results = []; screen("s-guess"); showPic(); }, reduce ? 1200 : 2400);
+}
+function sayFor(left) { const s = SAY[n % SAY.length]; return s[Math.min(5, Math.max(1, Math.ceil(left * 5 / LIMIT)))]; }
+function startTimer() {
+  ticking = true; $("#clock").className = "clockbar"; $("#fuse").className = "fuse";
+  const tick = () => {
+    if (!ticking) return;
+    const left = Math.max(0, LIMIT - (performance.now() - shownAt) / 1000), f = left / LIMIT;
+    $("#secs").textContent = Math.ceil(left);
+    const s = sayFor(left); if ($("#say").textContent !== s) $("#say").textContent = s;
+    $("#fusebar").style.transform = `scaleX(${f})`; $("#spark").style.left = (f * 100) + "%";
+    const hurry = left <= LIMIT * 0.4;
+    $("#clock").classList.toggle("hurry", hurry); $("#fuse").classList.toggle("hurry", hurry);
+    if (left <= 0) return timeout();
+    raf = requestAnimationFrame(tick);
+  };
+  raf = requestAnimationFrame(tick);
+}
+function stopTimer() { ticking = false; cancelAnimationFrame(raf); }
+function timeout() {
+  stopTimer();
+  $("#pic").classList.add("timeout");
+  $("#clock").className = "clockbar done"; $("#secs").textContent = "0"; $("#say").textContent = "Time's up! Counts as “not sure”.";
+  $("#spark").style.left = "0%"; $("#spark").textContent = "💨";
+  guess("none");
+}
+function showPic() {
+  const p = PICS[n];
+  $$(".progress i").forEach((b, k) => b.classList.toggle("done", k < n));
+  const img = $("#img"), box = $("#pic");
+  box.classList.remove("broken", "timeout");
+  $("#clock").className = "clockbar paused"; $("#secs").textContent = LIMIT; $("#say").textContent = "Loading the picture…";
+  $("#fuse").className = "fuse"; $("#fusebar").style.transform = "scaleX(1)"; $("#spark").style.left = "100%"; $("#spark").textContent = "🔥";
+  $$("[data-g]").forEach(b => { b.disabled = false; b.classList.remove("picked"); });
+  $("#answer").className = "answer"; $("#next").className = "primary next";
+  img.onerror = () => { box.classList.add("broken"); stopTimer(); };
+  img.onload = () => { shownAt = performance.now(); startTimer(); };   // the clock starts only once the picture is visible
+  img.alt = `Picture ${n + 1} of ${PICS.length}: a mountain valley`;
+  img.src = FP(p.file);
+  if (img.complete && img.naturalWidth) img.onload();
+}
+function guess(g) {
+  if ($("[data-g]").disabled || !$("#s-guess").classList.contains("on")) return;
+  const late = g === "none";
+  if (!late) {
+    stopTimer();
+    $("#clock").className = "clockbar"; $("#say").textContent = ["Locked in! 🔒", "Decided. ✅", "Nice reflexes ⚡", "Done! 🏁"][n % 4];
+  }
+  const p = PICS[n], secs = late ? LIMIT : (performance.now() - shownAt) / 1000, right = g === p.truth;
+  results.push({ g, right, secs, late });
+  $$("[data-g]").forEach(b => { b.disabled = true; b.classList.toggle("picked", b.dataset.g === g); });
+  $("#answer").innerHTML =
+    (late
+      ? `<b>It was ${p.truth === "ai" ? "made by AI" : "a real photo"}.</b><div class="small">${p.detail}</div>`
+      : `<b>${p.what}.</b> ${right ? "You said so too." : "You said " + (g === "ai" ? "AI" : "real") + "."}` +
+        `<div class="small">${p.detail} You decided in ${secs.toFixed(1)} of ${LIMIT} s.</div>`) +
+    `<div class="credit"><a href="${PAGE(p.file)}" target="_blank" rel="noopener">${p.credit}</a></div>`;
+  $("#answer").classList.add("on");
+  $("#next").textContent = n === PICS.length - 1 ? "See my result" : "Next picture";
+  $("#next").classList.add("on"); $("#next").focus({ preventScroll: true });
+}
+function previewResults() {   // only for the ?step= review shortcuts
+  if (!results.length) results = PICS.map((p, k) => ({ g: k % 2 ? p.truth : "none", right: k % 2 === 1, secs: k % 2 ? 2.4 + k : LIMIT, late: k % 2 === 0 }));
+}
+function result() {
+  clearAll(); screen("s-result"); previewResults();
+  const right = results.filter(r => r.right).length, lateN = results.filter(r => r.late).length;
+  $("#score").innerHTML = `${right}<small> / ${results.length}</small>`;
+  $("#t-result").textContent = right === results.length ? "All four! But you knew it was a test." :
+    lateN ? "The clock got you, right?" : "Not as easy as it looks, right?";
+  $("#thumbs").innerHTML = results.map((r, k) => {
+    const label = PICS[k].truth === "ai" ? "AI" : "REAL";
+    const cls = r.late ? "late" : r.right ? "" : "wrong", mark = r.late ? "⏱ not sure" : (r.right ? "✓ " : "✗ ") + label;
+    return `<div><img src="${FP(PICS[k].file)}" alt="Picture ${k + 1}: ${label}"><span class="${cls}">${mark}</span><em>${r.late ? "time's up" : r.secs.toFixed(1) + " s"}</em></div>`;
+  }).join("");
+  const answered = results.filter(r => !r.late), chips = [];
+  if (answered.length) chips.push(`⚡ Fastest ${Math.min(...answered.map(r => r.secs)).toFixed(1)} s`, `🐢 Slowest ${Math.max(...answered.map(r => r.secs)).toFixed(1)} s`);
+  if (lateN) chips.push(`⏱ ${lateN}× too slow`);
+  $("#chips").innerHTML = chips.map(c => `<span>${c}</span>`).join("");
+}
+
+// ---------- 2 · reveal: the 57 ----------
+const H = D.hook.dots, R = D.hook.raw;
+$("#bigN").textContent = H.have_seen;
+const HOOK_ROWS = [["seen", "--seen", H.have_seen, "already see it in their community"],
+  ["starting", "--starting", H.starting, "are starting to see it"],
+  ["rest", "--rest", H.expect_soon, "expect it soon"],
+  ["rest", "--rest", H.dont_expect, "don't expect it"],
+  ["na", "--na", H.not_sure + H.no_answer, `not sure (${H.not_sure}) or no answer (${H.no_answer})`]];
+$("#hookLegend").innerHTML = HOOK_ROWS.map(([, c, v, t]) => `<li style="--c:var(${c})"><b>${v}</b> ${t}</li>`).join("");
+$("#dots").setAttribute("aria-label", `100 dots: ${H.have_seen} already see it, ${H.starting} are starting to see it, ${H.expect_soon} expect it soon, ${H.dont_expect} don't expect it, ${H.not_sure} not sure, ${H.no_answer} no answer.`);
+$("#surprise").innerHTML = `<b>Only ${H.dont_expect} in 100</b> don't expect it at all.`;
+$("#srcHook").innerHTML = `Question: “${D.q.fake}”<br>${SRC}. Rounded to whole people: ` +
+  Object.keys(R).map(k => `${R[k]} → ${H[k]}`).join(", ") + ".";
+function number() {
+  clearAll(); screen("s-number");
+  const lateN = results.filter(r => r.late).length;
+  $("#youtoo").textContent = lateN ? `You ran out of time ${lateN}× — that's your “not sure”. In the survey, ${H.not_sure} of 100 Americans answered “not sure” too.` : "";
+  const kinds = HOOK_ROWS.flatMap(([c, , v]) => Array(v).fill(c));
+  $("#dots").innerHTML = kinds.map(() => "<i></i>").join("");
+  const dots = $$("#dots i");
+  $("#later").classList.remove("on");
+  if (reduce) { dots.forEach((d, k) => d.className = kinds[k]); $("#later").classList.add("on"); return; }
+  const fill = k => { dots[k].className = kinds[k] + " pop"; later(() => dots[k].classList.remove("pop"), 200); };
+  let k = 0;
+  const step = () => { fill(k++); if (k === H.have_seen) return later(step2, 1000); later(step, 26); };   // pause on the 57
+  const step2 = () => { fill(k++); if (k < kinds.length) later(step2, 16); else later(() => $("#later").classList.add("on"), 200); };
+  later(step, 400);
+}
+
+// ---------- 3 · your answer ----------
+$("#t-ask").textContent = D.q.sentiment;
+$("#opts1").innerHTML = SENT.slice(0, 5).map(([c, v]) => `<button data-a="${c}" style="--c:var(${v})">${S[c]}</button>`).join("");
+$$("#opts1 button").forEach(b => b.onclick = () => {
+  you1 = b.dataset.a;
+  $$("#opts1 button").forEach(x => { x.classList.toggle("picked", x === b); x.disabled = true; });
+  later(() => you(), reduce ? 0 : 450);
+});
+function ask() {
+  clearAll(); screen("s-ask");
+  $$("#opts1 button").forEach(x => { x.classList.remove("picked"); x.disabled = false; });
+}
+
+// ---------- 4 · you vs. America ----------
+function thousand(dist, codes) {   // largest remainder, so the dots always add up to 1,000
+  const raw = codes.map(([c]) => dist[c] * 10), base = raw.map(Math.floor);
+  const left = 1000 - base.reduce((a, b) => a + b, 0);
+  raw.map((v, i) => [v - base[i], i]).sort((a, b) => b[0] - a[0]).slice(0, Math.max(0, left)).forEach(([, i]) => base[i]++);
+  return base;
+}
+function field(svg, dist, codes, labels, youCode) {
+  const counts = thousand(dist, codes), cols = 40, cell = 10, cells = [];
+  codes.forEach(([c], i) => { if (c === youCode) cells.push([i, true]); for (let k = 0; k < counts[i]; k++) cells.push([i, false]); });
+  svg.setAttribute("viewBox", `0 0 ${cols * cell} ${Math.ceil(cells.length / cols) * cell}`);
+  svg.innerHTML = cells.map(([i, me], k) => {
+    const x = (k % cols) * cell + cell / 2, y = Math.floor(k / cols) * cell + cell / 2, col = `var(${codes[i][1]})`;
+    return me ? `<circle cx="${x}" cy="${y}" r="4.6" fill="${col}" stroke="var(--ink)" stroke-width="2.4" data-k="${i}" data-me="1"/>`
+              : `<circle cx="${x}" cy="${y}" r="3.7" fill="${col}" data-k="${i}"/>`;
+  }).join("");
+  svg.onpointermove = e => { const k = e.target.dataset && e.target.dataset.k; if (k === undefined) return tip();
+    tip(e, (e.target.dataset.me ? "<b>You</b> · " : "") + `${labels[codes[k][0]]}<br><b>${pct(dist[codes[k][0]])}</b> · ${counts[k]} of 1,000 dots`); };
+  svg.onpointerleave = () => tip();
+  return counts;
+}
+function tip(e, html) {
+  const t = $("#tip"); if (!e) { t.style.display = "none"; return; }
+  t.innerHTML = html; t.style.display = "block";
+  t.style.left = Math.min(e.clientX + 12, innerWidth - t.offsetWidth - 8) + "px"; t.style.top = (e.clientY + 14) + "px";
+}
+function legend(ul, dist, codes, labels, mine) {
+  ul.innerHTML = codes.map(([c, v]) => `<li style="--c:var(${v})" class="${c === mine ? "me" : ""}"><b>${pct(dist[c])}</b> ${labels[c]}</li>`).join("");
+}
+function you() {
+  clearAll(); screen("s-you");
+  if (!you1) you1 = "somewhat_concerned";
+  $("#tabs").innerHTML = ["total", ...AGES].map(g => `<button aria-pressed="false" data-grp="${g}">${G[g].label}</button>`).join("");
+  $$("#tabs button").forEach(b => b.onclick = () => { group = b.dataset.grp; draw4(); });
+  draw4();
+}
+function draw4() {
+  $$("#tabs button").forEach(b => b.setAttribute("aria-pressed", b.dataset.grp === group));
+  const g = G[group], s = side(you1);
+  $("#t-you").innerHTML = `<b>${in100(g.sentiment[you1])}</b> ${group === "total" ? "US adults" : "of " + g.label + "-year-olds"} chose what you chose: “${S[you1]}”.`;
+  field($("#f1"), g.sentiment, SENT, S, you1);
+  $("#f1").setAttribute("aria-label", `1,000 dots for ${g.label}, one outlined dot is you.`);
+  legend($("#lg1"), g.sentiment, SENT, S, you1);
+  const sideTxt = s === "none" ? `you're with the ${in100(sideSum(group, s))} who say none of these are close`
+    : `you're on the ${s} side, with ${in100(sideSum(group, s))}`;
+  let t;
+  if (group === "total") {
+    t = `Across all US adults, ${in100(sideSum("total", "concerned"))} are concerned and ${in100(sideSum("total", "excited"))} are excited. So ${sideTxt}.`;
+  } else {
+    const a = sideSum(group, "concerned"), b = sideSum("total", "concerned");
+    t = `${g.label}: ${in100(a)} are concerned, ` + (realGap(group, "total", a, b)
+      ? `<b>${a > b ? "more" : "less"}</b> than all US adults (${in100(b)}).`
+      : `<b>about the same</b> as all US adults (${in100(b)}); the difference is within the margin of error.`) + ` Here ${sideTxt}.`;
+  }
+  $("#you1").innerHTML = t;
+  $("#src4").textContent = `${g.label}: n = ${g.n.toLocaleString("en")}, margin of error about ±${Math.round(g.moe)} points · 1 dot ≈ 1 in 1,000 · ${SRC}`;
+}
+
+// ---------- 5 · the turn ----------
+$("#t-turn").textContent = D.q.agency;
+$("#opts2").innerHTML = AG.slice(0, 3).map(([c, v]) => `<button data-b="${c}" style="--c:var(${v})">${A[c]}</button>`).join("");
+$$("#opts2 button").forEach(b => b.onclick = () => answer2(b.dataset.b));
+$("#inevBig").textContent = plain(D.words.inevitable);
+$("#inevLabel").textContent = `“${A.inevitable}” (${pct(G.total.agency.inevitable)})`;
+$("#shapeLabel").textContent = `“${A.can_shape}”`;
+function turn() {
+  clearAll(); screen("s-turn");
+  you2 = null; $("#after2").classList.remove("on");
+  $$("#opts2 button").forEach(x => { x.classList.remove("picked"); x.disabled = false; });
+}
+function answer2(code) {
+  you2 = code;
+  $$("#opts2 button").forEach(x => { x.classList.toggle("picked", x.dataset.b === code); x.disabled = true; });
+  const t = G.total.agency;
+  $("#stack").innerHTML = AG.map(([c, v]) => `<i style="width:${t[c]}%;background:var(${v})" title="${A[c]}: ${pct(t[c])}"></i>`).join("");
+  $("#stack").setAttribute("aria-label", AG.map(([c]) => `${A[c]}: ${pct(t[c])}`).join(", "));
+  let x = 0; const mid = {}; AG.forEach(([c]) => { mid[c] = x + t[c] / 2; x += t[c]; });
+  $("#marks").innerHTML = `<span style="left:${Math.min(92, Math.max(8, mid[code]))}%">you</span>`;
+  legend($("#lg2"), t, AG, A, code);
+  $("#ages").innerHTML = AGES.map(g => `<div><span>${G[g].label}</span><span class="t"><i style="width:0%" data-w="${G[g].agency.can_shape}"></i></span><b>${in100(G[g].agency.can_shape)}</b></div>`).join("");
+  requestAnimationFrame(() => requestAnimationFrame(() => $$("#ages i").forEach(i => i.style.width = i.dataset.w + "%")));
+  const y = G.age_18_34.agency.can_shape, o = G.age_65_plus.agency.can_shape, m = G.age_35_49.agency.can_shape;
+  $("#gapTxt").innerHTML = (D.shapeGapReal
+      ? `<b>18–34: ${in100(y)}</b> vs <b>65+: ${in100(o)}</b>. This gap is bigger than the margin of error, so it's a real difference. `
+      : `The age groups are within the margin of error of each other. `)
+    + (D.shapeGap1835 ? "" : `18–34 and 35–49 (${in100(m)}) are about the same.`);
+  $("#youTurn").textContent = `You chose “${A[code]}”, like ${in100(t[code])} US adults.`;
+  $("#src5").textContent = `Question: “${D.q.agency}” · ${SRC}`;
+  $("#after2").classList.add("on");
+  later(() => $("#after2").scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" }), 150);
+}
+
+// ---------- 6 · close ----------
+function close6() {
+  clearAll(); screen("s-close");
+  previewResults(); if (!you1) you1 = "somewhat_concerned"; if (!you2) you2 = "inevitable";
+  // the second sentence only while the age gap still beats the margin of error (checked again at every build)
+  $("#t-close").innerHTML = `Most Americans are worried about AI, and most think it's coming anyway.`
+    + (D.shapeGapReal ? ` <span>Younger adults are more likely than older adults to think it can still be shaped.</span>` : "");
+  const right = results.filter(r => r.right).length;
+  $("#path").innerHTML = [
+    ["Your eyes", `${right} of ${results.length} pictures right. ${H.have_seen} in 100 Americans already see people struggling with this.`],
+    ["You feel", `“${S[you1]}”, like ${in100(G.total.sentiment[you1])} US adults. ${plain(D.words.concerned)} are concerned.`],
+    ["You think", `“${A[you2]}”, like ${in100(G.total.agency[you2])}. ${plain(D.words.inevitable)} say it's coming anyway.`],
+  ].map(([k, v]) => `<li><b>${k}</b><span>${v}</span></li>`).join("");
+}
+const COLS = [["n", g => G[g].n], ["±", g => Math.round(G[g].moe)], ["Concerned", g => sideSum(g, "concerned")], ["Excited", g => sideSum(g, "excited")],
+  ["None", g => G[g].sentiment.none], ["Can shape", g => G[g].agency.can_shape], ["Coming anyway", g => G[g].agency.inevitable], ["Neither", g => G[g].agency.neither]];
+$("#tbl").innerHTML = `<table><tr><th>Group</th>${COLS.map(c => `<th>${c[0]}</th>`).join("")}</tr>` +
+  ["total", ...AGES].map(g => `<tr><td>${G[g].label}</td>${COLS.map(([h, f], i) => `<td>${i < 2 ? f(g) : f(g).toFixed(1)}</td>`).join("")}</tr>`).join("") +
+  `</table><p class="tiny">Percent of each group. ± = margin of error in points (estimated for age groups). “No answer” isn't shown in the table but is part of the dots.</p>`;
+$("#srcAll").innerHTML = `<b>Questions, word for word:</b> “${D.q.fake}” · “${D.q.sentiment}” · “${D.q.agency}”<br>` +
+  `<b>Data:</b> ${SRC}. Latest wave only; the June pilot used a different method and is left out. Gaps smaller than the margin of error aren't called gaps.<br>` +
+  `<b>Pictures:</b> Wikimedia Commons. AI pictures: public domain (CC0), generated by VulcanSphere. Photos: SchmalspurDVZO, Alain Rouiller, Adrian Michael (CC BY-SA).<br>` +
+  `Prototype v5 by Adhurim Thaqi, HSLU Data Storytelling, built with Claude.`;
+
+// ---------- wiring ----------
+$("#start").onclick = ready;
+$$("[data-g]").forEach(b => b.onclick = () => guess(b.dataset.g));
+$("#next").onclick = () => { if (++n < PICS.length) showPic(); else result(); };
+$("#toNumber").onclick = number;
+$("#toAsk").onclick = ask;
+$("#toTurn").onclick = turn;
+$("#toClose").onclick = close6;
+$("#again").onclick = () => { clearAll(); results = []; you1 = you2 = null; group = "total"; draw(); screen("s-intro"); };
+addEventListener("keydown", e => {
+  if (!$("#s-guess").classList.contains("on")) return;
+  if (e.key === "r" || e.key === "R") guess("real");
+  if (e.key === "a" || e.key === "A") guess("ai");
+});
+
+// review shortcuts (screenshots, user tests): ?step=1…6 or a name, &a= &b= &g=
+const STEPS = { 1: "intro", 2: "number", 3: "ask", 4: "you", 5: "turn", 6: "close" };
+const want = STEPS[q.get("step")] || q.get("step");
+if (q.get("a") in S) you1 = q.get("a");
+if (q.get("g") in G) group = q.get("g");
+if (want === "result") result();
+else if (want === "number" || want === "end") { previewResults(); number(); }
+else if (want === "ask") ask();
+else if (want === "you") you();
+else if (want === "turn") { turn(); if (q.get("b") in A) answer2(q.get("b")); }
+else if (want === "close") { if (q.get("b") in A) you2 = q.get("b"); close6(); }
+else screen("s-intro");
+</script>
+</body>
+</html>
