@@ -27,8 +27,8 @@
 | Score / longest pause | not recorded | not recorded | not recorded |
 | Said out loud while using it | not recorded | not recorded | not recorded |
 | "What did you take away?" | positive; liked the idea | positive; liked the idea | positive; liked the idea |
-| Number remembered (right away / after 2 min) | not recorded | not recorded | not recorded |
-| Quiz or about them? | felt like fun | felt like fun | felt like fun |
+| Number remembered (right away / after 2 min) | yes, remembered the 57 | yes, remembered the 57 | yes, remembered the 57 |
+| Quiz or about them? | not a quiz; a fun game challenge | not a quiz; a fun game challenge | not a quiz; a fun game challenge |
 | Unclear | nothing, everything was clear | nothing, everything was clear | nothing, everything was clear |
 | Surprise | not recorded | not recorded | not recorded |
 
@@ -36,6 +36,8 @@
 - **Positive overall.** All three testers liked the idea.
 - **The timing works.** Testers named the time pressure as what they liked, which confirms the lecturer's comment from Test 0.
 - **It's fun and clear.** It felt like fun, and all three understood it without help (acceptance point 1 ✅).
+- **The number sticks.** All three still remembered the 57 two minutes later.
+- **Not a quiz.** It didn't feel like a quiz at all, more like a fun game challenge. So the "we are wrong if" case on the prototype card (people treat it as a quiz score) didn't happen.
 - **The issue: it gets predictable.** After playing it several times, testers knew the answers, because there are only four pictures and always the same ones. Replaying the guess loses its point.
 
 **What I change in v4 because of this:**

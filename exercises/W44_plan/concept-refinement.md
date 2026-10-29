@@ -11,10 +11,12 @@
 | It feels like **fun**, and **everything was clear** | All three testers | The hook works without explanation (acceptance 1 ✅). No tutorial needed. |
 | It gets **predictable after several plays**: always the same four pictures | All three testers | The guess only works the first time. Replaying turns it into remembering. |
 | The end screen was too cramped | My review (v2) | Fixed in v3: result → "Show me →" → the number. |
+| The **57 sticks**: all three remembered it after two minutes | All three testers | The guess → number order works. Keep the pause on the 57. |
+| **Not a quiz**, more a fun game challenge | All three testers | The "we are wrong if" case of the prototype card didn't happen. The game feel is a strength, so keep it. |
 
-**Not answered yet (test again in W48):**
-- Do people remember the **57** after two minutes? (not recorded this time)
-- Did it feel like a **quiz**, or like it was **about them**? That's the hypothesis on the prototype card, and it's still open.
+**Still to check in W48 (with 5 people and the full story):**
+- Does the fun game feel still hold when the "you" steps (3–4) follow, or does the change of tone feel like a break?
+- Do people link the 57 to *themselves*, e.g. "I also find it hard to tell"? So far we know it wasn't a quiz and the number stuck, but nobody was asked about that link directly.
 
 ## 2 · What changes (concept v1 → v2)
 1. **A bigger picture pool, drawn at random.**
