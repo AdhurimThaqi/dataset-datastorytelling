@@ -7,10 +7,14 @@ What's due this week (W43 slides + `../README.md`):
 - the HTML prototype file and **all prompts** in the research documentation
 
 ## What's here
+**→ The hand-in is in [`documentation/`](documentation/README.md):** `01_implementation-plan.pdf`, `02_sprint-plan.pdf` and `03_research-appendix.pdf`, structured the way the W44 slides ask.
+
+Working notes (the PDFs are built from these):
+
 | File | What |
 |---|---|
 | `concept-refinement.md` | What the test showed → what changes in the concept (v1 → v2) |
-| `implementation-plan.md` | Architecture, data pipeline, components, feasibility and risks, timeline W45–W51 |
+| `implementation-plan.md` | First draft: components, feasibility and risks. Replaced by `documentation/01_implementation-plan.md` (the dates there follow the course milestones). |
 | `design-references.md` | Three references and what we borrow from each (and what we don't) |
 
 ## The prototype and the prompts (for the research documentation)

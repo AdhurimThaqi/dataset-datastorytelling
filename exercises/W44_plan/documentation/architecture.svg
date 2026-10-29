@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 430" font-family="Segoe UI, system-ui, sans-serif" font-size="13">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#52514e"/>
+    </marker>
+    <style>
+      .box{fill:#fff;stroke:#0b0b0b;stroke-width:1.5}
+      .data{fill:#fdf0e9;stroke:#d9531e;stroke-width:1.5}
+      .tool{fill:#f3f2ee;stroke:#8a8984;stroke-width:1.2;stroke-dasharray:5 4}
+      .t{font-weight:700;font-size:14px;fill:#0b0b0b}
+      .s{fill:#52514e;font-size:12px}
+      .k{font-size:11px;letter-spacing:.08em;fill:#8a8984;font-weight:700}
+      .ln{stroke:#52514e;stroke-width:1.5;fill:none;marker-end:url(#a)}
+      .dl{stroke:#8a8984;stroke-width:1.2;fill:none;stroke-dasharray:5 4;marker-end:url(#a)}
+    </style>
+  </defs>
+
+  <text x="20" y="24" class="k">DATA</text>
+  <text x="250" y="24" class="k">PROCESSING (BUILD TIME, ON MY LAPTOP)</text>
+  <text x="700" y="24" class="k">PAGE (IN THE VISITOR'S BROWSER)</text>
+
+  <!-- data -->
+  <rect class="data" x="20" y="40" width="200" height="96" rx="10"/>
+  <text x="34" y="64" class="t">Survey data</text>
+  <text x="34" y="84" class="s">survey CSV (all waves, subgroups)</text>
+  <text x="34" y="100" class="s">+ data.json (n, margin, method)</text>
+  <text x="34" y="122" class="s">Athena Insights / NORC</text>
+
+  <rect class="data" x="20" y="200" width="200" height="96" rx="10"/>
+  <text x="34" y="224" class="t">Picture pool</text>
+  <text x="34" y="244" class="s">16 valleys: 8 real, 8 AI</text>
+  <text x="34" y="260" class="s">Wikimedia Commons</text>
+  <text x="34" y="282" class="s">CC0 (AI) · CC BY-SA (photos)</text>
+
+  <!-- processing -->
+  <rect class="box" x="250" y="40" width="200" height="96" rx="10"/>
+  <text x="264" y="64" class="t">data_cut.py</text>
+  <text x="264" y="84" class="s">Python 3, standard library</text>
+  <text x="264" y="100" class="s">latest wave, pilot dropped,</text>
+  <text x="264" y="116" class="s">nets, dots (sum 1,000), margin rule</text>
+
+  <rect class="box" x="480" y="40" width="190" height="96" rx="10"/>
+  <text x="494" y="64" class="t">build.py</text>
+  <text x="494" y="84" class="s">Python 3</text>
+  <text x="494" y="100" class="s">puts the numbers as JSON</text>
+  <text x="494" y="116" class="s">into template.html</text>
+
+  <rect class="box" x="480" y="200" width="190" height="96" rx="10"/>
+  <text x="494" y="224" class="t">check script</text>
+  <text x="494" y="244" class="s">Python 3</text>
+  <text x="494" y="260" class="s">every number on the page</text>
+  <text x="494" y="276" class="s">vs. the CSV → 0 mismatches</text>
+
+  <rect class="tool" x="250" y="200" width="200" height="96" rx="10"/>
+  <text x="264" y="224" class="t">Claude (LLM)</text>
+  <text x="264" y="244" class="s">writes HTML / JS / Python,</text>
+  <text x="264" y="260" class="s">one change per prompt,</text>
+  <text x="264" y="276" class="s">every prompt in prompts.md</text>
+
+  <!-- page -->
+  <rect class="box" x="700" y="40" width="240" height="256" rx="10"/>
+  <text x="714" y="64" class="t">index.html (one file)</text>
+  <text x="714" y="84" class="s">HTML, CSS, plain JavaScript, SVG</text>
+  <text x="714" y="100" class="s">no framework, no server, no tracking</text>
+  <line x1="714" y1="114" x2="926" y2="114" stroke="#e6e5e0"/>
+  <text x="714" y="134" class="s">1  Hook: Real or AI? (5-s clock)</text>
+  <text x="714" y="152" class="s">2  Reveal: 57 of 100 (100 dots)</text>
+  <text x="714" y="170" class="s">3  Your answer (survey question)</text>
+  <text x="714" y="188" class="s">4  You vs. America (1,000 dots, age)</text>
+  <text x="714" y="206" class="s">5  The turn: coming anyway · 27 vs 8</text>
+  <text x="714" y="224" class="s">6  Close: key message + source</text>
+  <line x1="714" y1="238" x2="926" y2="238" stroke="#e6e5e0"/>
+  <text x="714" y="258" class="s">random draw 2 + 2 · localStorage</text>
+  <text x="714" y="274" class="s">(pictures seen, stays in the browser)</text>
+
+  <!-- hosting -->
+  <rect class="box" x="700" y="330" width="110" height="64" rx="10"/>
+  <text x="714" y="356" class="t">GitHub Pages</text>
+  <text x="714" y="376" class="s">free hosting</text>
+  <rect class="box" x="830" y="330" width="110" height="64" rx="10"/>
+  <text x="844" y="356" class="t">Phone</text>
+  <text x="844" y="376" class="s">one browser</text>
+
+  <!-- arrows -->
+  <path class="ln" d="M220,88 H248"/>
+  <path class="ln" d="M450,88 H478"/>
+  <path class="ln" d="M670,88 H698"/>
+  <path class="ln" d="M575,136 V198"/>
+  <path class="ln" d="M220,270 H234 V314 H686 V270 H698"/>
+  <text x="300" y="309" class="s">pictures loaded from Commons at run time</text>
+  <path class="dl" d="M450,248 C470,248 470,150 520,138"/>
+  <path class="ln" d="M820,296 V310 H755 V328"/>
+  <path class="ln" d="M810,362 H828"/>
+
+  <!-- legend -->
+  <rect class="data" x="20" y="340" width="16" height="12" rx="3"/><text x="44" y="351" class="s">source data</text>
+  <rect class="box" x="130" y="340" width="16" height="12" rx="3"/><text x="154" y="351" class="s">code that runs</text>
+  <rect class="tool" x="260" y="340" width="16" height="12" rx="3"/><text x="284" y="351" class="s">tool that helps write the code (not part of the page)</text>
+  <text x="20" y="384" class="s">New survey wave → run build.py again: every number and the gap rule are updated, no text is typed by hand.</text>
+</svg>

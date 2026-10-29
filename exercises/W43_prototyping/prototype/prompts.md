@@ -217,5 +217,5 @@ the 100 dots and the source line. Change only how the pictures are chosen.
 ## Checks
 All numbers checked against `exercises/W39_data/survey_all_waves_all_subgroups.csv` (see `README.md`): 0 mismatches, and the dots add up to 100.
 
-## Next prompts (v2, v3 …)
+## Next prompts (v5 …)
 One change per prompt, based on what testers said (`test.md`). Save each version as a new file and add the prompt here.
