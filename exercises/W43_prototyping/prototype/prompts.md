@@ -240,6 +240,40 @@ Build v5: all six steps of direction A in ONE file, following sprint 1. Put it i
 - screenshots of every step in headless Edge, light and dark mode
 - Not yet: a real phone and a real tester (sprint task 5).
 
+## Prompt 7: v6, mentoring feedback (sprint 2, 05.11.2026)
+Model: Claude (Anthropic), in Claude Code. Files: `exercises/W46_sprint2/` (`template.html` → `build.py` → `v6.html`).
+
+```
+Mentoring feedback on v5 (05.11, Alain): good in general, only details.
+1. Remove the progress bar (the 6-step story bar at the top).
+2. Give hints on how to tell that something is AI.
+3. Real vs AI not only with pictures: add text.
+Keep everything else from v5. Copy the sprint 1 files into W46_sprint2 and call the output v6.html.
+- Hints: a "What should I look for?" button during the guess that shows a tip, never the answer.
+  After every answer a "How to tell" line. On the result screen a "How to spot AI" card with
+  rules of thumb, and the honest note that new models fix these clues.
+- Text round: after the 4 pictures, 2 short travel texts about Swiss valleys (1 by a person, 1 by AI),
+  same clock but longer (12 s), buttons PERSON / AI. Pool of 4 + 4 with the same no-repeat draw.
+- The human texts must really be written by people: take them word for word from Wikivoyage
+  revisions saved before ChatGPT launched (30 Nov 2022), with licence and a link to the revision.
+- Write the 4 AI texts yourself in the same travel-guide tone and length (~40 words), about a
+  Ticino valley, without facts that could be wrong. Make at least one hard to spot.
+- No survey number typed into the template; check.py must still say 0 mismatches.
+```
+
+**What was checked (05.11.2026):**
+- `check.py`: 71 checks, 0 mismatches
+- a click-through in jsdom, two full rounds (the second with the last text timing out): 6 items per round, hint button, "How to tell" after each item, result with 6 thumbs, then through to the close; no script error
+- screenshots of the intro, the text guess (`?step=text`) and the result in headless Edge
+- Not yet: a real phone and a real tester.
+
+## How the texts were chosen (v6)
+- **Human texts (4):** word for word from Wikivoyage, CC BY-SA 3.0, from revisions saved before ChatGPT existed, so they can't be AI-written:
+  - "Verzasca Valley", revision 4275033 (13 Aug 2021): the emerald river and the swimming warning
+  - "Lauterbrunnen", revision 4407914 (13 Mar 2022): the "clear springs" name and the Stechelberg walk
+- **AI texts (4):** written by Claude for this prototype in the same tone and length. One copies the tone of the real swimming warning, so it's hard to spot.
+- **Why travel texts:** same topic as the pictures (Swiss valleys), so the subject gives nothing away.
+
 ## How the pictures were chosen
 - **AI pictures:** from the Wikimedia Commons category "AI-generated landscapes".
   - From v4, all 8 come from one Commons user (VulcanSphere), who generated the same valley prompt with different models (Imagen 3.0, Reve, HiDream, AuraFlow, FLUX, Stable Diffusion 3.5). All are public domain (CC0).
@@ -254,5 +288,5 @@ Build v5: all six steps of direction A in ONE file, following sprint 1. Put it i
 ## Checks
 All numbers checked against `exercises/W39_data/survey_all_waves_all_subgroups.csv` (see `README.md`): 0 mismatches, and the dots add up to 100.
 
-## Next prompts (v6 …)
+## Next prompts (v7 …)
 One change per prompt, based on what testers said (`test.md`). Save each version as a new file and add the prompt here.

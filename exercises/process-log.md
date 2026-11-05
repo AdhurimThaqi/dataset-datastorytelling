@@ -84,3 +84,22 @@ I work alone, so every contribution below is mine. AI tools I used (Claude) are 
   - `exercises/W44_plan/` and `exercises/W43_prototyping/prototype/v4.html` (built with Claude; the draw logic was tested with 2,000 simulated players, and all 16 picture links were checked)
   - Wikimedia Commons file pages for licences
   - design references: whichfaceisreal.com · NYT The Upshot (2015) · pewresearch.org
+
+## W45 · 05.11 — Mentoring · input on interactivity and UX (Alain)
+- **Mentoring feedback (v5):** good in general, only details:
+  - remove the progress bar
+  - give hints on how to tell that a picture is AI
+  - make more links to other questions in the dataset
+  - Real vs AI not only with pictures: also text or other content
+  - sketch 1–2 more questions for next time
+  - go through the PDF and see what can be added; captcha-style games, true/false or other mechanics that can be reused
+- **What I did (v6, `exercises/W46_sprint2/`):**
+  - removed the 6-step story bar
+  - hints: a "What should I look for?" button during the guess, a "How to tell" line after each answer, a "How to spot AI" card on the result screen
+  - a text round after the 4 pictures: 1 human + 1 AI travel text (pool of 4 + 4). The human texts come from Wikivoyage revisions saved before ChatGPT existed.
+  - `check.py` still finds 0 mismatches
+- **Easy:** _…_
+- **Hard:** _…_
+- **Still open:** sketch 1–2 more questions (captcha grid with the "community impact" items, true/false cards with risks / family impact) · find out which PDF was meant · test on a real phone · one tester
+- **Better next week:** _…_
+- **Data / sources:** `exercises/W46_sprint2/` · prompt 7 in `W43_prototyping/prototype/prompts.md` (built with Claude) · Wikivoyage "Verzasca Valley" rev. 4275033 and "Lauterbrunnen" rev. 4407914 (CC BY-SA 3.0)
