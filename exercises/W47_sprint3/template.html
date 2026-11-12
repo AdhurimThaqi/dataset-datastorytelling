@@ -159,22 +159,25 @@ section.on{display:flex;animation:in .35s ease}
 .bubble{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:10px 14px;font-weight:700;min-height:48px;display:flex;align-items:center;position:relative}
 .bubble::before{content:"";position:absolute;left:-7px;top:50%;width:12px;height:12px;background:inherit;border-left:1px solid var(--line);border-bottom:1px solid var(--line);transform:translateY(-50%) rotate(45deg)}
 .counter{font:700 14px/1 var(--display);color:var(--muted);white-space:nowrap}
-.media{position:relative;width:min(100%,calc((100dvh - 290px) * 4 / 3));aspect-ratio:4/3;margin:0 auto;border-radius:22px;overflow:hidden;background:var(--panel2);box-shadow:var(--shadow);touch-action:pan-y;user-select:none;-webkit-user-select:none;transition:transform .25s ease,box-shadow .3s}
+#s-guess{--mw:min(100%,calc((100dvh - 290px) * 4 / 3))}
+.mwrap{position:relative;width:var(--mw);margin:0 auto;border-radius:22px}
+.media{position:relative;width:100%;aspect-ratio:4/3;margin:0 auto;border-radius:22px;overflow:hidden;background:var(--panel2);box-shadow:var(--shadow);touch-action:pan-y;user-select:none;-webkit-user-select:none;transition:transform .25s ease,box-shadow .3s}
 .media.drag{transition:none}
 .media img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
-.media .quote{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;padding:clamp(20px,5%,44px);background:var(--panel)}
+.media .quote{position:absolute;inset:0;display:none;overflow:auto;flex-direction:column;justify-content:center;padding:clamp(20px,5%,44px);background:var(--panel)}
 .media .quote p{font:500 clamp(17px,2.2vw,22px)/1.55 Georgia,"Times New Roman",serif}
 .media .quote .src{font:600 12px/1 system-ui;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
 .media.text img{display:none}.media.text .quote{display:flex}
+.media.text{aspect-ratio:auto;min-height:calc(var(--mw) * .75)}.media.text .quote{position:relative;inset:auto;min-height:inherit}
 .stamp{position:absolute;top:22px;padding:8px 16px;border:4px solid;border-radius:12px;font:700 30px/1 var(--display);letter-spacing:.06em;opacity:0;pointer-events:none;background:rgba(0,0,0,.25);color:#fff}
 .stamp.ai{right:22px;border-color:var(--ai);transform:rotate(12deg)}
 .stamp.real{left:22px;border-color:var(--real);transform:rotate(-12deg)}
 .loading{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-size:14px}
-.fuse{height:6px;border-radius:3px;background:var(--line);overflow:hidden;width:min(100%,calc((100dvh - 290px) * 4 / 3));margin:0 auto}
+.fuse{height:6px;border-radius:3px;background:var(--line);overflow:hidden;width:var(--mw);margin:0 auto}
 .fuse i{display:block;height:100%;width:100%;background:var(--ink);transform-origin:left;transition:background .3s}
 .fuse.hurry i{background:var(--hot)}
-.verdict{position:absolute;inset:auto 0 0 0;padding:16px 18px 14px;background:linear-gradient(to top,rgba(8,9,14,.94) 65%,rgba(8,9,14,0));color:#fff;transform:translateY(105%);transition:transform .35s cubic-bezier(.2,.9,.3,1.2)}
-.verdict.on{transform:none}
+.verdict{position:absolute;inset:auto 0 0 0;max-height:100%;overflow:auto;border-radius:0 0 22px 22px;pointer-events:none;padding:16px 18px 14px;background:linear-gradient(to top,rgba(8,9,14,.94) 65%,rgba(8,9,14,0));color:#fff;transform:translateY(105%);transition:transform .35s cubic-bezier(.2,.9,.3,1.2)}
+.verdict.on{transform:none;pointer-events:auto;cursor:pointer}
 .verdict .vh{display:flex;align-items:center;gap:10px;font:700 24px/1.1 var(--display)}
 .verdict .vh .pts{margin-left:auto;color:#fbbf24}
 .verdict .vd{font-size:14px;opacity:.88;margin-top:4px}
@@ -192,7 +195,7 @@ section.on{display:flex;animation:in .35s ease}
 .media.late{box-shadow:0 0 0 4px var(--muted),var(--shadow)}
 .media.shake{animation:wob .4s}
 @keyframes wob{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
-.choices{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;width:min(100%,calc((100dvh - 290px) * 4 / 3));margin:0 auto}
+.choices{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;width:var(--mw);margin:0 auto}
 .choices .g{font:700 20px/1 var(--display);letter-spacing:.05em;min-height:58px;border-width:2px}
 .choices .g.ai{border-color:var(--ai);color:var(--ai)}
 .choices .g.real{border-color:var(--real);color:var(--real)}
@@ -315,7 +318,7 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
   .scrim.on{display:block}
   .hero{grid-template-columns:1fr}.mosaic{display:none}
   .how{grid-template-columns:1fr}.how div{padding:10px 12px}.how b{display:inline;margin:0 4px}
-  .media,.fuse,.choices{width:min(100%,calc((100dvh - 250px) * 4 / 3))}
+  #s-guess{--mw:min(100%,calc((100dvh - 250px) * 4 / 3))}
   .hilo{grid-template-columns:1fr;gap:8px}.vs{display:none}.hcard{min-height:0;padding:16px}.hcard .val{font-size:44px}
   .bossgrid,.two{grid-template-columns:1fr}
   .guessnum{font-size:64px}
@@ -331,6 +334,23 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
 .hud .pill{display:flex;align-items:center;gap:4px;padding:6px 11px;border-radius:999px;background:var(--panel);border:1px solid var(--line);font:700 15px/1 var(--display);font-variant-numeric:tabular-nums;white-space:nowrap}
 .hud button.pill{min-height:36px}
 @media (min-width:861px){.hud .sheetbtn{display:none}}
+
+/* phones and short windows: the answer card goes UNDER the picture (it never fits on top of a small picture) */
+@media (max-width:860px), (max-height:640px){
+  .verdict{position:static;max-height:none;overflow:visible;transform:none;display:none;margin-top:10px;border-radius:18px;
+    background:#11131c;padding:14px 16px 12px;box-shadow:var(--shadow)}
+  .verdict.on{display:block;animation:in .3s ease}
+  .verdict .vh{font-size:20px;flex-wrap:wrap}
+  #s-guess.answered .choices,#s-guess.answered .tip,#s-guess.answered .fuse{display:none}
+}
+/* phones held sideways and short laptop windows: answer card NEXT TO the picture */
+@media (max-height:640px) and (min-width:600px) and (orientation:landscape){
+  #s-guess{--mw:min(55vw,calc((100dvh - 230px) * 4 / 3))}
+  #s-guess.answered .mwrap{display:grid;grid-template-columns:minmax(0,var(--mw)) minmax(260px,1fr);gap:12px;align-items:start;width:min(100%,calc(var(--mw) + 560px))}
+  #s-guess.textmode{--mw:min(50vw,440px)}
+  .media.text .quote{padding:14px 16px}.media.text .quote p{font-size:15px;line-height:1.45}.media.text .quote .src{margin-bottom:8px}
+  #s-guess.answered .verdict{margin-top:0;max-height:calc(100dvh - 130px);overflow:auto}
+}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -404,16 +424,17 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
   <!-- guess (pictures and texts) -->
   <section id="s-guess">
     <div class="wrap" style="gap:10px;max-width:none">
-      <div class="gtop" style="width:min(100%,calc((100dvh - 290px) * 4 / 3));margin:0 auto">
+      <div class="gtop" style="width:var(--mw);margin:0 auto">
         <div class="ring" id="ring"><svg viewBox="0 0 60 60"><circle class="bg" cx="30" cy="30" r="26"/><circle class="fg" id="ringFg" cx="30" cy="30" r="26" stroke-dasharray="163.4" stroke-dashoffset="0"/></svg><b id="secs">5</b></div>
         <div class="bubble" id="say" aria-live="polite">Take a good look 👀</div>
         <span class="counter" id="ctr">1 / 4</span>
       </div>
-      <div class="media" id="media">
+      <div class="mwrap"><div class="media" id="media">
         <img id="img" alt="">
         <div class="quote"><p class="src">From a travel guide about Swiss valleys</p><p id="quote"></p></div>
         <div class="loading" id="loading">Loading…</div>
         <span class="stamp ai" id="stAi">AI</span><span class="stamp real" id="stReal">REAL</span>
+      </div>
         <div class="verdict" id="verdict" aria-live="assertive"></div>
       </div>
       <div class="fuse" id="fuse" aria-hidden="true"><i id="fusebar"></i></div>
@@ -627,6 +648,7 @@ const q = new URLSearchParams(location.search);
 if (q.get("theme")) document.documentElement.dataset.theme = q.get("theme");
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const LIMIT = Math.max(2, Math.min(30, +q.get("limit") || 5));
+const STACKED = "(max-width:860px), (max-height:640px)";   // must match the CSS media query that puts the verdict under the picture
 const TIME = { warm: LIMIT, hard: LIMIT + 1, text: Math.round(LIMIT * 2.4), tf: LIMIT + 3 };
 const store = {
   get(k, d) { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch { return d; } },
@@ -788,7 +810,7 @@ function startGuess(L) { G_ = { ...G_, L, n: 0, list: S.items[L.id], limit: TIME
 function show() {
   const p = G_.list[G_.n], m = $("#media");
   m.className = "media" + (p.kind === "text" ? " text" : ""); m.style.transform = "";
-  $("#verdict").className = "verdict"; $("#tip").textContent = ""; $("#tip").className = "tip";
+  $("#s-guess").classList.remove("answered"); $("#s-guess").classList.toggle("textmode", p.kind === "text"); $("#verdict").className = "verdict"; $("#tip").textContent = ""; $("#tip").className = "tip";
   $("#ctr").textContent = `${G_.n + 1} / ${G_.list.length}`;
   $("#realLbl").textContent = p.kind === "text" ? "PERSON" : "REAL";
   $$("[data-g]").forEach(b => { b.disabled = false; b.classList.remove("picked"); });
@@ -852,7 +874,8 @@ function guess(g) {
     `<div class="vd">${esc(p.detail)}${late ? "" : ` You decided in ${secs.toFixed(1)} s.`}</div>` +
     `<div class="vt"><b>How to tell:</b> ${esc(tell)}</div><div class="vc">${link}</div>` +
     `<div class="auto" id="auto"><i></i></div><div class="vrow"><span id="autoTxt">Next in a moment · tap to skip</span><button id="pauseBtn">⏸ Keep open</button></div>`;
-  $("#verdict").classList.add("on");
+  $("#verdict").classList.add("on"); $("#s-guess").classList.add("answered");
+  if (matchMedia(STACKED).matches) later(() => $("#verdict").scrollIntoView({ block: "nearest", behavior: reduce ? "auto" : "smooth" }), 60);
   $("#say").textContent = late ? "Too slow, the feed moved on 🫠" : right ? ["Locked in! 🔒", "Nice eyes ⚡", "Called it 😎", "Easy 💅"][G_.n % 4] : ["Fooled you 😈", "Ouch 🙃", "Sneaky one 🫣", "It got you 😬"][G_.n % 4];
   note("clue", p.kind === "text" ? (p.truth === "ai" ? "AI text" : "Human text") : (p.truth === "ai" ? "AI picture" : "Real photo") + (L.id === "hard" ? " · hard mode" : ""), esc(tell), p.file || p.text);
   autoNext(G_.limit > 9 ? 6500 : 4800, nextItem);
@@ -873,7 +896,8 @@ function nextItem() {
   if (r === G_.list.length) confetti(60);
   level(S.lv + 1);
 }
-$("#media").addEventListener("click", () => { if (G_.answered && performance.now() - G_.answeredAt > 400) skipAuto(); });   // not the click that ends a swipe
+$("#media").addEventListener("click", () => { if (G_.answered && performance.now() - G_.answeredAt > 400) skipAuto(); });
+$("#verdict").addEventListener("click", e => { if (!e.target.closest("a,button") && G_.answered) skipAuto(); });   // not the click that ends a swipe
 // swipe: right = real, left = AI
 (() => {
   const m = $("#media"); let x0 = null, dx = 0, id = null;
