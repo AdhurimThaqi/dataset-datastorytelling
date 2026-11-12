@@ -177,7 +177,8 @@ section.on{display:flex;animation:in .35s ease}
 .fuse i{display:block;height:100%;width:100%;background:var(--ink);transform-origin:left;transition:background .3s}
 .fuse.hurry i{background:var(--hot)}
 .verdict{position:absolute;inset:auto 0 0 0;max-height:100%;overflow:auto;border-radius:0 0 22px 22px;pointer-events:none;padding:16px 18px 14px;background:linear-gradient(to top,rgba(8,9,14,.94) 65%,rgba(8,9,14,0));color:#fff;transform:translateY(105%);transition:transform .35s cubic-bezier(.2,.9,.3,1.2)}
-.verdict.on{transform:none;pointer-events:auto;cursor:pointer}
+.verdict:not(.on){opacity:0;visibility:hidden}
+.verdict.on{transform:none;pointer-events:auto;cursor:pointer;opacity:1;visibility:visible}
 .verdict .vh{display:flex;align-items:center;gap:10px;font:700 24px/1.1 var(--display)}
 .verdict .vh .pts{margin-left:auto;color:#fbbf24}
 .verdict .vd{font-size:14px;opacity:.88;margin-top:4px}
@@ -810,7 +811,7 @@ function startGuess(L) { G_ = { ...G_, L, n: 0, list: S.items[L.id], limit: TIME
 function show() {
   const p = G_.list[G_.n], m = $("#media");
   m.className = "media" + (p.kind === "text" ? " text" : ""); m.style.transform = "";
-  $("#s-guess").classList.remove("answered"); $("#s-guess").classList.toggle("textmode", p.kind === "text"); $("#verdict").className = "verdict"; $("#tip").textContent = ""; $("#tip").className = "tip";
+  $("#s-guess").classList.remove("answered"); $("#s-guess").scrollTop = 0; $("#verdict").innerHTML = ""; $("#s-guess").classList.toggle("textmode", p.kind === "text"); $("#verdict").className = "verdict"; $("#tip").textContent = ""; $("#tip").className = "tip";
   $("#ctr").textContent = `${G_.n + 1} / ${G_.list.length}`;
   $("#realLbl").textContent = p.kind === "text" ? "PERSON" : "REAL";
   $$("[data-g]").forEach(b => { b.disabled = false; b.classList.remove("picked"); });
