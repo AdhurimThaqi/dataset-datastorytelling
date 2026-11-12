@@ -3,35 +3,199 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Data Storytelling</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="icon" href="favicon-32.png" sizes="32x32"><link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>Real or AI? · Data Storytelling</title>
+<meta name="description" content="Worried, but it's coming anyway: a data game about what Americans think of AI. HSLU Data Storytelling, Adhurim Thaqi.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 <style>
-:root{--surface:#fcfcfb;--panel:#fff;--ink:#0b0b0b;--ink2:#52514e;--line:#e6e5e0;--accent:#2a78d6}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--surface:#1a1a19;--panel:#222221;--ink:#fff;--ink2:#c3c2b7;--line:#34332f;--accent:#3987e5}}
-:root[data-theme="dark"]{--surface:#1a1a19;--panel:#222221;--ink:#fff;--ink2:#c3c2b7;--line:#34332f;--accent:#3987e5}
-body{margin:0;background:var(--surface);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
-main{max-width:760px;margin:auto;padding:40px 16px}
-p{color:var(--ink2)}
-a.card{display:block;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:14px 0;color:var(--ink);text-decoration:none}
-a.card:hover{border-color:var(--accent)}
-a.card b{font-size:19px}a.card span{display:block;color:var(--ink2);margin-top:4px}
+:root{--bg:#f3f2ed;--panel:#fff;--panel2:#f0eee7;--ink:#14151b;--ink2:#54565f;--muted:#8a8b93;--line:#e2e0d8;
+  --real:#0c9b87;--ai:#7a4ff0;--gold:#d99a00;--shadow:0 1px 2px rgba(0,0,0,.05),0 8px 28px rgba(20,21,27,.07);--display:"Space Grotesk",system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d0f17;--panel:#161925;--panel2:#1e2232;--ink:#f2f3f8;--ink2:#b4b7c6;--muted:#7d8193;--line:#292d3d;
+  --real:#2dd4bf;--ai:#a78bfa;--gold:#fbbf24;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}}
+:root[data-theme="dark"]{--bg:#0d0f17;--panel:#161925;--panel2:#1e2232;--ink:#f2f3f8;--ink2:#b4b7c6;--muted:#7d8193;--line:#292d3d;
+  --real:#2dd4bf;--ai:#a78bfa;--gold:#fbbf24;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+a{color:inherit;text-decoration:none}
+main{max-width:1120px;margin:auto;padding:22px 20px 56px}
+h1,h2,h3,p{margin:0}
+.disp{font-family:var(--display);letter-spacing:-.03em}
+.kicker{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+
+/* top bar */
+.top{display:flex;align-items:center;gap:10px;font:700 17px/1 var(--display)}
+.top i{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,var(--real),var(--ai));display:grid;place-items:center;color:#fff;font-style:normal}
+.top span{margin-left:auto;font:500 13px/1 system-ui;color:var(--muted)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.05fr 1fr;gap:36px;align-items:center;margin:36px 0 54px}
+.live{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:var(--panel);border:1px solid var(--line);font-size:13px;font-weight:600}
+.live b{width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 0 rgba(34,197,94,.6);animation:pulse 1.8s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 9px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
+.hero h1{font:700 clamp(44px,7vw,82px)/.93 var(--display);letter-spacing:-.045em;margin:16px 0 14px}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--real),var(--ai));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lead{font-size:clamp(17px,2vw,20px);color:var(--ink2);max-width:30ch}
+.ctas{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:15px 22px;border-radius:16px;font-weight:700;font-size:17px;transition:transform .2s,box-shadow .2s}
+.btn.play{background:linear-gradient(90deg,var(--real),var(--ai));color:#fff;box-shadow:0 10px 30px -8px var(--ai)}
+.btn.ghost{background:var(--panel);border:1px solid var(--line)}
+.btn:hover{transform:translateY(-3px)}
+.mosaic{display:grid;grid-template-columns:1fr 1fr;gap:12px;transform:rotate(2deg)}
+.mosaic div{aspect-ratio:4/3;border-radius:18px;background:var(--panel2) center/cover;box-shadow:var(--shadow);position:relative;transition:transform .35s cubic-bezier(.2,.9,.3,1.3)}
+.mosaic div:nth-child(2){transform:translateY(18px)}.mosaic div:nth-child(3){transform:translateY(-6px)}
+.mosaic div:hover{transform:scale(1.06) rotate(-2deg);z-index:2}
+.mosaic div span{position:absolute;left:10px;bottom:10px;font:700 13px/1 var(--display);padding:6px 10px;border-radius:999px;background:rgba(0,0,0,.6);color:#fff}
+
+/* stats strip */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:54px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px 18px}
+.stat b{display:block;font:700 34px/1 var(--display);letter-spacing:-.03em}
+.stat span{font-size:14px;color:var(--ink2)}
+
+/* sections + cards */
+section{margin-bottom:48px}
+.sh{display:flex;align-items:baseline;gap:12px;margin-bottom:14px}
+.sh h2{font:700 26px/1.1 var(--display);letter-spacing:-.02em}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.card{position:relative;display:flex;flex-direction:column;gap:6px;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:20px;min-height:150px;overflow:hidden;transition:transform .3s cubic-bezier(.2,.9,.3,1.3),box-shadow .3s,border-color .3s}
+.card .ic{width:42px;height:42px;border-radius:13px;background:var(--panel2);display:grid;place-items:center;font-size:21px;margin-bottom:6px;transition:transform .3s}
+.card h3{font:700 19px/1.2 var(--display);letter-spacing:-.01em}
+.card p{font-size:14px;color:var(--ink2)}
+.card .more{max-height:0;opacity:0;overflow:hidden;font-size:14px;color:var(--ink2);transition:max-height .35s ease,opacity .3s}
+.card .go{position:absolute;right:18px;top:18px;font-size:18px;color:var(--muted);transition:transform .3s,color .3s}
+.card:hover{transform:translateY(-5px) scale(1.015);box-shadow:var(--shadow);border-color:color-mix(in srgb,var(--ai) 45%,var(--line))}
+.card:hover .ic{transform:scale(1.15) rotate(-6deg)}
+.card:hover .go{transform:translateX(4px);color:var(--ai)}
+.card:hover .more{max-height:80px;opacity:1}
+.card:focus-visible{outline:3px solid var(--ai);outline-offset:3px}
+
+/* prototype timeline */
+.versions{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:14px}
+.versions .card.now{background:linear-gradient(135deg,color-mix(in srgb,var(--real) 14%,var(--panel)),color-mix(in srgb,var(--ai) 16%,var(--panel)));border-color:color-mix(in srgb,var(--ai) 40%,var(--line))}
+.tag{display:inline-block;align-self:flex-start;font:700 11px/1 system-ui;letter-spacing:.08em;text-transform:uppercase;padding:5px 9px;border-radius:999px;background:var(--panel2);color:var(--ink2)}
+.now .tag{background:var(--ai);color:#fff}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:8px}
+.chips span{font-size:12px;font-weight:600;padding:4px 9px;border-radius:999px;background:color-mix(in srgb,var(--panel) 70%,transparent);border:1px solid var(--line)}
+
+/* list rows (documents) */
+.rows{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.row{display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px 16px;font-weight:600;transition:transform .25s,box-shadow .25s}
+.row small{display:block;font-weight:400;color:var(--muted);font-size:13px}
+.row:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.row .pdf{flex:none;width:38px;height:38px;border-radius:11px;background:color-mix(in srgb,#ef4444 14%,var(--panel2));display:grid;place-items:center;font:700 11px/1 system-ui;color:#ef4444}
+
+footer{border-top:1px solid var(--line);padding-top:18px;font-size:13px;color:var(--muted);display:flex;flex-wrap:wrap;gap:8px 18px}
+footer a{text-decoration:underline}
+
+/* entrance animation */
+.rise{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
+.rise.in{opacity:1;transform:none}
+
+@media (max-width:900px){
+  .hero{grid-template-columns:1fr;gap:28px;margin:26px 0 40px}
+  .mosaic{transform:none;max-width:520px}
+  .stats{grid-template-columns:1fr 1fr}
+  .grid,.rows{grid-template-columns:1fr 1fr}
+  .versions{grid-template-columns:1fr 1fr}.versions .now{grid-column:1/-1}
+}
+@media (max-width:560px){
+  main{padding:16px 16px 40px}
+  .grid,.rows,.versions{grid-template-columns:1fr}
+  .stat b{font-size:28px}
+  .card{min-height:0}
+  .card .more{max-height:80px;opacity:1}   /* no hover on phones: always show */
+  .btn{flex:1;justify-content:center;white-space:nowrap;padding:14px 12px;font-size:16px}
+  .top span{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rise{opacity:1;transform:none}}
 </style>
 </head>
 <body>
 <main>
-<p>HSLU · I.BA_DAS Data Storytelling · HS26 · Adhurim Thaqi</p>
-<h1>Data Storytelling</h1>
-<a class="card" href="ai.html"><b>Project: Americans on AI →</b><span>How the U.S. public feels about artificial intelligence — findings from the biweekly survey we work with this semester.</span></a>
-<a class="card" href="w41.html"><b>Project: Milestone 1 — rebriefing, user survey, concept →</b><span>What we understood from the briefing, what the people we design for need, and how we plan to solve it.</span></a>
-<a class="card" href="w43.html"><b>Project: Milestone 2 — three different designs →</b><span>Three directions for the data story (web flow, exhibition floor, dinner-table animatic), with wireframes, a comparison and an AI draft.</span></a>
-<a class="card" href="exercises/W47_sprint3/v7.html"><b>Prototype v7: the full game (12.11) →</b><span>Real or AI? with 7 levels: harder 2026 AI pictures, then the survey data as games (guess the number, more or fewer, true or false). Points, badges, a leaderboard and a challenge link for friends.</span></a>
-<a class="card" href="exercises/W46_sprint2/v6.html"><b>Prototype v6: after mentoring (05.11) →</b><span>v5 with the mentoring feedback: no progress bar, hints on how to spot AI, and a second round with travel texts (written by a person or by AI?).</span></a>
-<a class="card" href="exercises/W45_sprint1/v5.html"><b>Prototype v5: the whole story →</b><span>Real or AI? against the clock, then 57 of 100 Americans, your own answer among 1,000 US adults, and why most think AI is coming anyway. About 2 minutes, phone first.</span></a>
-<a class="card" href="exercises/W43_prototyping/prototype/v4.html"><b>Prototype v4: Real or AI? (the hook only) →</b><span>Beat the 5-second clock on four pictures (new ones every round, from a pool of 16), see your result, then see that 57 of 100 Americans already see people struggling to tell real from fake.</span></a>
-<a class="card" href="exercises/W44_plan/documentation/01_implementation-plan.pdf"><b>W44: implementation plan (PDF) →</b><span>Concept, tone, architecture and the backward plan to 17.12.</span></a>
-<a class="card" href="exercises/W44_plan/documentation/02_sprint-plan.pdf"><b>W44: sprint plan, sprint 1 (PDF) →</b><span>One goal and five tasks for 05.11–12.11, each with "done when …".</span></a>
-<a class="card" href="exercises/W44_plan/documentation/03_research-appendix.pdf"><b>W44: research appendix (PDF) →</b><span>What the test showed, the full user test (v1 → v4) and every prompt used to build the prototype.</span></a>
-<a class="card" href="exercises.html"><b>Exercises & process →</b><span>The weekly exercises behind the milestones (data mapping, data exploration, interviews) and the week-by-week process log.</span></a>
-<a class="card" href="output/report.html"><b>Practice: four dataset examples →</b><span>Gapminder, CO2 emissions, Titanic and Seattle weather — the inspect → clean → find the story → visualise workflow.</span></a>
+  <div class="top"><i>?</i>Real or AI?<span>HSLU · Data Storytelling · HS26 · Adhurim Thaqi</span></div>
+
+  <div class="hero">
+    <div>
+      <span class="live"><b></b>Prototype v7 is live</span>
+      <h1 class="disp">Worried, but it's coming <em>anyway.</em></h1>
+      <p class="lead">A 5-minute data game: spot the AI fakes, then find out what 1,000 Americans think about AI.</p>
+      <div class="ctas">
+        <a class="btn play" href="exercises/W47_sprint3/v7.html">▶ Play the game</a>
+        <a class="btn ghost" href="#project">See the project ↓</a>
+      </div>
+    </div>
+    <div class="mosaic" aria-hidden="true">
+      <div style="background-image:url('exercises/W47_sprint3/img/p03.jpg')"><span>Real?</span></div>
+      <div style="background-image:url('exercises/W47_sprint3/img/p10.jpg')"><span>AI?</span></div>
+      <div style="background-image:url('exercises/W47_sprint3/img/p05.jpg')"><span>Real?</span></div>
+      <div style="background-image:url('exercises/W47_sprint3/img/p12.jpg')"><span>AI?</span></div>
+    </div>
+  </div>
+
+  <div class="stats rise">
+    <div class="stat"><b>57<small style="font-size:16px">/100</small></b><span>Americans already see people struggling to tell real from fake</span></div>
+    <div class="stat"><b>2 in 3</b><span>are concerned about AI</span></div>
+    <div class="stat"><b>2 in 3</b><span>say it's coming anyway</span></div>
+    <div class="stat"><b>7</b><span>levels · 35 pictures · 1 leaderboard</span></div>
+  </div>
+
+  <section class="rise">
+    <div class="sh"><h2>Prototype</h2><span class="kicker">from hook to full game</span></div>
+    <div class="versions">
+      <a class="card now" href="exercises/W47_sprint3/v7.html"><span class="go">→</span><span class="tag">v7 · now</span><h3>The full game</h3>
+        <p>7 levels, harder AI pictures, the survey data as mini-games.</p>
+        <div class="chips"><span>🏆 Leaderboard</span><span>🥊 Challenge link</span><span>🔊 Sound</span><span>📱 Phone first</span></div></a>
+      <a class="card" href="exercises/W46_sprint2/v6.html"><span class="go">→</span><span class="tag">v6</span><h3>Hints + texts</h3><p>How to spot AI, and a text round.</p></a>
+      <a class="card" href="exercises/W45_sprint1/v5.html"><span class="go">→</span><span class="tag">v5</span><h3>The whole story</h3><p>All six steps in one page.</p></a>
+      <a class="card" href="exercises/W43_prototyping/prototype/v4.html"><span class="go">→</span><span class="tag">v4</span><h3>The hook</h3><p>Real or AI? against the clock.</p></a>
+    </div>
+  </section>
+
+  <section class="rise" id="project">
+    <div class="sh"><h2>Project</h2><span class="kicker">data · research · design</span></div>
+    <div class="grid">
+      <a class="card" href="ai.html"><span class="go">→</span><span class="ic">📊</span><h3>Americans on AI</h3><p>The data and what it says.</p>
+        <span class="more">A biweekly survey of US adults (Athena Insights / NORC): headline numbers, trends, find your group.</span></a>
+      <a class="card" href="w41.html"><span class="go">→</span><span class="ic">🧭</span><h3>Milestone 1</h3><p>Rebriefing, users, concept.</p>
+        <span class="more">What the brief asks, who we design for (20–35, use AI, undecided) and the plan.</span></a>
+      <a class="card" href="w43.html"><span class="go">→</span><span class="ic">✏️</span><h3>Milestone 2</h3><p>Three directions, sketched.</p>
+        <span class="more">Web game, exhibition floor and a dinner-table animatic, with wireframes and a comparison.</span></a>
+    </div>
+  </section>
+
+  <section class="rise">
+    <div class="sh"><h2>Documents</h2><span class="kicker">W44 · PDF</span></div>
+    <div class="rows">
+      <a class="row" href="exercises/W44_plan/documentation/01_implementation-plan.pdf"><span class="pdf">PDF</span><span>Implementation plan<small>Concept, architecture, timeline</small></span></a>
+      <a class="row" href="exercises/W44_plan/documentation/02_sprint-plan.pdf"><span class="pdf">PDF</span><span>Sprint plan<small>Goal and tasks, sprint 1</small></span></a>
+      <a class="row" href="exercises/W44_plan/documentation/03_research-appendix.pdf"><span class="pdf">PDF</span><span>Research appendix<small>User test and all prompts</small></span></a>
+    </div>
+  </section>
+
+  <section class="rise">
+    <div class="sh"><h2>Process</h2><span class="kicker">week by week</span></div>
+    <div class="grid" style="grid-template-columns:repeat(2,1fr)">
+      <a class="card" href="exercises.html"><span class="go">→</span><span class="ic">🗂️</span><h3>Exercises & process log</h3><p>Mapping, data, interviews, and every week's notes.</p></a>
+      <a class="card" href="output/report.html"><span class="go">→</span><span class="ic">🧪</span><h3>Practice datasets</h3><p>Gapminder, CO₂, Titanic, Seattle weather.</p></a>
+    </div>
+  </section>
+
+  <footer>
+    <span>Data: <i>Americans on AI</i>, Athena Insights with NORC · US adults, 10–14 Sep 2026, n = 1,083</span>
+    <a href="https://github.com/AdhurimThaqi/dataset-datastorytelling">Code on GitHub</a>
+    <span>Built with Claude · AI use named in the process log</span>
+  </footer>
 </main>
+<script>
+// gentle entrance as sections scroll into view (everything is visible without JS too)
+(() => {
+  const els = document.querySelectorAll(".rise");
+  if (!("IntersectionObserver" in window)) return els.forEach(e => e.classList.add("in"));
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: .12 });
+  els.forEach(e => io.observe(e));
+})();
+</script>
 </body>
 </html>
