@@ -305,6 +305,37 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
 .toast{position:fixed;left:50%;top:18px;transform:translate(-50%,-120%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-weight:700;z-index:60;transition:transform .35s cubic-bezier(.2,.9,.3,1.2);box-shadow:var(--shadow);white-space:nowrap}
 .toast.on{transform:translate(-50%,0)}
 
+
+/* hover: the thing under the cursor grows and shows more, then goes back (mouse only) */
+.levels li{transition:background .25s,transform .25s,padding .25s,color .25s;flex-wrap:wrap;cursor:default}
+.levels li .ic{transition:transform .25s}
+.levels li .lvd{flex-basis:100%;max-height:0;opacity:0;overflow:hidden;font-size:12px;font-weight:400;color:var(--ink2);padding-left:40px;transition:max-height .3s ease,opacity .25s,margin .25s}
+.badges div{cursor:default;transition:transform .25s cubic-bezier(.2,.9,.3,1.4),filter .3s,opacity .3s,box-shadow .25s}
+.badges div::after{content:attr(data-tip);position:absolute;left:50%;bottom:calc(100% + 8px);transform:translate(-50%,6px);width:150px;padding:8px 10px;border-radius:10px;background:var(--ink);color:var(--bg);font:500 12px/1.3 system-ui;text-align:center;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:5}
+.board li{transition:transform .25s,background .25s,padding .25s}
+.board .sub{max-height:0;opacity:0;overflow:hidden;transition:max-height .3s,opacity .25s}
+.board li.me .sub,.board li.vs .sub{max-height:20px;opacity:1}
+.note,.player,.learned li,.pills span{transition:transform .25s,box-shadow .25s}
+@media (hover:hover) and (pointer:fine){
+  .levels li:hover{background:var(--panel2);transform:translateX(4px);padding:12px 10px;color:var(--ink)}
+  .levels li:hover .ic{transform:scale(1.18) rotate(-6deg)}
+  .levels li:hover .lvd{max-height:60px;opacity:1;margin-top:4px}
+  .badges div:hover{transform:scale(1.18);filter:none;opacity:1;box-shadow:var(--shadow);z-index:4}
+  .badges div:hover::after{opacity:1;transform:translate(-50%,0)}
+  .board li:hover{background:var(--panel2);transform:scale(1.03);padding:13px 12px}
+  .board li:hover .sub{max-height:20px;opacity:1}
+  .note:hover,.learned li:hover{transform:translateY(-3px) scale(1.02);box-shadow:var(--shadow)}
+  .player:hover{transform:scale(1.02)}
+  .pills span:hover{transform:translateY(-3px) scale(1.06)}
+}
+.badges div:nth-child(4n+1)::after{left:0;transform:translate(0,6px)}.badges div:nth-child(4n)::after{left:auto;right:0;transform:translate(0,6px)}
+@media (hover:hover) and (pointer:fine){.badges div:nth-child(4n+1):hover::after,.badges div:nth-child(4n):hover::after{transform:none}}
+.badges{padding-top:4px}
+/* intro: three short pills instead of three text blocks */
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pills span{padding:10px 14px;border-radius:999px;background:var(--panel);border:1px solid var(--line);font-weight:700;font-size:15px}
+.soundbtn{position:absolute;right:12px;top:12px;min-height:34px;width:34px;padding:0;border-radius:50%;background:var(--panel);font-size:15px}
+.verdict .vc{display:flex;gap:10px;align-items:center;justify-content:space-between}
 /* ---------- responsive ---------- */
 @media (max-width:1180px){
   .app{grid-template-columns:minmax(0,1fr) 300px}
@@ -362,6 +393,7 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
 <aside class="rail left" aria-label="Your game">
   <div class="brand"><i>?</i>Real or AI?</div>
   <div class="player">
+    <button class="soundbtn" id="soundBtn" aria-label="Sound on or off" title="Sound">🔊</button>
     <div class="who"><div class="avatar" id="av">?</div><div style="min-width:0"><div class="nm" id="pName">Player</div><div class="rk" id="pRank">Rookie</div></div></div>
     <div class="scoreline"><span class="score" id="score">0</span><span>points</span></div>
     <div class="pop" id="pop">+0</div>
@@ -380,6 +412,7 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
     <div class="lv"><i id="hudIc">🎮</i><span id="hudLv">Real or AI?</span></div>
     <span class="pill" title="Streak">🔥<span id="hudStreak">0</span></span>
     <span class="pill" title="Points">⭐<span id="hudScore">0</span></span>
+    <button class="pill" id="soundBtn2" aria-label="Sound on or off">🔊</button>
     <button class="pill sheetbtn" id="sheetBtn" aria-label="Field notes and leaderboard">📓<span id="hudNotes">0</span></button>
   </div>
 
@@ -388,24 +421,20 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
     <div class="wrap">
       <div class="hero">
         <div>
-          <p class="kicker">A data game · about 5 minutes</p>
+          <p class="kicker">7 levels · 5 minutes</p>
           <h1 id="t-intro" class="disp">Real or <em>AI?</em></h1>
-          <p class="ink2" style="font-size:18px">Spot the fakes, then guess what 1,000 Americans told a survey about AI. Points for speed, streaks and good guesses.</p>
+          <p class="ink2" style="font-size:19px">Spot the fakes. Guess the data. Beat your friends.</p>
         </div>
         <div class="mosaic" aria-hidden="true" id="mosaic"></div>
       </div>
       <div class="challenge" id="challenge"></div>
-      <div class="how">
-        <div>👀<b>Spot it</b>Pictures and texts. Swipe or tap: <b style="display:inline;color:var(--real)">Real</b> or <b style="display:inline;color:var(--ai)">AI</b>. <span class="limtxt">5</span> seconds each.</div>
-        <div>🎯<b>Guess the data</b>Higher or lower, true or false, and how many Americans in 100.</div>
-        <div>🏆<b>Climb the board</b>Earn badges, beat your friends, and learn the clues on the way.</div>
-      </div>
+      <div class="pills" aria-label="How it works"><span>👀 Real or AI?</span><span>🎯 Guess the numbers</span><span>🏆 Top the board</span></div>
       <div class="namerow">
         <input id="nameIn" maxlength="18" autocomplete="nickname" aria-label="Your player name" placeholder="Your player name">
         <button class="ghost" id="dice" title="Random name" aria-label="Random name">🎲</button>
       </div>
       <button class="start" id="start">Start the game ▶</button>
-      <p class="tiny" style="text-align:center">Keys: <b>←</b> AI · <b>→</b> Real · <b>H</b> hint · <b>Space</b> next. Scores stay on this device. Nothing is sent anywhere.</p>
+      <p class="tiny" style="text-align:center"><b>←</b> AI · <b>→</b> Real · <b>Space</b> next</p>
     </div>
   </section>
 
@@ -452,7 +481,7 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
   <section id="s-boss" aria-labelledby="t-boss">
     <div class="wrap">
       <p class="kicker">Boss level · Americans on AI · <span data-dates></span></p>
-      <p class="bossq" id="t-boss">Out of 100 Americans, how many say they <u>already</u> see people around them struggling to tell what's real from what's fake because of AI?</p>
+      <p class="bossq" id="t-boss">How many of 100 Americans <u>already</u> see people around them struggling to tell real from fake?</p>
       <div class="bossgrid">
         <div class="dots" id="bossDots" role="img" aria-label="100 dots"></div>
         <div>
@@ -471,7 +500,7 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
       </div>
       <div class="reveal" id="bossMore">
         <div class="callout" id="surprise"></div>
-        <p class="source" id="srcHook"></p>
+        <details class="source"><summary>Source</summary><p id="srcHook"></p></details>
         <div class="cta"><button class="primary" id="bossNext">Next level →</button></div>
       </div>
     </div>
@@ -480,8 +509,8 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
   <!-- higher or lower -->
   <section id="s-hilo" aria-labelledby="t-hilo">
     <div class="wrap">
-      <p class="kicker">Same survey · <span id="hiloStem"></span></p>
-      <h2 class="q" id="t-hilo">Do more or fewer Americans already see this in their community?</h2>
+      <p class="kicker">In their community</p>
+      <h2 class="q" id="t-hilo">More or fewer Americans already see this?</h2>
       <div class="pips" id="hiloPips"></div>
       <div class="hilo">
         <div class="hcard" id="hA"><p class="unit">already see it around them</p><p class="it" id="hAit"></p><p class="val" id="hAval"></p><i class="fillbar" id="hAbar"></i></div>
@@ -511,7 +540,7 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
       <p class="kicker" id="youKick">Your turn · the survey's own question</p>
       <!-- phase 1: your feeling -->
       <div class="phase on" id="ph1"><p class="q" id="t-you"></p><div class="opts" id="opts1"></div>
-        <p class="tiny">Same question and answers as for the <span data-n></span> US adults. Your answer stays on this page.</p></div>
+        <p class="tiny">The survey's own question.</p></div>
       <!-- phase 2: predict -->
       <div class="phase" id="ph2"><p class="q" id="predQ"></p>
         <p class="guessnum"><span id="predVal">50</span><small>of 100 US adults</small></p>
@@ -525,7 +554,7 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
           <div id="youViz"></div>
         </div>
         <div class="callout" id="youNote" style="border-color:var(--shape)"></div>
-        <p class="source" id="youSrc"></p>
+        <details class="source"><summary>Source</summary><p id="youSrc"></p></details>
         <div class="cta"><button class="primary" id="youNext">Next →</button></div>
       </div>
     </div>
@@ -537,18 +566,14 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
       <div class="endtop"><div class="trophy" id="trophy">🏆</div>
         <div><p class="kicker">Final score · <span id="endRank"></span></p><p class="endscore" id="endScore">0</p><p class="small" id="endSub"></p></div></div>
       <div class="earned" id="earned"></div>
-      <div class="card" style="display:flex;flex-direction:column;gap:10px">
-        <p class="kicker">What it adds up to</p>
-        <h2 class="message" id="t-end"></h2>
-      </div>
+      <h2 class="message" id="t-end"></h2>
       <div><p class="kicker" style="margin-bottom:8px">What you learned</p><ul class="learned" id="learned"></ul></div>
       <div class="card" style="display:flex;flex-direction:column;gap:10px">
-        <p class="kicker">🥊 Challenge a friend: same pictures, your score to beat</p>
+        <p class="kicker">🥊 Challenge a friend</p>
         <div class="share"><input id="shareUrl" readonly aria-label="Challenge link"><button class="primary" id="copyBtn">Copy</button></div>
       </div>
       <div class="cta"><button class="ghost" id="boardBtn">🏆 Leaderboard</button><button class="primary" id="again">Play again · new pictures</button></div>
-      <details><summary>All numbers as a table</summary><div class="tbl" id="tbl"></div></details>
-      <p class="source" id="srcAll"></p>
+      <details><summary>Sources and all numbers</summary><div class="tbl" id="tbl"></div><p class="source" id="srcAll"></p></details>
     </div>
   </section>
 </main>
@@ -560,11 +585,11 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
     <button role="tab" aria-selected="false" data-tab="board">🏆 Leaderboard</button>
   </div>
   <div class="pane on" id="pane-notes" role="tabpanel">
-    <div class="empty" id="notesEmpty"><b>📓</b>Every answer unlocks a clue or a fact. They collect here, so you learn while you play.</div>
+    <div class="empty" id="notesEmpty"><b>📓</b>Clues and facts you unlock land here.</div>
     <div id="notes" style="display:flex;flex-direction:column;gap:10px"></div>
   </div>
   <div class="pane" id="pane-board" role="tabpanel">
-    <p class="tiny">Top 10 on this device. Pass the phone around, or send a challenge link.</p>
+    <p class="tiny">Top 10 on this device</p>
     <ol class="board" id="board"></ol>
     <div class="empty" id="boardEmpty"><b>🏆</b>No scores yet. Be the first.</div>
   </div>
@@ -626,13 +651,13 @@ const SAY_TEXT = { 5: "Read it 📖", 4: "Person or machine?", 3: "Too smooth?",
 
 // ---------- game setup ----------
 const LEVELS = [
-  { id: "warm", ic: "🌄", name: "Warm-up", kind: "pic", blurb: "Four mountain valleys. Two are real photos, two are from older AI models (2024–25)." },
-  { id: "hard", ic: "🧨", name: "Hard mode", kind: "pic", mult: 1.5, blurb: "New 2026 AI models, and real photos that look fake. Swipe right for real, left for AI." },
-  { id: "text", ic: "✍️", name: "Texts", kind: "text", blurb: "Two short travel texts. One is by a person, one by AI." },
-  { id: "boss", ic: "🎯", name: "The number", kind: "boss", blurb: "You've seen how hard it is. How many Americans already see people struggling with this?" },
-  { id: "hilo", ic: "↕️", name: "More or fewer", kind: "hilo", blurb: "What else do Americans see AI changing in their community? Guess the order." },
-  { id: "tf", ic: "⚡", name: "True or false", kind: "tf", blurb: "Three quick claims about AI risks and families. 8 seconds each." },
-  { id: "you", ic: "🫵", name: "Your turn", kind: "you", blurb: "Answer the survey's questions yourself, then guess how America answered." },
+  { id: "warm", ic: "🌄", name: "Warm-up", kind: "pic", blurb: "4 valleys. Real photo or AI?", d: "Older AI models · 5 s each" },
+  { id: "hard", ic: "🧨", name: "Hard mode", kind: "pic", mult: 1.5, blurb: "Newest AI vs. real photos that look fake.", d: "4 pictures · ×1.5 points" },
+  { id: "text", ic: "✍️", name: "Texts", kind: "text", blurb: "Person or AI? Read fast.", d: "2 short travel texts" },
+  { id: "boss", ic: "🎯", name: "The number", kind: "boss", blurb: "How many Americans see this happening?", d: "Guess on 100 dots · up to 300 points" },
+  { id: "hilo", ic: "↕️", name: "More or fewer", kind: "hilo", blurb: "What else do Americans see AI changing?", d: "4 quick picks: more or fewer" },
+  { id: "tf", ic: "⚡", name: "True or false", kind: "tf", blurb: "Real number or fake number?", d: "3 claims · 8 s each" },
+  { id: "you", ic: "🫵", name: "Your turn", kind: "you", blurb: "Answer like the survey. Then guess America.", d: "2 questions + 2 guesses" },
 ];
 const BADGES = [
   ["eagle", "🦅", "Eagle eye", "All hard-mode pictures right"], ["lightning", "⚡", "Lightning", "A right answer in under 1.5 s"],
@@ -678,6 +703,30 @@ $$("[data-dates]").forEach(e => e.textContent = D.dates);
 $$("[data-n]").forEach(e => e.textContent = D.n.toLocaleString("en"));
 $$(".limtxt").forEach(e => e.textContent = LIMIT);
 
+
+// ---------- sound: tiny synthesized effects (no files), mute button remembered on this device ----------
+const SFX = (() => {
+  let ctx = null, on = store.get("realOrAI.sound", true);
+  const ac = () => { try { ctx = ctx || new (window.AudioContext || window.webkitAudioContext)(); if (ctx.state === "suspended") ctx.resume(); return ctx; } catch { return null; } };
+  const tone = (f, t0, dur, type = "sine", vol = .07, slide = 0) => {
+    const c = ac(); if (!c) return; const t = c.currentTime + t0, o = c.createOscillator(), g = c.createGain();
+    o.type = type; o.frequency.setValueAtTime(f, t); if (slide) o.frequency.exponentialRampToValueAtTime(f * slide, t + dur);
+    g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + .012); g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+    o.connect(g).connect(c.destination); o.start(t); o.stop(t + dur + .03);
+  };
+  const S = {
+    click: () => tone(700, 0, .05, "triangle", .04),
+    count: () => tone(520, 0, .09, "sine", .06),
+    go: () => tone(440, 0, .22, "sine", .07, 2),
+    right: () => { tone(660, 0, .1, "triangle", .07); tone(990, .08, .18, "triangle", .07); },
+    wrong: () => tone(220, 0, .28, "sawtooth", .035, .55),
+    tick: () => tone(1250, 0, .035, "square", .02),
+    badge: () => [784, 988, 1319].forEach((f, i) => tone(f, i * .07, .2, "triangle", .05)),
+    end: () => [523, 659, 784, 1047].forEach((f, i) => tone(f, i * .12, .3, "triangle", .06)),
+  };
+  const paint = () => ["#soundBtn", "#soundBtn2"].forEach(id => { const b = $(id); if (b) { b.textContent = on ? "🔊" : "🔇"; b.setAttribute("aria-pressed", on); } });
+  return { play(n) { if (on) try { S[n](); } catch {} }, toggle() { on = !on; store.set("realOrAI.sound", on); paint(); if (on) S.click(); }, paint };
+})();
 // ---------- state ----------
 let S;
 function fresh() {
@@ -766,18 +815,18 @@ function hud() {
   }
   $("#levels").innerHTML = LEVELS.map((l, i) => {
     const r = S.res[l.id], trail = r ? r.map(x => x === true ? "✅" : x === false ? "❌" : x === "tie" ? "🟨" : "⏱").join("") : "";
-    return `<li class="${i < S.lv ? "done" : i === S.lv ? "now" : ""}"><span class="ic">${l.ic}</span>${l.name}<span class="tr">${trail}</span></li>`;
+    return `<li class="${i < S.lv ? "done" : i === S.lv ? "now" : ""}"><span class="ic">${l.ic}</span>${l.name}<span class="tr">${trail}</span><span class="lvd">${l.d}</span></li>`;
   }).join("");
   if (S.lv >= 0 && LEVELS[S.lv]) { $("#hudIc").textContent = LEVELS[S.lv].ic; $("#hudLv").textContent = `${S.lv + 1}/${LEVELS.length} · ${LEVELS[S.lv].name}`; }
 }
 function badge(id) {
   if (S.badges.has(id)) return;
-  S.badges.add(id);
+  S.badges.add(id); later(() => SFX.play("badge"), 250);
   const b = BADGES.find(x => x[0] === id);
   $$("#badges div")[BADGES.indexOf(b)].classList.add("on");
   toast(`${b[1]} Badge: ${b[2]}`);
 }
-$("#badges").innerHTML = BADGES.map(b => `<div title="${b[2]}: ${b[3]}" aria-label="${b[2]}: ${b[3]}">${b[1]}</div>`).join("");
+$("#badges").innerHTML = BADGES.map(b => `<div data-tip="${b[2]}: ${b[3]}" aria-label="${b[2]}: ${b[3]}">${b[1]}</div>`).join("");
 function toast(t) { const el = $("#toast"); el.textContent = t; el.classList.add("on"); clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove("on"), 2200); }
 function confetti(n = 80) {
   if (reduce) return;
@@ -797,10 +846,10 @@ function level(i) {
   $("#lvMult").hidden = !L.mult; $("#lvMult").textContent = `×${L.mult} points`;
   screen("s-level");
   (S.items[L.id] || []).forEach(p => { if (p.file) { const im = new Image(); im.src = p.file; } });   // preload
-  const go = () => { clearAll(); RUN[L.kind](L); };
+  const go = () => { clearAll(); SFX.play("go"); RUN[L.kind](L); };
   $("#lvGo").onclick = go;
   if (reduce) return;
-  [3, 2, 1].forEach((k, j) => later(() => { const c = $("#lvCount"); c.textContent = k; c.classList.remove("tick"); void c.offsetWidth; c.classList.add("tick"); }, j * 750));
+  [3, 2, 1].forEach((k, j) => later(() => { SFX.play("count"); const c = $("#lvCount"); c.textContent = k; c.classList.remove("tick"); void c.offsetWidth; c.classList.add("tick"); }, j * 750));
   later(go, 2300);
 }
 const RUN = { pic: startGuess, text: startGuess, boss, hilo, tf, you: youStart };
@@ -829,12 +878,13 @@ function show() {
 }
 function setRing(f, secs, el = "#ringFg", num = "#secs") { $(el).style.strokeDashoffset = 163.4 * (1 - f); $(num).textContent = Math.ceil(secs); }
 function startTimer() {
-  G_.ticking = true;
+  G_.ticking = true; G_.lastTick = 0;
   const p = G_.list[G_.n];
   const tick = () => {
     if (!G_.ticking) return;
     const left = Math.max(0, G_.limit - (performance.now() - G_.shownAt) / 1000), f = left / G_.limit;
     setRing(f, left); $("#fusebar").style.transform = `scaleX(${f})`;
+    const sec = Math.ceil(left); if (sec <= 2 && sec > 0 && sec !== G_.lastTick) { G_.lastTick = sec; SFX.play("tick"); }
     const k = Math.min(5, Math.max(1, Math.ceil(f * 5))), s = p.kind === "text" ? SAY_TEXT[k] : SAY[G_.n % 4][k];
     if ($("#say").textContent !== s && !G_.hint) $("#say").textContent = s;
     const hurry = f <= .4; $("#ring").classList.toggle("hurry", hurry); $("#fuse").classList.toggle("hurry", hurry);
@@ -862,7 +912,7 @@ function guess(g) {
     if (secs < 1.5) badge("lightning");
   }
   S.res[L.id].push(late ? null : right);
-  add(pts, late ? false : right);
+  add(pts, late ? false : right); SFX.play(right ? "right" : "wrong");
   $$("[data-g]").forEach(b => { b.disabled = true; b.classList.toggle("picked", b.dataset.g === g); });
   $("#hintBtn").disabled = true;
   const m = $("#media"); m.classList.add(late ? "late" : right ? "right" : "wrong"); if (!right && !late) m.classList.add("shake");
@@ -872,9 +922,8 @@ function guess(g) {
   const head = late ? `⏱ Time's up · ${what}` : right ? `✅ Right! ${what}` : `❌ Nope · ${what}`;
   const link = p.url ? `<a href="${p.url}" target="_blank" rel="noopener">${esc(p.credit)}</a>` : esc(p.credit);
   $("#verdict").innerHTML = `<div class="vh">${head}<span class="pts">${pts ? "+" + pts : ""}</span></div>` +
-    `<div class="vd">${esc(p.detail)}${late ? "" : ` You decided in ${secs.toFixed(1)} s.`}</div>` +
-    `<div class="vt"><b>How to tell:</b> ${esc(tell)}</div><div class="vc">${link}</div>` +
-    `<div class="auto" id="auto"><i></i></div><div class="vrow"><span id="autoTxt">Next in a moment · tap to skip</span><button id="pauseBtn">⏸ Keep open</button></div>`;
+    `<div class="vt">💡 ${esc(tell)}</div>` +
+    `<div class="auto" id="auto"><i></i></div><div class="vrow vc"><span title="${esc(p.detail)}">${link}</span><button id="pauseBtn" aria-label="Keep open">⏸</button></div>`;
   $("#verdict").classList.add("on"); $("#s-guess").classList.add("answered");
   if (matchMedia(STACKED).matches) later(() => $("#verdict").scrollIntoView({ block: "nearest", behavior: reduce ? "auto" : "smooth" }), 60);
   $("#say").textContent = late ? "Too slow, the feed moved on 🫠" : right ? ["Locked in! 🔒", "Nice eyes ⚡", "Called it 😎", "Easy 💅"][G_.n % 4] : ["Fooled you 😈", "Ouch 🙃", "Sneaky one 🫣", "It got you 😬"][G_.n % 4];
@@ -887,7 +936,7 @@ function autoNext(ms, fn) {
   autoFn = fn; const a = $("#auto"); a.style.setProperty("--t", ms + "ms"); a.classList.add("run");
   autoT = later(() => { autoT = null; fn(); }, reduce ? ms + 3000 : ms);
 }
-function pauseAuto() { if (!autoT) return; clearTimeout(autoT); autoT = null; $("#auto").classList.add("paused"); $("#autoTxt").textContent = "Paused · tap the picture or press Space to go on"; $("#pauseBtn").remove(); }
+function pauseAuto() { if (!autoT) return; clearTimeout(autoT); autoT = null; $("#auto").classList.add("paused"); $("#pauseBtn").textContent = "▶"; $("#pauseBtn").onclick = e => { e.stopPropagation(); skipAuto(); }; }
 function skipAuto() { if (!autoFn) return; if (autoT) clearTimeout(autoT); autoT = null; const f = autoFn; autoFn = null; f(); }
 function nextItem() {
   autoFn = null;
@@ -933,7 +982,7 @@ $("#bossLock").onclick = () => {
     $("#bossYou").textContent = v; $("#bossReal").textContent = real;
     $("#bossMsg").textContent = off <= 3 ? `🎯 Bullseye! Off by ${off}. +${pts}` : off <= 10 ? `Close! Off by ${off}. +${pts}` : `Off by ${off}. +${pts}`;
     $("#bossRev").classList.add("on"); later(() => $("#bossMore").classList.add("on"), 500);
-    S.res.boss.push(off <= 10); add(pts, null); if (off <= 3) { badge("bullseye"); confetti(); }
+    S.res.boss.push(off <= 10); add(pts, null); SFX.play(off <= 10 ? "right" : "wrong"); if (off <= 3) { badge("bullseye"); confetti(); }
     note("fact", `${real} in 100 Americans`, `already see people around them struggling to tell what's real from what's fake because of AI. Only ${H.dont_expect} in 100 don't expect it.`, "boss");
   };
   if (reduce) { dots.forEach((_, k) => fill(k)); return done(); }
@@ -945,7 +994,6 @@ $("#bossNext").onclick = () => level(S.lv + 1);
 
 // ---------- level 5: more or fewer ----------
 const CI = D.community, seenOf = i => CI[i].dist.have_seen;
-$("#hiloStem").textContent = D.stems.ai_community_impact.replace(/\?$/, "");
 let HL = { k: 0 };
 function hilo() {
   screen("s-hilo"); S.res.hilo = []; HL = { k: 0 }; hiloShow();
@@ -969,7 +1017,7 @@ function hiloPick(up) {
   $("#hB").className = "hcard " + (right === "tie" ? "tie" : right ? "ok" : "no");
   $("#hiloMsg").textContent = right === "tie" ? `🟨 Too close to call: ${pct(va)} vs ${pct(vb)} is within the margin of error. You get the points anyway.`
     : right ? `✅ Right: ${in100(vb)} vs ${in100(va)}. +100` : `❌ It's ${vb > va ? "more" : "fewer"}: ${in100(vb)} vs ${in100(va)}.`;
-  S.res.hilo.push(right); add(right ? 100 : 0, right === "tie" ? null : right);
+  S.res.hilo.push(right); add(right ? 100 : 0, right === "tie" ? null : right); SFX.play(right ? "right" : "wrong");
   autoHilo();
 }
 function autoHilo() {
@@ -1013,7 +1061,7 @@ function tfPick(said) {
   $("#tBtn").disabled = $("#fBtn").disabled = true;
   const c = S.tf[TF.k], secs = (performance.now() - TF.t0) / 1000, right = said === c.truth;
   const pts = right ? 100 + Math.round(30 * Math.max(0, 1 - secs / TIME.tf)) : 0;
-  S.res.tf.push(said === null ? null : right); add(pts, said === null ? false : right);
+  S.res.tf.push(said === null ? null : right); add(pts, said === null ? false : right); SFX.play(right ? "right" : "wrong");
   $("#tfFill").style.width = "0"; $("#tfMark").style.left = c.shown + "%"; $("#tfMark").textContent = `claim: ${c.shown}`;
   $("#tfRev").classList.add("on"); requestAnimationFrame(() => requestAnimationFrame(() => $("#tfFill").style.width = c.v + "%"));
   $("#tfMsg").textContent = (said === null ? "⏱ Time's up. " : right ? `✅ Right! +${pts} · ` : "❌ Wrong · ") + (c.truth ? `True: ${pct(c.v)}.` : `False: it's ${pct(c.v)}, not ${c.shown}.`);
@@ -1086,6 +1134,7 @@ $("#youNext").onclick = () => { if (Y.part === 1) { Y.part = 2; youAsk(); } else
 // ---------- end ----------
 const BOARD_KEY = "realOrAI.board.v7";
 function end() {
+  later(() => SFX.play("end"), 300);
   clearAll(); S.done = true; S.lv = LEVELS.length; hud();
   if (!S.hints) badge("nohint");
   screen("s-end");
@@ -1163,10 +1212,11 @@ function startGame() {
   fresh(); S.name = keepName; S.playedOnce = keepPlayed; S.items = last;
   $("#notes").innerHTML = ""; $("#notesEmpty").style.display = ""; $("#noteCnt").textContent = 0; $("#hudNotes").textContent = 0;
   $$("#badges div").forEach(d => d.classList.remove("on"));
-  draw(); level(0);
+  tab("notes"); draw(); level(0);
 }
-$("#start").onclick = startGame;
-$("#again").onclick = () => { clearAll(); screen("s-intro"); S.lv = -1; hud(); $("#hudLv").textContent = "Real or AI?"; $("#hudIc").textContent = "🎮"; };
+$("#start").onclick = () => { SFX.play("click"); startGame(); };
+["#soundBtn", "#soundBtn2"].forEach(id => $(id).onclick = () => SFX.toggle()); SFX.paint();
+$("#again").onclick = () => { clearAll(); screen("s-intro"); tab("board"); S.lv = -1; hud(); $("#hudLv").textContent = "Real or AI?"; $("#hudIc").textContent = "🎮"; };
 if (q.has("reset")) { store.set(SEEN_KEY + ".1", []); store.set(SEEN_KEY + ".2", []); store.set(TSEEN_KEY, []); }
 
 // ---------- keys ----------
@@ -1182,7 +1232,7 @@ addEventListener("keydown", e => {
 });
 
 // ---------- review shortcuts: ?step=warm|hard|text|boss|hilo|tf|you|turn|end ----------
-hud(); renderBoard();
+hud(); renderBoard(); if (!q.get("step")) tab("board");   // first screen: show the leaderboard
 const want = q.get("step");
 const IDX = { warm: 0, hard: 1, text: 2, boss: 3, hilo: 4, tf: 5, you: 6, turn: 6 };
 if (want && (want in IDX || want === "end")) {
