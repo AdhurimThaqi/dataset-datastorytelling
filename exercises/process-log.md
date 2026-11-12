@@ -103,3 +103,25 @@ I work alone, so every contribution below is mine. AI tools I used (Claude) are 
 - **Still open:** sketch 1–2 more questions (captcha grid with the "community impact" items, true/false cards with risks / family impact) · find out which PDF was meant · test on a real phone · one tester
 - **Better next week:** _…_
 - **Data / sources:** `exercises/W46_sprint2/` · prompt 7 in `W43_prototyping/prototype/prompts.md` (built with Claude) · Wikivoyage "Verzasca Valley" rev. 4275033 and "Lauterbrunnen" rev. 4407914 (CC BY-SA 3.0)
+
+## W46 · 12.11 — Mentoring 2 (Alain) · prototype v7
+- **Feedback (lecturer):**
+  - improve the UI: you always have to scroll and click "Next"; the sides are empty, so use them
+  - gamification is liked, but it's only at the beginning: add more game features
+  - when the data is shown, the user should learn something while playing, and maybe compete (leaderboard)
+  - responsive, and it should look good
+  - the pictures are too easy to tell apart: use better-quality AI pictures and real photos
+- **What I did (v7, `exercises/W47_sprint3/`):**
+  - a 3-column game layout (player card · stage · field notes and leaderboard), a top bar and a bottom sheet on the phone, light and dark mode
+  - no scrolling during play: the answer slides over the picture and the game moves on by itself; swipe, arrow keys and Space
+  - 7 levels with points, streaks, 8 badges and a rank title
+  - the data as games: guess the number (the 57), more or fewer (5 community items), true or false (risks, families), predict America (concerned, "coming anyway"); every answer adds a clue or fact to the field notes
+  - a leaderboard on the device and a "challenge a friend" link (same round, score to beat)
+  - hard mode: 8 photoreal AI pictures generated in Figma AI of the same valleys, plus 9 real photos that look fake; all 35 pictures processed the same way, so the file gives nothing away
+  - `check.py`: 149 checks, 0 mismatches
+- **Easy:** _…_
+- **Hard:** _…_
+- **Still open:** test on a real phone · testers: is ~5 minutes too long, is hard mode too hard? · a shared online leaderboard would need a server
+- **Better next week:** _…_
+- **Data / sources:** `exercises/W47_sprint3/` · prompt 8 in `W43_prototyping/prototype/prompts.md` (built with Claude; AI pictures generated with gpt-image-2.5 and gemini-3.1-flash-image in Figma AI) · Wikimedia Commons file pages for licences
+

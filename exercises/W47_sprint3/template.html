@@ -1,0 +1,1175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Real or AI? · v7</title>
+<!--
+  Prototype v7 · sprint 3 · "Real or AI?" as a full game
+  v7 = v6 + mentoring feedback 12 Nov: game layout that uses the sides (player card · stage · field notes/leaderboard),
+  no scrolling and no "Next" clicking during play (auto-advance, swipe, keys), harder pictures (2026 AI models vs.
+  real photos that look fake), the data part as games (guess the number · higher or lower · true or false ·
+  predict America), points, streaks, badges, a leaderboard on this device and a "challenge a friend" link.
+  HSLU I.BA_DAS, Adhurim Thaqi (solo). Built with Claude (LLM), prompts in ../W43_prototyping/prototype/prompts.md.
+  THIS FILE IS GENERATED: edit template.html, then run `python build.py`. Every survey number comes from the CSV (see check.py).
+  Review shortcuts: ?step=intro|warm|hard|text|boss|hilo|tf|you|turn|end · ?theme=dark|light · ?limit=8 · ?reset
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f3f2ed;--panel:#fff;--panel2:#f0eee7;--ink:#14151b;--ink2:#54565f;--muted:#8a8b93;--line:#e2e0d8;
+  --real:#0c9b87;--ai:#7a4ff0;--gold:#d99a00;--hot:#ef4f2b;--good:#16a34a;--bad:#dc2626;--glow:rgba(122,79,240,.18);
+  --seen:#d9531e;--starting:#f2b393;--rest:#d7d6d0;--na:#ecebe6;
+  --vexc:#1c5cab;--sexc:#86b6ef;--scon:#ee9b72;--vcon:#b84a1d;--none:#bdbcb6;--noans:#e2e1dc;--shape:#2a78d6;--inev:#eb6834;
+  --display:"Space Grotesk",system-ui,sans-serif;--r:18px;--shadow:0 1px 2px rgba(0,0,0,.05),0 8px 28px rgba(20,21,27,.07);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d0f17;--panel:#161925;--panel2:#1e2232;--ink:#f2f3f8;--ink2:#b4b7c6;--muted:#7d8193;--line:#292d3d;
+  --real:#2dd4bf;--ai:#a78bfa;--gold:#fbbf24;--hot:#ff6b4a;--good:#4ade80;--bad:#f87171;--glow:rgba(167,139,250,.22);
+  --seen:#f07a45;--starting:#8a4a2c;--rest:#55544f;--na:#34333a;
+  --vexc:#86b6ef;--sexc:#256abf;--scon:#c4501f;--vcon:#f2a27e;--none:#6b6a65;--noans:#45443f;--shape:#3987e5;--inev:#d95926;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}}
+:root[data-theme="dark"]{
+  --bg:#0d0f17;--panel:#161925;--panel2:#1e2232;--ink:#f2f3f8;--ink2:#b4b7c6;--muted:#7d8193;--line:#292d3d;
+  --real:#2dd4bf;--ai:#a78bfa;--gold:#fbbf24;--hot:#ff6b4a;--good:#4ade80;--bad:#f87171;--glow:rgba(167,139,250,.22);
+  --seen:#f07a45;--starting:#8a4a2c;--rest:#55544f;--na:#34333a;
+  --vexc:#86b6ef;--sexc:#256abf;--scon:#c4501f;--vcon:#f2a27e;--none:#6b6a65;--noans:#45443f;--shape:#3987e5;--inev:#d95926;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-tap-highlight-color:transparent}
+body{overflow:hidden}
+button{font:inherit;color:inherit;cursor:pointer;border:1px solid var(--line);background:var(--panel);border-radius:14px;padding:12px 16px;min-height:48px;transition:transform .12s,background .2s,border-color .2s,opacity .2s}
+button:active{transform:scale(.97)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--ai);outline-offset:2px}
+button[disabled]{opacity:.45;cursor:default;transform:none}
+.primary{background:var(--ink);color:var(--bg);border-color:var(--ink);font-weight:700}
+.ghost{background:transparent}
+.disp{font-family:var(--display);letter-spacing:-.02em}
+.kicker{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:0;font-weight:600}
+.muted{color:var(--muted)}.ink2{color:var(--ink2)}.tiny{font-size:12px;color:var(--muted)}.small{font-size:14px;color:var(--ink2)}
+h1,h2,h3,p{margin:0}
+
+/* ---------- layout: rail | stage | rail ---------- */
+.app{display:grid;grid-template-columns:270px minmax(0,1fr) 310px;gap:18px;height:100dvh;padding:18px;max-width:1500px;margin:0 auto}
+.rail{background:var(--panel);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:auto;display:flex;flex-direction:column;min-height:0}
+.stage{position:relative;display:flex;flex-direction:column;min-height:0;min-width:0}
+.hud{display:none}
+section{display:none;flex:1;min-height:0;flex-direction:column;overflow:auto;scrollbar-width:thin}
+section.on{display:flex;animation:in .35s ease}
+@keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.wrap{width:100%;max-width:760px;margin:auto;padding:4px 2px;display:flex;flex-direction:column;gap:14px}
+
+/* left rail */
+.brand{display:flex;align-items:center;gap:10px;padding:18px 18px 6px;font:700 18px/1 var(--display)}
+.brand i{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--real),var(--ai));display:grid;place-items:center;font-style:normal;color:#fff;font-size:15px}
+.player{margin:12px 14px;padding:16px;border-radius:18px;background:var(--panel2);position:relative;overflow:hidden}
+.player .who{display:flex;align-items:center;gap:10px}
+.avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font:700 18px/1 var(--display);color:#fff;background:linear-gradient(135deg,var(--ai),var(--real));flex:none}
+.player .nm{font-weight:700;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.player .rk{font-size:13px;color:var(--ink2)}
+.scoreline{display:flex;align-items:baseline;gap:8px;margin-top:14px}
+.score{font:700 44px/1 var(--display);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.score+span{color:var(--muted);font-size:14px}
+.pop{position:absolute;right:16px;top:58px;font:700 22px/1 var(--display);color:var(--gold);pointer-events:none;opacity:0}
+.pop.go{animation:float 1.1s ease-out}
+@keyframes float{0%{opacity:0;transform:translateY(10px) scale(.8)}20%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-30px)}}
+.streak{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:14px;color:var(--ink2)}
+.flames{display:flex;gap:2px}.flames b{filter:grayscale(1);opacity:.3;transition:.3s}.flames b.on{filter:none;opacity:1}
+.race{margin:0 14px 6px;padding:12px 14px;border-radius:14px;border:1px dashed var(--line);font-size:13px;display:none}
+.race.on{display:block}
+.race .bar{height:8px;border-radius:4px;background:var(--panel2);margin-top:8px;position:relative;overflow:hidden}
+.race .bar i{position:absolute;inset:0 auto 0 0;background:var(--gold);border-radius:4px;transition:width .6s}
+.railh{margin:14px 18px 8px;font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.levels{list-style:none;margin:0;padding:0 10px}
+.levels li{display:flex;align-items:center;gap:10px;padding:8px;border-radius:12px;font-size:14px;color:var(--muted)}
+.levels li .ic{width:30px;height:30px;border-radius:10px;background:var(--panel2);display:grid;place-items:center;flex:none;font-size:15px}
+.levels li .tr{margin-left:auto;font-size:12px;letter-spacing:1px;white-space:nowrap}
+.levels li.done{color:var(--ink2)}.levels li.done .ic{background:color-mix(in srgb,var(--good) 18%,transparent)}
+.levels li.now{color:var(--ink);font-weight:700;background:var(--panel2)}.levels li.now .ic{background:var(--ink);color:var(--bg)}
+.badges{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 16px 18px}
+.badges div{aspect-ratio:1;border-radius:14px;background:var(--panel2);display:grid;place-items:center;font-size:22px;filter:grayscale(1);opacity:.35;transition:.4s;position:relative}
+.badges div.on{filter:none;opacity:1;background:color-mix(in srgb,var(--gold) 20%,var(--panel2));animation:badge .7s ease}
+@keyframes badge{0%{transform:scale(.4)}60%{transform:scale(1.2)}100%{transform:none}}
+
+/* right rail */
+.tabs{display:flex;gap:6px;padding:14px 14px 4px}
+.tabs button{flex:1;min-height:40px;padding:6px 10px;border-radius:999px;font-size:14px;font-weight:600;background:transparent;border-color:transparent;color:var(--muted)}
+.tabs button[aria-selected="true"]{background:var(--panel2);color:var(--ink)}
+.tabs .cnt{display:inline-block;min-width:20px;padding:0 6px;margin-left:4px;border-radius:999px;background:var(--ai);color:#fff;font-size:11px;line-height:18px}
+.pane{display:none;padding:8px 14px 18px;flex-direction:column;gap:10px}
+.pane.on{display:flex}
+.empty{padding:26px 12px;text-align:center;color:var(--muted);font-size:14px}
+.empty b{display:block;font-size:30px;margin-bottom:6px}
+.note{border-radius:14px;background:var(--panel2);padding:12px 14px;font-size:14px;line-height:1.4;animation:in .4s ease}
+.note .tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:999px;margin-bottom:6px}
+.note .tag.clue{background:color-mix(in srgb,var(--ai) 20%,transparent);color:var(--ai)}
+.note .tag.fact{background:color-mix(in srgb,var(--seen) 22%,transparent);color:var(--seen)}
+.note b{display:block;margin-bottom:2px}
+.board{list-style:none;margin:0;padding:0;counter-reset:r}
+.board li{display:grid;grid-template-columns:26px 1fr auto;gap:8px;align-items:center;padding:9px 10px;border-radius:12px;font-size:14px;counter-increment:r}
+.board li::before{content:counter(r);font:700 13px/1 var(--display);color:var(--muted);text-align:center}
+.board li:nth-child(1)::before{content:"🥇"}.board li:nth-child(2)::before{content:"🥈"}.board li:nth-child(3)::before{content:"🥉"}
+.board li.me{background:color-mix(in srgb,var(--gold) 18%,transparent);font-weight:700}
+.board li.vs{border:1px dashed var(--gold)}
+.board .pts{font:700 15px/1 var(--display);font-variant-numeric:tabular-nums}
+.board .sub{display:block;font-size:11px;color:var(--muted);font-weight:400}
+
+/* ---------- stage pieces ---------- */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:18px}
+.cta{display:flex;gap:10px;margin-top:auto;padding-top:6px}.cta button{flex:1}
+
+/* intro */
+.hero{display:grid;grid-template-columns:1.1fr 1fr;gap:22px;align-items:center}
+.hero h1{font:700 clamp(40px,6vw,68px)/.95 var(--display);letter-spacing:-.04em;margin:8px 0 12px}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--real),var(--ai));-webkit-background-clip:text;background-clip:text;color:transparent}
+.mosaic{display:grid;grid-template-columns:1fr 1fr;gap:8px;transform:rotate(2deg)}
+.mosaic div{aspect-ratio:4/3;border-radius:14px;background:var(--panel2) center/cover;box-shadow:var(--shadow);position:relative}
+.mosaic div span{position:absolute;left:8px;bottom:8px;font:700 12px/1 var(--display);padding:5px 9px;border-radius:999px;background:rgba(0,0,0,.6);color:#fff}
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.how div{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px;font-size:14px;color:var(--ink2)}
+.how b{display:block;color:var(--ink);font-size:15px;margin:6px 0 2px}
+.namerow{display:flex;gap:10px;align-items:center}
+.namerow input{flex:1;min-width:0;font:inherit;padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:var(--panel);color:var(--ink);min-height:48px}
+.challenge{display:none;padding:12px 14px;border-radius:14px;background:color-mix(in srgb,var(--gold) 16%,var(--panel));border:1px solid color-mix(in srgb,var(--gold) 40%,transparent);font-size:15px}
+.challenge.on{display:block}
+.start{font-size:18px;min-height:58px;background:linear-gradient(90deg,var(--real),var(--ai));color:#fff;border:0}
+
+/* level splash */
+#s-level .wrap{text-align:center;align-items:center;justify-content:center;flex:1}
+.lvnum{font:700 14px/1 var(--display);letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.lvicon{font-size:64px;line-height:1;animation:badge .7s ease}
+.lvname{font:700 clamp(36px,6vw,60px)/1 var(--display);letter-spacing:-.03em}
+.lvblurb{max-width:460px;color:var(--ink2);font-size:17px}
+.lvcount{font:700 96px/1 var(--display);letter-spacing:-.05em;min-height:96px}
+.lvcount.tick{animation:tick .8s ease-out}
+@keyframes tick{0%{transform:scale(1.6);opacity:0}30%{opacity:1}100%{transform:scale(.9);opacity:.85}}
+.mult[hidden]{display:none}
+.mult{display:inline-block;padding:4px 12px;border-radius:999px;background:color-mix(in srgb,var(--gold) 22%,transparent);color:var(--gold);font-weight:700;font-size:14px}
+
+/* guess */
+.gtop{display:flex;align-items:center;gap:12px}
+.ring{width:54px;height:54px;flex:none;position:relative}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:6}
+.ring .bg{stroke:var(--line)}.ring .fg{stroke:var(--ink);stroke-linecap:round;transition:stroke .3s}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font:700 22px/1 var(--display);font-variant-numeric:tabular-nums}
+.ring.hurry .fg{stroke:var(--hot)}.ring.hurry b{color:var(--hot);animation:shake .25s linear infinite}
+@keyframes shake{0%,100%{transform:rotate(0)}25%{transform:rotate(-7deg)}75%{transform:rotate(7deg)}}
+.bubble{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:10px 14px;font-weight:700;min-height:48px;display:flex;align-items:center;position:relative}
+.bubble::before{content:"";position:absolute;left:-7px;top:50%;width:12px;height:12px;background:inherit;border-left:1px solid var(--line);border-bottom:1px solid var(--line);transform:translateY(-50%) rotate(45deg)}
+.counter{font:700 14px/1 var(--display);color:var(--muted);white-space:nowrap}
+.media{position:relative;width:min(100%,calc((100dvh - 290px) * 4 / 3));aspect-ratio:4/3;margin:0 auto;border-radius:22px;overflow:hidden;background:var(--panel2);box-shadow:var(--shadow);touch-action:pan-y;user-select:none;-webkit-user-select:none;transition:transform .25s ease,box-shadow .3s}
+.media.drag{transition:none}
+.media img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.media .quote{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;padding:clamp(20px,5%,44px);background:var(--panel)}
+.media .quote p{font:500 clamp(17px,2.2vw,22px)/1.55 Georgia,"Times New Roman",serif}
+.media .quote .src{font:600 12px/1 system-ui;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.media.text img{display:none}.media.text .quote{display:flex}
+.stamp{position:absolute;top:22px;padding:8px 16px;border:4px solid;border-radius:12px;font:700 30px/1 var(--display);letter-spacing:.06em;opacity:0;pointer-events:none;background:rgba(0,0,0,.25);color:#fff}
+.stamp.ai{right:22px;border-color:var(--ai);transform:rotate(12deg)}
+.stamp.real{left:22px;border-color:var(--real);transform:rotate(-12deg)}
+.loading{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-size:14px}
+.fuse{height:6px;border-radius:3px;background:var(--line);overflow:hidden;width:min(100%,calc((100dvh - 290px) * 4 / 3));margin:0 auto}
+.fuse i{display:block;height:100%;width:100%;background:var(--ink);transform-origin:left;transition:background .3s}
+.fuse.hurry i{background:var(--hot)}
+.verdict{position:absolute;inset:auto 0 0 0;padding:16px 18px 14px;background:linear-gradient(to top,rgba(8,9,14,.94) 65%,rgba(8,9,14,0));color:#fff;transform:translateY(105%);transition:transform .35s cubic-bezier(.2,.9,.3,1.2)}
+.verdict.on{transform:none}
+.verdict .vh{display:flex;align-items:center;gap:10px;font:700 24px/1.1 var(--display)}
+.verdict .vh .pts{margin-left:auto;color:#fbbf24}
+.verdict .vd{font-size:14px;opacity:.88;margin-top:4px}
+.verdict .vt{font-size:14px;margin-top:6px}.verdict .vt b{color:#c4b5fd}
+.verdict .vc{font-size:11px;opacity:.6;margin-top:6px}.verdict .vc a{color:inherit}
+.auto{height:4px;border-radius:2px;background:rgba(255,255,255,.18);margin-top:10px;overflow:hidden;display:flex}
+.auto i{display:block;height:100%;width:0;background:#fff}
+.auto.run i{animation:fill var(--t,4s) linear forwards}
+.auto.paused i{animation-play-state:paused}
+@keyframes fill{to{width:100%}}
+.vrow{display:flex;gap:8px;align-items:center;margin-top:8px;font-size:12px;opacity:.75}
+.vrow button{min-height:30px;padding:3px 10px;font-size:12px;border-radius:999px;background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.2);color:#fff}
+.media.right{box-shadow:0 0 0 4px var(--good),var(--shadow)}
+.media.wrong{box-shadow:0 0 0 4px var(--bad),var(--shadow)}
+.media.late{box-shadow:0 0 0 4px var(--muted),var(--shadow)}
+.media.shake{animation:wob .4s}
+@keyframes wob{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.choices{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;width:min(100%,calc((100dvh - 290px) * 4 / 3));margin:0 auto}
+.choices .g{font:700 20px/1 var(--display);letter-spacing:.05em;min-height:58px;border-width:2px}
+.choices .g.ai{border-color:var(--ai);color:var(--ai)}
+.choices .g.real{border-color:var(--real);color:var(--real)}
+.choices .g.ai:hover:not([disabled]){background:color-mix(in srgb,var(--ai) 12%,var(--panel))}
+.choices .g.real:hover:not([disabled]){background:color-mix(in srgb,var(--real) 12%,var(--panel))}
+.choices .g.picked{opacity:1;color:#fff}.choices .g.ai.picked{background:var(--ai)}.choices .g.real.picked{background:var(--real)}
+.choices .g small{display:block;font:500 11px/1 system-ui;letter-spacing:0;opacity:.7;margin-top:4px}
+.hintbtn{min-height:58px;padding:6px 14px;border-radius:14px;font-size:14px;background:var(--panel2);border-color:transparent;white-space:nowrap}
+.tip{text-align:center;font-size:14px;color:var(--ink2);min-height:20px}
+.tip.on{color:var(--ink);animation:in .3s}
+
+/* boss: guess the number */
+.bossq{font:700 clamp(20px,2.6vw,27px)/1.25 var(--display);letter-spacing:-.01em}
+.bossgrid{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:center}
+.dots{display:grid;grid-template-columns:repeat(10,1fr);gap:7px;width:100%;max-width:340px;margin:0 auto}
+.dots i{aspect-ratio:1;border-radius:50%;background:var(--na);transition:background .2s,transform .2s,box-shadow .2s}
+.dots i.g{background:color-mix(in srgb,var(--ai) 55%,transparent)}
+.dots i.seen{background:var(--seen)}.dots i.starting{background:var(--starting)}.dots i.rest{background:var(--rest)}.dots i.na{background:var(--na)}
+.dots i.mark{box-shadow:0 0 0 3px var(--ai)}
+.dots i.pp{transform:scale(1.25)}
+.guessnum{font:700 88px/1 var(--display);letter-spacing:-.05em;text-align:center;font-variant-numeric:tabular-nums}
+.guessnum small{display:block;font:500 15px/1.3 system-ui;letter-spacing:0;color:var(--ink2);margin-top:6px}
+input[type=range]{width:100%;accent-color:var(--ai);height:36px}
+.reveal{display:none}.reveal.on{display:flex;flex-direction:column;gap:10px;animation:in .4s ease}
+.cmp{display:flex;gap:10px}
+.cmp div{flex:1;border-radius:14px;padding:12px;background:var(--panel2);text-align:center}
+.cmp b{display:block;font:700 34px/1 var(--display)}
+.cmp .real b{color:var(--seen)}
+.legend{list-style:none;padding:0;margin:0;font-size:14px}
+.legend li{display:flex;gap:10px;align-items:center;padding:5px 0;border-bottom:1px solid var(--line)}
+.legend li:last-child{border-bottom:0}
+.legend li::before{content:"";width:11px;height:11px;border-radius:50%;flex:none;background:var(--c)}
+.legend b{min-width:3.7em;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums;flex:none}
+.legend li.me{font-weight:700}
+.legend li.me::after{content:"you";margin-left:auto;font-size:11px;letter-spacing:.06em;text-transform:uppercase;border:1.5px solid var(--ink);border-radius:999px;padding:1px 7px}
+.callout{border-left:4px solid var(--seen);background:var(--panel2);border-radius:0 14px 14px 0;padding:12px 14px;font-size:15px}
+.source{font-size:11px;color:var(--muted);line-height:1.4}
+
+/* higher or lower */
+.hilo{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:stretch}
+.hcard{border-radius:20px;padding:22px 18px;background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px;min-height:250px;position:relative;overflow:hidden}
+.hcard .it{font:700 clamp(18px,2.2vw,23px)/1.25 var(--display)}
+.hcard .val{margin-top:auto;font:700 64px/1 var(--display);letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.hcard .val small{font-size:16px;letter-spacing:0;color:var(--muted);font-weight:500;margin-left:4px}
+.hcard .unit{font-size:13px;color:var(--ink2)}
+.hcard .fillbar{position:absolute;left:0;bottom:0;height:6px;background:var(--seen);transition:width .8s ease}
+.hcard.q .val{color:var(--muted)}
+.hcard.ok{box-shadow:0 0 0 3px var(--good),var(--shadow)}.hcard.no{box-shadow:0 0 0 3px var(--bad),var(--shadow)}.hcard.tie{box-shadow:0 0 0 3px var(--gold),var(--shadow)}
+.vs{display:grid;place-items:center;font:700 18px/1 var(--display);color:var(--muted)}
+.vs span{width:46px;height:46px;border-radius:50%;background:var(--panel2);display:grid;place-items:center}
+.hlbtns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hlbtns button{font:700 18px/1 var(--display);min-height:56px}
+.hlmsg{text-align:center;font-weight:600;min-height:24px}
+.pips{display:flex;gap:6px;justify-content:center}
+.pips i{width:28px;height:6px;border-radius:3px;background:var(--line)}
+.pips i.ok{background:var(--good)}.pips i.no{background:var(--bad)}.pips i.tie{background:var(--gold)}.pips i.now{background:var(--ink)}
+
+/* true or false */
+.claim{font:700 clamp(22px,3vw,32px)/1.25 var(--display);letter-spacing:-.015em;text-align:center;padding:30px 16px;min-height:200px;display:grid;place-items:center}
+.claim em{font-style:normal;color:var(--ai)}
+.tfbtns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tfbtns button{font:700 20px/1 var(--display);min-height:60px}
+.tfbtns .t{border-color:var(--good);color:var(--good)}.tfbtns .f{border-color:var(--bad);color:var(--bad)}
+.tfbar{position:relative;height:30px;border-radius:8px;background:var(--panel2);margin:16px 0 26px}
+.tfbar i{position:absolute;inset:0 auto 0 0;border-radius:8px;background:var(--seen);transition:width .8s ease}
+.tfbar span{position:absolute;top:100%;transform:translateX(-50%);font-size:12px;font-weight:700;white-space:nowrap;margin-top:4px}
+.tfbar span::before{content:"";position:absolute;left:50%;bottom:100%;height:38px;border-left:2px dashed var(--ink);margin-bottom:-4px}
+
+/* your turn */
+.opts{display:flex;flex-direction:column;gap:8px}
+.opts button{text-align:left;display:flex;align-items:center;gap:12px}
+.opts button::before{content:"";width:14px;height:14px;border-radius:50%;flex:none;background:var(--c,var(--line))}
+.opts button.picked{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.q{font:700 clamp(19px,2.4vw,24px)/1.3 var(--display)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+.big{font:700 clamp(56px,8vw,88px)/.95 var(--display);letter-spacing:-.05em}
+.stack{display:flex;height:30px;border-radius:9px;overflow:hidden}
+.stack i{display:block;height:100%}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips button{min-height:36px;padding:4px 12px;border-radius:999px;font-size:14px}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.ages div{display:grid;grid-template-columns:50px 1fr 70px;align-items:center;gap:10px;font-size:14px;margin:7px 0}
+.ages .t{height:16px;background:var(--panel2);border-radius:5px;position:relative;overflow:hidden}
+.ages .t i{position:absolute;inset:0 auto 0 0;background:var(--shape);border-radius:0 5px 5px 0;transition:width .8s ease}
+.ages b{text-align:right;font-variant-numeric:tabular-nums}
+.phase{display:none}.phase.on{display:flex;flex-direction:column;gap:12px;animation:in .35s ease}
+
+/* end */
+.endtop{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center}
+.trophy{width:120px;height:120px;border-radius:30px;background:linear-gradient(135deg,var(--gold),var(--hot));display:grid;place-items:center;font-size:62px;box-shadow:var(--shadow);animation:badge .8s ease}
+.endscore{font:700 72px/1 var(--display);letter-spacing:-.04em}
+.message{font:700 clamp(22px,3vw,30px)/1.2 var(--display);letter-spacing:-.015em}
+.message span{color:var(--ink2)}
+.learned{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.learned li{background:var(--panel2);border-radius:14px;padding:12px 14px;font-size:14px}
+.share{display:flex;gap:8px}.share input{flex:1;min-width:0;font:13px ui-monospace,monospace;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--panel2);color:var(--ink)}
+.earned{display:flex;flex-wrap:wrap;gap:6px}
+.earned span{padding:6px 12px;border-radius:999px;background:color-mix(in srgb,var(--gold) 18%,var(--panel2));font-size:14px;font-weight:600}
+details{font-size:13px;color:var(--ink2)}summary{cursor:pointer;padding:6px 0}
+table{border-collapse:collapse;width:100%;font-size:12px;font-variant-numeric:tabular-nums}
+th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:first-child,td:first-child{text-align:left}
+.tbl{overflow-x:auto}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:50;overflow:hidden}
+.confetti i{position:absolute;top:-12px;width:9px;height:14px;border-radius:2px;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(105vh) rotate(720deg)}}
+.toast{position:fixed;left:50%;top:18px;transform:translate(-50%,-120%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-weight:700;z-index:60;transition:transform .35s cubic-bezier(.2,.9,.3,1.2);box-shadow:var(--shadow);white-space:nowrap}
+.toast.on{transform:translate(-50%,0)}
+
+/* ---------- responsive ---------- */
+@media (max-width:1180px){
+  .app{grid-template-columns:minmax(0,1fr) 300px}
+  .rail.left{display:none}
+  .hud{display:flex}
+}
+@media (max-width:860px){
+  .app{grid-template-columns:minmax(0,1fr);padding:10px 12px calc(10px + env(safe-area-inset-bottom));gap:10px}
+  .rail.right{position:fixed;left:0;right:0;bottom:0;max-height:72dvh;border-radius:22px 22px 0 0;z-index:40;transform:translateY(105%);transition:transform .35s ease;padding-bottom:env(safe-area-inset-bottom)}
+  .rail.right.open{transform:none}
+  .rail.right::before{content:"";display:block;width:40px;height:5px;border-radius:3px;background:var(--line);margin:10px auto 0}
+  .scrim.on{display:block}
+  .hero{grid-template-columns:1fr}.mosaic{display:none}
+  .how{grid-template-columns:1fr}.how div{padding:10px 12px}.how b{display:inline;margin:0 4px}
+  .media,.fuse,.choices{width:min(100%,calc((100dvh - 250px) * 4 / 3))}
+  .hilo{grid-template-columns:1fr;gap:8px}.vs{display:none}.hcard{min-height:0;padding:16px}.hcard .val{font-size:44px}
+  .bossgrid,.two{grid-template-columns:1fr}
+  .guessnum{font-size:64px}
+  .learned{grid-template-columns:1fr}
+  .endtop{grid-template-columns:1fr;justify-items:start}.trophy{width:84px;height:84px;font-size:44px;border-radius:22px}
+  .claim{min-height:150px;padding:18px 8px}
+  .choices .g small{display:none}
+}
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:39;display:none}
+.hud{align-items:center;gap:8px;margin-bottom:10px;flex-wrap:nowrap}
+.hud .lv{flex:1;min-width:0;display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hud .lv i{font-style:normal;width:30px;height:30px;border-radius:10px;background:var(--ink);color:var(--bg);display:grid;place-items:center;flex:none}
+.hud .pill{display:flex;align-items:center;gap:4px;padding:6px 11px;border-radius:999px;background:var(--panel);border:1px solid var(--line);font:700 15px/1 var(--display);font-variant-numeric:tabular-nums;white-space:nowrap}
+.hud button.pill{min-height:36px}
+@media (min-width:861px){.hud .sheetbtn{display:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- ================= left rail: the player ================= -->
+<aside class="rail left" aria-label="Your game">
+  <div class="brand"><i>?</i>Real or AI?</div>
+  <div class="player">
+    <div class="who"><div class="avatar" id="av">?</div><div style="min-width:0"><div class="nm" id="pName">Player</div><div class="rk" id="pRank">Rookie</div></div></div>
+    <div class="scoreline"><span class="score" id="score">0</span><span>points</span></div>
+    <div class="pop" id="pop">+0</div>
+    <div class="streak"><span class="flames" id="flames"><b>🔥</b><b>🔥</b><b>🔥</b><b>🔥</b><b>🔥</b></span><span id="streakTxt">No streak yet</span></div>
+  </div>
+  <div class="race" id="race"><span id="raceTxt"></span><div class="bar"><i id="raceBar"></i></div></div>
+  <p class="railh">Levels</p>
+  <ul class="levels" id="levels"></ul>
+  <p class="railh">Badges</p>
+  <div class="badges" id="badges"></div>
+</aside>
+
+<!-- ================= stage ================= -->
+<main class="stage">
+  <div class="hud" id="hud">
+    <div class="lv"><i id="hudIc">🎮</i><span id="hudLv">Real or AI?</span></div>
+    <span class="pill" title="Streak">🔥<span id="hudStreak">0</span></span>
+    <span class="pill" title="Points">⭐<span id="hudScore">0</span></span>
+    <button class="pill sheetbtn" id="sheetBtn" aria-label="Field notes and leaderboard">📓<span id="hudNotes">0</span></button>
+  </div>
+
+  <!-- intro -->
+  <section id="s-intro" class="on" aria-labelledby="t-intro">
+    <div class="wrap">
+      <div class="hero">
+        <div>
+          <p class="kicker">A data game · about 5 minutes</p>
+          <h1 id="t-intro" class="disp">Real or <em>AI?</em></h1>
+          <p class="ink2" style="font-size:18px">Spot the fakes, then guess what 1,000 Americans told a survey about AI. Points for speed, streaks and good guesses.</p>
+        </div>
+        <div class="mosaic" aria-hidden="true" id="mosaic"></div>
+      </div>
+      <div class="challenge" id="challenge"></div>
+      <div class="how">
+        <div>👀<b>Spot it</b>Pictures and texts. Swipe or tap: <b style="display:inline;color:var(--real)">Real</b> or <b style="display:inline;color:var(--ai)">AI</b>. <span class="limtxt">5</span> seconds each.</div>
+        <div>🎯<b>Guess the data</b>Higher or lower, true or false, and how many Americans in 100.</div>
+        <div>🏆<b>Climb the board</b>Earn badges, beat your friends, and learn the clues on the way.</div>
+      </div>
+      <div class="namerow">
+        <input id="nameIn" maxlength="18" autocomplete="nickname" aria-label="Your player name" placeholder="Your player name">
+        <button class="ghost" id="dice" title="Random name" aria-label="Random name">🎲</button>
+      </div>
+      <button class="start" id="start">Start the game ▶</button>
+      <p class="tiny" style="text-align:center">Keys: <b>←</b> AI · <b>→</b> Real · <b>H</b> hint · <b>Space</b> next. Scores stay on this device. Nothing is sent anywhere.</p>
+    </div>
+  </section>
+
+  <!-- level splash -->
+  <section id="s-level" aria-live="polite">
+    <div class="wrap">
+      <p class="lvnum" id="lvNum">Level 1 of 7</p>
+      <div class="lvicon" id="lvIcon">🌄</div>
+      <h2 class="lvname" id="lvName">Warm-up</h2>
+      <p class="lvblurb" id="lvBlurb"></p>
+      <span class="mult" id="lvMult" hidden></span>
+      <p class="lvcount" id="lvCount">3</p>
+      <button class="ghost" id="lvGo" style="min-width:180px">I'm ready, go!</button>
+    </div>
+  </section>
+
+  <!-- guess (pictures and texts) -->
+  <section id="s-guess">
+    <div class="wrap" style="gap:10px;max-width:none">
+      <div class="gtop" style="width:min(100%,calc((100dvh - 290px) * 4 / 3));margin:0 auto">
+        <div class="ring" id="ring"><svg viewBox="0 0 60 60"><circle class="bg" cx="30" cy="30" r="26"/><circle class="fg" id="ringFg" cx="30" cy="30" r="26" stroke-dasharray="163.4" stroke-dashoffset="0"/></svg><b id="secs">5</b></div>
+        <div class="bubble" id="say" aria-live="polite">Take a good look 👀</div>
+        <span class="counter" id="ctr">1 / 4</span>
+      </div>
+      <div class="media" id="media">
+        <img id="img" alt="">
+        <div class="quote"><p class="src">From a travel guide about Swiss valleys</p><p id="quote"></p></div>
+        <div class="loading" id="loading">Loading…</div>
+        <span class="stamp ai" id="stAi">AI</span><span class="stamp real" id="stReal">REAL</span>
+        <div class="verdict" id="verdict" aria-live="assertive"></div>
+      </div>
+      <div class="fuse" id="fuse" aria-hidden="true"><i id="fusebar"></i></div>
+      <div class="choices">
+        <button class="g ai" data-g="ai">← AI<small>swipe left</small></button>
+        <button class="hintbtn" id="hintBtn">💡 Hint <span class="muted">−40</span></button>
+        <button class="g real" data-g="real"><span id="realLbl">REAL</span> →<small>swipe right</small></button>
+      </div>
+      <p class="tip" id="tip"></p>
+    </div>
+  </section>
+
+  <!-- boss: guess the number -->
+  <section id="s-boss" aria-labelledby="t-boss">
+    <div class="wrap">
+      <p class="kicker">Boss level · Americans on AI · <span data-dates></span></p>
+      <p class="bossq" id="t-boss">Out of 100 Americans, how many say they <u>already</u> see people around them struggling to tell what's real from what's fake because of AI?</p>
+      <div class="bossgrid">
+        <div class="dots" id="bossDots" role="img" aria-label="100 dots"></div>
+        <div>
+          <div id="bossAsk">
+            <p class="guessnum"><span id="bossVal">50</span><small>of 100 Americans</small></p>
+            <input type="range" id="bossRange" min="0" max="100" value="50" aria-label="Your guess, out of 100">
+            <div class="cta"><button class="primary" id="bossLock">Lock in my guess 🔒</button></div>
+            <p class="tiny" style="margin-top:8px">Up to 300 points. The closer, the more.</p>
+          </div>
+          <div class="reveal" id="bossRev">
+            <div class="cmp"><div><span class="small">You said</span><b id="bossYou"></b></div><div class="real"><span class="small">Real answer</span><b id="bossReal"></b></div></div>
+            <p class="hlmsg" id="bossMsg"></p>
+            <ul class="legend" id="hookLegend"></ul>
+          </div>
+        </div>
+      </div>
+      <div class="reveal" id="bossMore">
+        <div class="callout" id="surprise"></div>
+        <p class="source" id="srcHook"></p>
+        <div class="cta"><button class="primary" id="bossNext">Next level →</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- higher or lower -->
+  <section id="s-hilo" aria-labelledby="t-hilo">
+    <div class="wrap">
+      <p class="kicker">Same survey · <span id="hiloStem"></span></p>
+      <h2 class="q" id="t-hilo">Do more or fewer Americans already see this in their community?</h2>
+      <div class="pips" id="hiloPips"></div>
+      <div class="hilo">
+        <div class="hcard" id="hA"><p class="unit">already see it around them</p><p class="it" id="hAit"></p><p class="val" id="hAval"></p><i class="fillbar" id="hAbar"></i></div>
+        <div class="vs"><span>VS</span></div>
+        <div class="hcard q" id="hB"><p class="unit">already see it around them</p><p class="it" id="hBit"></p><p class="val" id="hBval">?</p><i class="fillbar" id="hBbar" style="width:0"></i></div>
+      </div>
+      <div class="hlbtns"><button id="hiBtn">▲ More</button><button id="loBtn">▼ Fewer</button></div>
+      <p class="hlmsg" id="hiloMsg" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <!-- true or false -->
+  <section id="s-tf" aria-labelledby="t-tf">
+    <div class="wrap">
+      <div class="gtop"><div class="ring" id="tfRing"><svg viewBox="0 0 60 60"><circle class="bg" cx="30" cy="30" r="26"/><circle class="fg" id="tfRingFg" cx="30" cy="30" r="26" stroke-dasharray="163.4" stroke-dashoffset="0"/></svg><b id="tfSecs">8</b></div>
+        <div class="bubble" id="tfStem"></div><span class="counter" id="tfCtr">1 / 3</span></div>
+      <div class="card"><p class="claim" id="t-tf"></p>
+        <div class="reveal" id="tfRev"><div class="tfbar" id="tfBar"><i id="tfFill"></i><span id="tfMark"></span></div><p class="hlmsg" id="tfMsg"></p></div>
+      </div>
+      <div class="tfbtns"><button class="t" id="tBtn">✓ True</button><button class="f" id="fBtn">✗ False</button></div>
+    </div>
+  </section>
+
+  <!-- your turn: sentiment, then agency -->
+  <section id="s-you" aria-labelledby="t-you">
+    <div class="wrap">
+      <p class="kicker" id="youKick">Your turn · the survey's own question</p>
+      <!-- phase 1: your feeling -->
+      <div class="phase on" id="ph1"><p class="q" id="t-you"></p><div class="opts" id="opts1"></div>
+        <p class="tiny">Same question and answers as for the <span data-n></span> US adults. Your answer stays on this page.</p></div>
+      <!-- phase 2: predict -->
+      <div class="phase" id="ph2"><p class="q" id="predQ"></p>
+        <p class="guessnum"><span id="predVal">50</span><small>of 100 US adults</small></p>
+        <input type="range" id="predRange" min="0" max="100" value="50" aria-label="Your guess, out of 100">
+        <div class="cta"><button class="primary" id="predLock">Lock in 🔒</button></div><p class="tiny">Up to 200 points.</p></div>
+      <!-- phase 3: reveal -->
+      <div class="phase" id="ph3">
+        <div class="two">
+          <div><p class="big" id="youBig" style="color:var(--vcon)"></p><p class="small" id="youBigTxt"></p>
+            <div class="cmp" style="margin-top:12px"><div><span class="small">You guessed</span><b id="youGuess"></b></div><div><span class="small">Points</span><b id="youPts" style="color:var(--gold)"></b></div></div></div>
+          <div id="youViz"></div>
+        </div>
+        <div class="callout" id="youNote" style="border-color:var(--shape)"></div>
+        <p class="source" id="youSrc"></p>
+        <div class="cta"><button class="primary" id="youNext">Next →</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- end -->
+  <section id="s-end" aria-labelledby="t-end">
+    <div class="wrap">
+      <div class="endtop"><div class="trophy" id="trophy">🏆</div>
+        <div><p class="kicker">Final score · <span id="endRank"></span></p><p class="endscore" id="endScore">0</p><p class="small" id="endSub"></p></div></div>
+      <div class="earned" id="earned"></div>
+      <div class="card" style="display:flex;flex-direction:column;gap:10px">
+        <p class="kicker">What it adds up to</p>
+        <h2 class="message" id="t-end"></h2>
+      </div>
+      <div><p class="kicker" style="margin-bottom:8px">What you learned</p><ul class="learned" id="learned"></ul></div>
+      <div class="card" style="display:flex;flex-direction:column;gap:10px">
+        <p class="kicker">🥊 Challenge a friend: same pictures, your score to beat</p>
+        <div class="share"><input id="shareUrl" readonly aria-label="Challenge link"><button class="primary" id="copyBtn">Copy</button></div>
+      </div>
+      <div class="cta"><button class="ghost" id="boardBtn">🏆 Leaderboard</button><button class="primary" id="again">Play again · new pictures</button></div>
+      <details><summary>All numbers as a table</summary><div class="tbl" id="tbl"></div></details>
+      <p class="source" id="srcAll"></p>
+    </div>
+  </section>
+</main>
+
+<!-- ================= right rail: field notes + leaderboard ================= -->
+<aside class="rail right" id="sheet" aria-label="Field notes and leaderboard">
+  <div class="tabs" role="tablist">
+    <button role="tab" aria-selected="true" data-tab="notes">📓 Field notes<span class="cnt" id="noteCnt">0</span></button>
+    <button role="tab" aria-selected="false" data-tab="board">🏆 Leaderboard</button>
+  </div>
+  <div class="pane on" id="pane-notes" role="tabpanel">
+    <div class="empty" id="notesEmpty"><b>📓</b>Every answer unlocks a clue or a fact. They collect here, so you learn while you play.</div>
+    <div id="notes" style="display:flex;flex-direction:column;gap:10px"></div>
+  </div>
+  <div class="pane" id="pane-board" role="tabpanel">
+    <p class="tiny">Top 10 on this device. Pass the phone around, or send a challenge link.</p>
+    <ol class="board" id="board"></ol>
+    <div class="empty" id="boardEmpty"><b>🏆</b>No scores yet. Be the first.</div>
+  </div>
+</aside>
+<div class="scrim" id="scrim"></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ---------- data: injected by build.py (survey numbers from the official CSV, pictures from pool.json) ----------
+const D = __DATA__;
+const POOL = __POOL__;
+
+// ---------- texts (same pool as v6) ----------
+// Human: Wikivoyage (CC BY-SA 3.0), word for word, from revisions saved before ChatGPT launched (30 Nov 2022).
+// AI: written by Claude (Anthropic), prompt 7 in ../W43_prototyping/prototype/prompts.md.
+const WV = (page, oldid, date) => ({ url: `https://en.wikivoyage.org/w/index.php?oldid=${oldid}`,
+  detail: `Wikivoyage, page “${page}”, as saved on ${date}, before ChatGPT existed.`, credit: "Wikivoyage contributors, CC BY-SA 3.0" });
+const HUMAN = (text, src, tell) => ({ kind: "text", truth: "real", text, tell, ...src });
+const AIT = (text, tell) => ({ kind: "text", truth: "ai", text, tell,
+  detail: "Written by Claude (Anthropic) for this prototype from a one-line prompt.", credit: "AI text, prompt 7 in prompts.md", url: "" });
+const VERZ = WV("Verzasca Valley", 4275033, "13 Aug 2021"), LAUT = WV("Lauterbrunnen", 4407914, "13 Mar 2022");
+const TEXTS = [
+  HUMAN("This valley offers a wild and fascinating landscape, with the Alps on one side and a lake on the other. The river has an emerald green color, and thanks to its good visibility, it is famous as a river diving destination.",
+    VERZ, "A concrete, slightly unusual fact (river diving) that only someone who knows the place would mention."),
+  HUMAN("The river may be very inviting, but it is known that the current can be dangerous. The rocks are sometimes slippery. Make sure to look for any warning sign and ask locals for information on safe areas for swimming.",
+    VERZ, "Slightly clumsy phrasing (“it is known that”). People write less smoothly than AI."),
+  HUMAN("It lies in a dramatic sheer-sided U-shaped valley, with scores of waterfalls - its name means \"clear springs\" but is often rendered as \"loud springs\" for their roar in spate.",
+    LAUT, "An odd, specific detail (what the name means) and a rare word (“in spate”). AI rarely takes that kind of detour."),
+  HUMAN("Stechelberg is reached by continuing south on the lane at Buchen instead of branching for Trümmelbach. Falls cascade on either side as the valley walls close in: very scenic, and you may have it to yourself as it's not on the tourist circuit.",
+    LAUT, "Real place names and directions (Buchen, Trümmelbach), plus an insider tip. Generic AI text avoids details it could get wrong."),
+  AIT("Nestled between towering granite walls, the valley offers a perfect blend of rugged nature and charming tradition. Whether you're a keen hiker or simply looking to unwind, its crystal-clear river and peaceful hamlets make it truly unforgettable.",
+    "“Nestled”, “perfect blend”, “truly unforgettable”: polished brochure phrases, and no name or number at all."),
+  AIT("The valley is best explored on foot. Well-marked trails lead past small villages and waterfalls, and the views get better with every turn. The weather in the mountains can change quickly, so pack a light jacket even on sunny days.",
+    "Advice that fits any valley in the world. Nothing in it tells you which valley it is."),
+  AIT("Swimming in the river is tempting on hot days, but the water is cold and the current can be stronger than it looks. Stick to calm spots near the villages, and check local signs before going in.",
+    "Hard one: it copies the tone of a real warning. But it names no river, no village and no spot."),
+  AIT("Stone houses cling to the steep slopes, and the river runs clear over smooth grey rock. In summer the silence is broken only by cowbells and the sound of water. It feels like a place where time has slowed down.",
+    "Every sentence is a picture-postcard cliché (“where time has slowed down”), and there are no facts you could check."),
+];
+const TELL = {   // level-1 pictures: a general rule of thumb
+  ai: "Older AI landscapes are too perfect: soft light everywhere, glassy water, details that melt when you zoom in, no traces of people.",
+  real: "Real photos are messier: uneven light, haze, a cut-off edge, ordinary things like a path, a wall or a power line.",
+};
+const TIPS = {
+  pic: ["Is the light perfect everywhere at once?", "Zoom in with your eyes: do far-away trees and houses melt into mush?",
+        "Is there any text (a sign)? Does it make sense for this place?", "Too beautiful is not proof: real water can be turquoise, too.",
+        "Do things that should repeat (houses, fences) look copy-pasted?", "Look for ‘staged mess’: AI adds a towel or a mirror to look real."],
+  text: ["Are there real names, numbers or odd details?", "Does it sound like a brochure (“perfect blend”, “unforgettable”)?",
+         "Could this be about any valley in the world?", "Is the phrasing a bit clumsy? People write less smoothly than AI."],
+};
+const SAY = [
+  { 5: "Take a good look 👀", 4: "Check the light…", 3: "Hmm. Too perfect?", 2: "Your thumb wants to scroll 👆", 1: "DECIDE!! 😬" },
+  { 5: "Fresh eyes 👀", 4: "Look at the water…", 3: "Real? Fake? Real?", 2: "The feed won't wait ⏩", 1: "NOW!! 😱" },
+  { 5: "Read any signs? 🪧", 4: "Houses, fences, paths…", 3: "Trust your gut…", 2: "Tick tock ⏰", 1: "GO GO GO 🫣" },
+  { 5: "Last one here 🏁", 4: "Rocks, trees, river…", 3: "You've got this?", 2: "Scrolling in 2… 👆", 1: "CHOOSE!! 🤯" },
+];
+const SAY_TEXT = { 5: "Read it 📖", 4: "Person or machine?", 3: "Too smooth?", 2: "Your thumb is itching 👆", 1: "DECIDE!! 😬" };
+
+// ---------- game setup ----------
+const LEVELS = [
+  { id: "warm", ic: "🌄", name: "Warm-up", kind: "pic", blurb: "Four mountain valleys. Two are real photos, two are from older AI models (2024–25)." },
+  { id: "hard", ic: "🧨", name: "Hard mode", kind: "pic", mult: 1.5, blurb: "New 2026 AI models, and real photos that look fake. Swipe right for real, left for AI." },
+  { id: "text", ic: "✍️", name: "Texts", kind: "text", blurb: "Two short travel texts. One is by a person, one by AI." },
+  { id: "boss", ic: "🎯", name: "The number", kind: "boss", blurb: "You've seen how hard it is. How many Americans already see people struggling with this?" },
+  { id: "hilo", ic: "↕️", name: "More or fewer", kind: "hilo", blurb: "What else do Americans see AI changing in their community? Guess the order." },
+  { id: "tf", ic: "⚡", name: "True or false", kind: "tf", blurb: "Three quick claims about AI risks and families. 8 seconds each." },
+  { id: "you", ic: "🫵", name: "Your turn", kind: "you", blurb: "Answer the survey's questions yourself, then guess how America answered." },
+];
+const BADGES = [
+  ["eagle", "🦅", "Eagle eye", "All hard-mode pictures right"], ["lightning", "⚡", "Lightning", "A right answer in under 1.5 s"],
+  ["streak", "🔥", "On fire", "5 right in a row"], ["bullseye", "🎯", "Bullseye", "The number within ±3"],
+  ["nerd", "📊", "Data nerd", "More or fewer: no mistakes"], ["fact", "🧠", "Fact-checker", "True or false: all right"],
+  ["mind", "🔮", "Mind reader", "A prediction within ±5"], ["nohint", "🙈", "No hints", "Finished without any hint"],
+];
+const RANKS = [[0, "Doom-scroller"], [.3, "Spotter"], [.5, "Detective"], [.68, "Fact-checker"], [.82, "AI whisperer"]];
+const ADJ = ["Swift", "Sharp", "Sly", "Calm", "Bold", "Keen", "Quiet", "Lucky"], ANI = ["Lynx", "Ibex", "Marmot", "Eagle", "Fox", "Chamois", "Owl", "Trout"];
+
+// ---------- helpers ----------
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const q = new URLSearchParams(location.search);
+if (q.get("theme")) document.documentElement.dataset.theme = q.get("theme");
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const LIMIT = Math.max(2, Math.min(30, +q.get("limit") || 5));
+const TIME = { warm: LIMIT, hard: LIMIT + 1, text: Math.round(LIMIT * 2.4), tf: LIMIT + 3 };
+const store = {
+  get(k, d) { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
+};
+function mulberry32(a) { return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+let rnd = Math.random;
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const pct = v => (v > 0 && v < 0.05 ? "<0.1" : v.toFixed(1)) + " %";
+const in100 = v => Math.round(v) + " in 100";
+const plain = w => w.replace(/^about /, "");
+const later = (fn, ms) => { const t = setTimeout(fn, ms); timers.push(t); return t; };
+let timers = [];
+function clearAll() { timers.forEach(clearTimeout); timers = []; stopTimer(); }
+const SL = D.labels.sentiment, AL = D.labels.agency, G = D.groups;
+const SENT = [["very_excited", "--vexc"], ["somewhat_excited", "--sexc"], ["somewhat_concerned", "--scon"], ["very_concerned", "--vcon"], ["none", "--none"], ["no_answer", "--noans"]];
+const AG = [["can_shape", "--shape"], ["inevitable", "--inev"], ["neither", "--none"], ["no_answer", "--noans"]];
+const AGES = ["age_18_34", "age_35_49", "age_50_64", "age_65_plus"];
+const concerned = g => G[g].sentiment.somewhat_concerned + G[g].sentiment.very_concerned;
+const realGap = (a, b, va, vb) => Math.abs(va - vb) > Math.hypot(G[a].moe, G[b].moe);
+const CLOSE = D.moe * Math.SQRT2;    // two answers from the same sample: closer than this is "too close to call"
+const SRC = `Americans on AI, Athena Insights with NORC at the University of Chicago · US adults, ${D.dates} · n = ${D.n.toLocaleString("en")} · weighted · margin of error about ±${Math.round(D.moe)} points`;
+const H = D.hook.dots, R = D.hook.raw;
+$$("[data-dates]").forEach(e => e.textContent = D.dates);
+$$("[data-n]").forEach(e => e.textContent = D.n.toLocaleString("en"));
+$$(".limtxt").forEach(e => e.textContent = LIMIT);
+
+// ---------- state ----------
+let S;
+function fresh() {
+  S = { name: S ? S.name : "", score: 0, streak: 0, bestStreak: 0, hints: 0, lv: -1, items: {}, res: {}, badges: new Set(), notes: [],
+        seed: 0, play: null, maxScore: 0, you1: null, you2: null, pred: {}, hilo: [], tf: [], done: false };
+}
+fresh();
+const vs = q.has("vs") && q.has("s") ? { name: q.get("vs").slice(0, 18), score: Math.max(0, Math.min(99999, +q.get("s") || 0)) } : null;
+
+// ---------- drawing the round ----------
+const SEEN_KEY = "realOrAI.seen.v7", TSEEN_KEY = "realOrAI.textSeen.v7";
+function drawFrom(list, keyOf, perKind, seenKey, last) {
+  let seen = store.get(seenKey, []).filter(k => list.some(x => keyOf(x) === k));
+  const pick = truth => {
+    const all = list.filter(x => x.truth === truth);
+    let fresh = all.filter(x => !seen.includes(keyOf(x)));
+    if (fresh.length < perKind) { seen = seen.filter(k => !all.some(x => keyOf(x) === k)); fresh = all.filter(x => !last.includes(keyOf(x))); }
+    return shuffle(fresh).slice(0, perKind);
+  };
+  const out = shuffle([...pick("real"), ...pick("ai")]);
+  store.set(seenKey, [...seen, ...out.map(keyOf)]);
+  return out;
+}
+function draw() {
+  const last = Object.values(S.items).flat().map(x => x.file || x.text);
+  S.seed = q.has("r") && !S.playedOnce ? (+q.get("r") >>> 0) : (Math.random() * 2 ** 31) >>> 0;
+  const fixed = !S.playedOnce && q.get("p") && q.get("t");
+  if (fixed) {   // challenge link: exactly the same pictures and texts
+    const P = q.get("p").split(".").map(Number).filter(i => POOL[i]), T = q.get("t").split(".").map(Number).filter(i => TEXTS[i]);
+    S.items.warm = P.slice(0, 4).map(i => POOL[i]); S.items.hard = P.slice(4, 8).map(i => POOL[i]); S.items.text = T.map(i => TEXTS[i]);
+  }
+  if (!fixed || S.items.warm.length < 4 || S.items.hard.length < 4 || S.items.text.length < 2) {
+    rnd = Math.random;
+    S.items.warm = drawFrom(POOL.filter(p => p.level === 1), p => p.file, 2, SEEN_KEY + ".1", last);
+    S.items.hard = drawFrom(POOL.filter(p => p.level === 2), p => p.file, 2, SEEN_KEY + ".2", last);
+    S.items.text = drawFrom(TEXTS, t => t.text, 1, TSEEN_KEY, last);
+  }
+  ["warm", "hard"].forEach(k => S.items[k] = S.items[k].map(p => ({ kind: "pic", ...p })));
+  rnd = mulberry32(S.seed);       // the data games use the seed, so a challenge gets the same questions
+  S.hilo = shuffle(D.community.map((c, i) => i)).slice(0, 5);
+  S.tf = makeClaims();
+  S.play = { p: [...S.items.warm, ...S.items.hard].map(x => POOL.findIndex(p => p.file === x.file)), t: S.items.text.map(x => TEXTS.indexOf(TEXTS.find(t => t.text === x.text))) };
+  S.playedOnce = true;
+}
+
+// ---------- notes (the learning side) ----------
+function note(kind, title, text, key) {
+  if (key && S.notes.some(n => n.key === key)) return;
+  S.notes.unshift({ kind, title, text, key });
+  $("#notes").insertAdjacentHTML("afterbegin", `<div class="note"><span class="tag ${kind}">${kind === "clue" ? "Clue" : "Fact"}</span><b>${title}</b>${text}</div>`);
+  $("#notesEmpty").style.display = "none";
+  $("#noteCnt").textContent = S.notes.length; $("#hudNotes").textContent = S.notes.length;
+}
+
+// ---------- points, streaks, badges ----------
+function add(points, right) {
+  if (right === true) { S.streak++; S.bestStreak = Math.max(S.bestStreak, S.streak); if (S.streak >= 5) badge("streak"); }
+  else if (right === false) S.streak = 0;
+  if (points > 0) {
+    S.score += points;
+    const p = $("#pop"); p.textContent = "+" + points; p.classList.remove("go"); void p.offsetWidth; p.classList.add("go");
+  }
+  hud();
+}
+function countTo(el, to) {
+  const from = +el.dataset.v || 0; el.dataset.v = to;
+  if (reduce) { el.textContent = to.toLocaleString("en"); return; }
+  const t0 = performance.now();
+  const f = t => { const k = Math.min(1, (t - t0) / 600); el.textContent = Math.round(from + (to - from) * (1 - (1 - k) ** 3)).toLocaleString("en"); if (k < 1) requestAnimationFrame(f); };
+  requestAnimationFrame(f);
+}
+function rankOf(score) { const f = score / maxScore(); return RANKS.filter(r => f >= r[0]).pop()[1]; }
+function maxScore() { return 4 * 190 + 4 * 280 + 2 * 190 + 300 + 4 * 100 + 3 * 130 + 2 * 200; }   // rough ceiling, only for the rank title
+function hud() {
+  countTo($("#score"), S.score); countTo($("#hudScore"), S.score);
+  $$("#flames b").forEach((b, k) => b.classList.toggle("on", k < S.streak));
+  $("#streakTxt").textContent = S.streak ? `${S.streak} in a row` + (S.streak > 1 ? ` · +${Math.min(100, 20 * (S.streak - 1))} bonus` : "") : "No streak yet";
+  $("#hudStreak").textContent = S.streak;
+  $("#pRank").textContent = rankOf(S.score);
+  const nm = S.name || "Player"; $("#pName").textContent = nm; $("#av").textContent = nm.trim()[0].toUpperCase();
+  if (vs) {
+    $("#race").classList.add("on");
+    const ahead = S.score - vs.score;
+    $("#raceTxt").innerHTML = `🥊 vs <b>${esc(vs.name)}</b> (${vs.score.toLocaleString("en")}) · ` + (ahead >= 0 ? `<b style="color:var(--good)">you're ahead!</b>` : `${(-ahead).toLocaleString("en")} to go`);
+    $("#raceBar").style.width = Math.min(100, S.score / Math.max(1, vs.score) * 100) + "%";
+  }
+  $("#levels").innerHTML = LEVELS.map((l, i) => {
+    const r = S.res[l.id], trail = r ? r.map(x => x === true ? "✅" : x === false ? "❌" : x === "tie" ? "🟨" : "⏱").join("") : "";
+    return `<li class="${i < S.lv ? "done" : i === S.lv ? "now" : ""}"><span class="ic">${l.ic}</span>${l.name}<span class="tr">${trail}</span></li>`;
+  }).join("");
+  if (S.lv >= 0 && LEVELS[S.lv]) { $("#hudIc").textContent = LEVELS[S.lv].ic; $("#hudLv").textContent = `${S.lv + 1}/${LEVELS.length} · ${LEVELS[S.lv].name}`; }
+}
+function badge(id) {
+  if (S.badges.has(id)) return;
+  S.badges.add(id);
+  const b = BADGES.find(x => x[0] === id);
+  $$("#badges div")[BADGES.indexOf(b)].classList.add("on");
+  toast(`${b[1]} Badge: ${b[2]}`);
+}
+$("#badges").innerHTML = BADGES.map(b => `<div title="${b[2]}: ${b[3]}" aria-label="${b[2]}: ${b[3]}">${b[1]}</div>`).join("");
+function toast(t) { const el = $("#toast"); el.textContent = t; el.classList.add("on"); clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove("on"), 2200); }
+function confetti(n = 80) {
+  if (reduce) return;
+  const box = document.createElement("div"); box.className = "confetti";
+  const cols = ["var(--real)", "var(--ai)", "var(--gold)", "var(--hot)"];
+  box.innerHTML = Array.from({ length: n }, () => `<i style="left:${Math.random() * 100}%;background:${cols[Math.floor(Math.random() * 4)]};animation-duration:${1.6 + Math.random() * 1.6}s;animation-delay:${Math.random() * .4}s"></i>`).join("");
+  document.body.appendChild(box); setTimeout(() => box.remove(), 3800);
+}
+
+// ---------- screens + levels ----------
+function screen(id) { $$("section").forEach(s => s.classList.toggle("on", s.id === id)); closeSheet(); }
+function level(i) {
+  clearAll(); S.lv = i; hud();
+  if (i >= LEVELS.length) return end();
+  const L = LEVELS[i];
+  $("#lvNum").textContent = `Level ${i + 1} of ${LEVELS.length}`; $("#lvIcon").textContent = L.ic; $("#lvName").textContent = L.name; $("#lvBlurb").textContent = L.blurb;
+  $("#lvMult").hidden = !L.mult; $("#lvMult").textContent = `×${L.mult} points`;
+  screen("s-level");
+  (S.items[L.id] || []).forEach(p => { if (p.file) { const im = new Image(); im.src = p.file; } });   // preload
+  const go = () => { clearAll(); RUN[L.kind](L); };
+  $("#lvGo").onclick = go;
+  if (reduce) return;
+  [3, 2, 1].forEach((k, j) => later(() => { const c = $("#lvCount"); c.textContent = k; c.classList.remove("tick"); void c.offsetWidth; c.classList.add("tick"); }, j * 750));
+  later(go, 2300);
+}
+const RUN = { pic: startGuess, text: startGuess, boss, hilo, tf, you: youStart };
+
+// ---------- levels 1–3: real or AI ----------
+let G_ = { L: null, n: 0, list: [], shownAt: 0, ticking: false, raf: 0, limit: 5, hint: false };
+function startGuess(L) { G_ = { ...G_, L, n: 0, list: S.items[L.id], limit: TIME[L.id] }; S.res[L.id] = []; screen("s-guess"); show(); }
+function show() {
+  const p = G_.list[G_.n], m = $("#media");
+  m.className = "media" + (p.kind === "text" ? " text" : ""); m.style.transform = "";
+  $("#verdict").className = "verdict"; $("#tip").textContent = ""; $("#tip").className = "tip";
+  $("#ctr").textContent = `${G_.n + 1} / ${G_.list.length}`;
+  $("#realLbl").textContent = p.kind === "text" ? "PERSON" : "REAL";
+  $$("[data-g]").forEach(b => { b.disabled = false; b.classList.remove("picked"); });
+  $("#hintBtn").disabled = false; G_.hint = false; G_.answered = false;
+  setRing(1, G_.limit); $("#ring").className = "ring"; $("#fuse").className = "fuse"; $("#fusebar").style.transform = "scaleX(1)";
+  $("#say").textContent = p.kind === "text" ? SAY_TEXT[5] : SAY[G_.n % 4][5];
+  stamps(0);
+  if (p.kind === "text") { $("#quote").textContent = p.text; $("#loading").style.display = "none"; G_.shownAt = performance.now(); startTimer(); return; }
+  const img = $("#img"); $("#loading").style.display = "grid"; $("#loading").textContent = "Loading…";
+  img.onload = () => { $("#loading").style.display = "none"; G_.shownAt = performance.now(); startTimer(); };
+  img.onerror = () => { $("#loading").textContent = "The picture couldn't load."; };
+  img.alt = `Picture ${G_.n + 1}: a mountain valley`;
+  img.src = p.file;
+  if (img.complete && img.naturalWidth) img.onload();
+}
+function setRing(f, secs, el = "#ringFg", num = "#secs") { $(el).style.strokeDashoffset = 163.4 * (1 - f); $(num).textContent = Math.ceil(secs); }
+function startTimer() {
+  G_.ticking = true;
+  const p = G_.list[G_.n];
+  const tick = () => {
+    if (!G_.ticking) return;
+    const left = Math.max(0, G_.limit - (performance.now() - G_.shownAt) / 1000), f = left / G_.limit;
+    setRing(f, left); $("#fusebar").style.transform = `scaleX(${f})`;
+    const k = Math.min(5, Math.max(1, Math.ceil(f * 5))), s = p.kind === "text" ? SAY_TEXT[k] : SAY[G_.n % 4][k];
+    if ($("#say").textContent !== s && !G_.hint) $("#say").textContent = s;
+    const hurry = f <= .4; $("#ring").classList.toggle("hurry", hurry); $("#fuse").classList.toggle("hurry", hurry);
+    if (left <= 0) return guess("none");
+    G_.raf = requestAnimationFrame(tick);
+  };
+  G_.raf = requestAnimationFrame(tick);
+}
+function stopTimer() { G_.ticking = false; cancelAnimationFrame(G_.raf); }
+function hint() {
+  if (G_.answered || $("#hintBtn").disabled) return;
+  const tips = TIPS[G_.list[G_.n].kind];
+  $("#tip").textContent = "💡 " + tips[Math.floor(Math.random() * tips.length)]; $("#tip").className = "tip on";
+  $("#hintBtn").disabled = true; G_.hint = true; S.hints++;
+}
+function guess(g) {
+  if (G_.answered || !$("#s-guess").classList.contains("on")) return;
+  G_.answered = true; G_.answeredAt = performance.now(); stopTimer();
+  const p = G_.list[G_.n], late = g === "none", right = g === p.truth, secs = late ? G_.limit : (performance.now() - G_.shownAt) / 1000;
+  const L = G_.L, base = L.id === "hard" ? 150 : L.id === "text" ? 120 : 100;
+  let pts = 0;
+  if (right) {
+    const speed = Math.round(50 * Math.max(0, 1 - secs / G_.limit)), streak = Math.min(100, 20 * S.streak);
+    pts = Math.max(0, Math.round((base + speed) * (L.mult || 1)) + streak - (G_.hint ? 40 : 0));
+    if (secs < 1.5) badge("lightning");
+  }
+  S.res[L.id].push(late ? null : right);
+  add(pts, late ? false : right);
+  $$("[data-g]").forEach(b => { b.disabled = true; b.classList.toggle("picked", b.dataset.g === g); });
+  $("#hintBtn").disabled = true;
+  const m = $("#media"); m.classList.add(late ? "late" : right ? "right" : "wrong"); if (!right && !late) m.classList.add("shake");
+  m.style.transform = ""; stamps(0);
+  const what = p.kind === "text" ? (p.truth === "ai" ? "Written by AI" : "Written by a person") : (p.truth === "ai" ? "Made by AI" : "A real photo");
+  const tell = p.tell || TELL[p.truth];
+  const head = late ? `⏱ Time's up · ${what}` : right ? `✅ Right! ${what}` : `❌ Nope · ${what}`;
+  const link = p.url ? `<a href="${p.url}" target="_blank" rel="noopener">${esc(p.credit)}</a>` : esc(p.credit);
+  $("#verdict").innerHTML = `<div class="vh">${head}<span class="pts">${pts ? "+" + pts : ""}</span></div>` +
+    `<div class="vd">${esc(p.detail)}${late ? "" : ` You decided in ${secs.toFixed(1)} s.`}</div>` +
+    `<div class="vt"><b>How to tell:</b> ${esc(tell)}</div><div class="vc">${link}</div>` +
+    `<div class="auto" id="auto"><i></i></div><div class="vrow"><span id="autoTxt">Next in a moment · tap to skip</span><button id="pauseBtn">⏸ Keep open</button></div>`;
+  $("#verdict").classList.add("on");
+  $("#say").textContent = late ? "Too slow, the feed moved on 🫠" : right ? ["Locked in! 🔒", "Nice eyes ⚡", "Called it 😎", "Easy 💅"][G_.n % 4] : ["Fooled you 😈", "Ouch 🙃", "Sneaky one 🫣", "It got you 😬"][G_.n % 4];
+  note("clue", p.kind === "text" ? (p.truth === "ai" ? "AI text" : "Human text") : (p.truth === "ai" ? "AI picture" : "Real photo") + (L.id === "hard" ? " · hard mode" : ""), esc(tell), p.file || p.text);
+  autoNext(G_.limit > 9 ? 6500 : 4800, nextItem);
+  $("#pauseBtn").onclick = e => { e.stopPropagation(); pauseAuto(); };
+}
+let autoT = null, autoFn = null;
+function autoNext(ms, fn) {
+  autoFn = fn; const a = $("#auto"); a.style.setProperty("--t", ms + "ms"); a.classList.add("run");
+  autoT = later(() => { autoT = null; fn(); }, reduce ? ms + 3000 : ms);
+}
+function pauseAuto() { if (!autoT) return; clearTimeout(autoT); autoT = null; $("#auto").classList.add("paused"); $("#autoTxt").textContent = "Paused · tap the picture or press Space to go on"; $("#pauseBtn").remove(); }
+function skipAuto() { if (!autoFn) return; if (autoT) clearTimeout(autoT); autoT = null; const f = autoFn; autoFn = null; f(); }
+function nextItem() {
+  autoFn = null;
+  if (++G_.n < G_.list.length) return show();
+  if (G_.L.id === "hard" && S.res.hard.every(x => x === true)) badge("eagle");
+  const r = S.res[G_.L.id].filter(x => x === true).length;
+  if (r === G_.list.length) confetti(60);
+  level(S.lv + 1);
+}
+$("#media").addEventListener("click", () => { if (G_.answered && performance.now() - G_.answeredAt > 400) skipAuto(); });   // not the click that ends a swipe
+// swipe: right = real, left = AI
+(() => {
+  const m = $("#media"); let x0 = null, dx = 0, id = null;
+  m.addEventListener("pointerdown", e => { if (G_.answered || !G_.ticking) return; x0 = e.clientX; dx = 0; id = e.pointerId; m.setPointerCapture(id); m.classList.add("drag"); });
+  m.addEventListener("pointermove", e => { if (x0 === null) return; dx = e.clientX - x0; m.style.transform = `translateX(${dx}px) rotate(${dx / 25}deg)`; stamps(dx); });
+  const up = () => { if (x0 === null) return; m.classList.remove("drag"); x0 = null; if (Math.abs(dx) > 80) guess(dx > 0 ? "real" : "ai"); else { m.style.transform = ""; stamps(0); } };
+  m.addEventListener("pointerup", up); m.addEventListener("pointercancel", up);
+})();
+function stamps(dx) { $("#stReal").style.opacity = Math.max(0, Math.min(1, dx / 90)); $("#stAi").style.opacity = Math.max(0, Math.min(1, -dx / 90)); }
+
+// ---------- level 4: the number (boss) ----------
+const KINDS = [...Array(H.have_seen).fill("seen"), ...Array(H.starting).fill("starting"), ...Array(H.expect_soon + H.dont_expect).fill("rest"), ...Array(H.not_sure + H.no_answer).fill("na")];
+$("#bossDots").innerHTML = Array(100).fill("<i></i>").join("");
+$("#hookLegend").innerHTML = [["--seen", H.have_seen, "already see it in their community"], ["--starting", H.starting, "are starting to see it"],
+  ["--rest", H.expect_soon + H.dont_expect, `expect it soon (${H.expect_soon}) or don't expect it (${H.dont_expect})`],
+  ["--na", H.not_sure + H.no_answer, `not sure (${H.not_sure}) or no answer (${H.no_answer})`]].map(([c, v, t]) => `<li style="--c:var(${c})"><b>${v}</b> ${t}</li>`).join("");
+$("#surprise").innerHTML = `<b>Only ${H.dont_expect} in 100</b> don't expect it at all. Being fooled by AI isn't a personal weakness: most Americans already see it around them.`;
+$("#srcHook").innerHTML = `Question: “${esc(D.stems.ai_community_impact)} ${esc(D.q.fake)}” Answer “${esc(D.labels.community.have_seen)}”. ${SRC}. Rounded to whole people: ` + Object.keys(R).map(k => `${R[k]} → ${H[k]}`).join(", ") + ".";
+function bossPaint(v) { $$("#bossDots i").forEach((d, k) => d.className = k < v ? "g" : ""); $("#bossVal").textContent = v; }
+function boss() {
+  screen("s-boss"); S.res.boss = [];
+  $("#bossAsk").style.display = ""; $("#bossRev").classList.remove("on"); $("#bossMore").classList.remove("on");
+  $("#bossRange").value = 50; bossPaint(50);
+}
+$("#bossRange").oninput = e => bossPaint(+e.target.value);
+$("#bossLock").onclick = () => {
+  const v = +$("#bossRange").value, real = H.have_seen, off = Math.abs(v - real), pts = Math.max(0, 300 - 10 * off);
+  $("#bossAsk").style.display = "none";
+  const dots = $$("#bossDots i"); dots.forEach(d => d.className = "");
+  const fill = k => { dots[k].className = KINDS[k] + (k === v - 1 ? " mark" : "") + (reduce ? "" : " pp"); later(() => dots[k].classList.remove("pp"), 180); };
+  const done = () => {
+    $("#bossYou").textContent = v; $("#bossReal").textContent = real;
+    $("#bossMsg").textContent = off <= 3 ? `🎯 Bullseye! Off by ${off}. +${pts}` : off <= 10 ? `Close! Off by ${off}. +${pts}` : `Off by ${off}. +${pts}`;
+    $("#bossRev").classList.add("on"); later(() => $("#bossMore").classList.add("on"), 500);
+    S.res.boss.push(off <= 10); add(pts, null); if (off <= 3) { badge("bullseye"); confetti(); }
+    note("fact", `${real} in 100 Americans`, `already see people around them struggling to tell what's real from what's fake because of AI. Only ${H.dont_expect} in 100 don't expect it.`, "boss");
+  };
+  if (reduce) { dots.forEach((_, k) => fill(k)); return done(); }
+  let k = 0; const step = () => { fill(k++); if (k === real) return later(step2, 700); later(step, 22); };
+  const step2 = () => { fill(k++); if (k < 100) later(step2, 12); else later(done, 200); };
+  later(step, 200);
+};
+$("#bossNext").onclick = () => level(S.lv + 1);
+
+// ---------- level 5: more or fewer ----------
+const CI = D.community, seenOf = i => CI[i].dist.have_seen;
+$("#hiloStem").textContent = D.stems.ai_community_impact.replace(/\?$/, "");
+let HL = { k: 0 };
+function hilo() {
+  screen("s-hilo"); S.res.hilo = []; HL = { k: 0 }; hiloShow();
+}
+function hiloShow() {
+  const a = S.hilo[HL.k], b = S.hilo[HL.k + 1];
+  $("#hAit").textContent = CI[a].text; $("#hAval").innerHTML = `${Math.round(seenOf(a))}<small>in 100</small>`; $("#hAbar").style.width = seenOf(a) + "%";
+  $("#hBit").textContent = CI[b].text; $("#hBval").textContent = "?"; $("#hBbar").style.width = "0";
+  $("#hA").className = "hcard"; $("#hB").className = "hcard q";
+  $("#hiBtn").disabled = $("#loBtn").disabled = false; $("#hiloMsg").textContent = "";
+  $("#hiloPips").innerHTML = Array.from({ length: 4 }, (_, k) => `<i class="${S.res.hilo[k] === true ? "ok" : S.res.hilo[k] === false ? "no" : S.res.hilo[k] === "tie" ? "tie" : k === HL.k ? "now" : ""}"></i>`).join("");
+}
+function hiloPick(up) {
+  if ($("#hiBtn").disabled) return;
+  $("#hiBtn").disabled = $("#loBtn").disabled = true;
+  const a = S.hilo[HL.k], b = S.hilo[HL.k + 1], va = seenOf(a), vb = seenOf(b), tie = Math.abs(va - vb) <= CLOSE;
+  const right = tie ? "tie" : (vb > va) === up;
+  const el = $("#hBval"), t0 = performance.now(), to = Math.round(vb);
+  const f = t => { const k = reduce ? 1 : Math.min(1, (t - t0) / 700); el.innerHTML = `${Math.round(to * k)}<small>in 100</small>`; if (k < 1) requestAnimationFrame(f); };
+  requestAnimationFrame(f); $("#hBbar").style.width = vb + "%";
+  $("#hB").className = "hcard " + (right === "tie" ? "tie" : right ? "ok" : "no");
+  $("#hiloMsg").textContent = right === "tie" ? `🟨 Too close to call: ${pct(va)} vs ${pct(vb)} is within the margin of error. You get the points anyway.`
+    : right ? `✅ Right: ${in100(vb)} vs ${in100(va)}. +100` : `❌ It's ${vb > va ? "more" : "fewer"}: ${in100(vb)} vs ${in100(va)}.`;
+  S.res.hilo.push(right); add(right ? 100 : 0, right === "tie" ? null : right);
+  autoHilo();
+}
+function autoHilo() {
+  later(() => {
+    if (++HL.k < 4) return hiloShow();
+    if (S.res.hilo.every(x => x !== false)) badge("nerd");
+    const order = CI.map((c, i) => i).sort((x, y) => seenOf(y) - seenOf(x));
+    note("fact", "What Americans already see AI doing around them", order.map(i => `${Math.round(seenOf(i))} · ${esc(CI[i].text.replace(/^People are /, ""))}`).join("<br>"), "hilo");
+    level(S.lv + 1);
+  }, 2600);
+}
+$("#hiBtn").onclick = () => hiloPick(true); $("#loBtn").onclick = () => hiloPick(false);
+
+// ---------- level 6: true or false ----------
+function makeClaims() {
+  const C = [];
+  D.risks.forEach(r => C.push({ v: r.dist.already, stem: "risks", text: k => `<em>${k} in 100</em> Americans say “${esc(r.text)}” is <b>already happening.</b>`, what: `say “${r.text}” is already happening` }));
+  D.family.forEach(f => { const w = f.dist.somewhat_worse + f.dist.much_worse;
+    C.push({ v: w, stem: "family", text: k => `<em>${k} in 100</em> Americans say AI is making families' <b>${esc(f.text.toLowerCase())}</b>&nbsp;worse.`, what: `say AI is making families' ${f.text.toLowerCase()} worse` }); });
+  const picks = shuffle(C).slice(0, 3), truth = shuffle([true, false, rnd() < .5]);
+  return picks.map((c, i) => {
+    const real = Math.round(c.v), shift = (15 + Math.floor(rnd() * 11)) * (real > 55 ? -1 : real < 25 ? 1 : rnd() < .5 ? -1 : 1);
+    return { ...c, truth: truth[i], shown: truth[i] ? real : Math.max(2, Math.min(97, real + shift)) };
+  });
+}
+let TF = { k: 0, t0: 0, raf: 0, on: false };
+function tf() { screen("s-tf"); S.res.tf = []; TF.k = 0; tfShow(); }
+function tfShow() {
+  const c = S.tf[TF.k];
+  $("#t-tf").innerHTML = c.text(c.shown); $("#tfRev").classList.remove("on");
+  $("#tfStem").textContent = c.stem === "risks" ? "Thinking about the next 20 years…" : "Thinking about families in America today…";
+  $("#tfCtr").textContent = `${TF.k + 1} / 3`; $("#tBtn").disabled = $("#fBtn").disabled = false;
+  TF.t0 = performance.now(); TF.on = true; $("#tfRing").className = "ring";
+  const tick = () => { if (!TF.on) return; const left = Math.max(0, TIME.tf - (performance.now() - TF.t0) / 1000);
+    setRing(left / TIME.tf, left, "#tfRingFg", "#tfSecs"); $("#tfRing").classList.toggle("hurry", left / TIME.tf <= .4);
+    if (left <= 0) return tfPick(null); TF.raf = requestAnimationFrame(tick); };
+  TF.raf = requestAnimationFrame(tick);
+}
+function tfPick(said) {
+  if (!TF.on) return; TF.on = false; cancelAnimationFrame(TF.raf);
+  $("#tBtn").disabled = $("#fBtn").disabled = true;
+  const c = S.tf[TF.k], secs = (performance.now() - TF.t0) / 1000, right = said === c.truth;
+  const pts = right ? 100 + Math.round(30 * Math.max(0, 1 - secs / TIME.tf)) : 0;
+  S.res.tf.push(said === null ? null : right); add(pts, said === null ? false : right);
+  $("#tfFill").style.width = "0"; $("#tfMark").style.left = c.shown + "%"; $("#tfMark").textContent = `claim: ${c.shown}`;
+  $("#tfRev").classList.add("on"); requestAnimationFrame(() => requestAnimationFrame(() => $("#tfFill").style.width = c.v + "%"));
+  $("#tfMsg").textContent = (said === null ? "⏱ Time's up. " : right ? `✅ Right! +${pts} · ` : "❌ Wrong · ") + (c.truth ? `True: ${pct(c.v)}.` : `False: it's ${pct(c.v)}, not ${c.shown}.`);
+  note("fact", `${in100(c.v)} Americans`, esc(c.what) + ".", "tf" + c.what);
+  later(() => { if (++TF.k < 3) return tfShow(); if (S.res.tf.every(x => x === true)) badge("fact"); level(S.lv + 1); }, 3000);
+}
+$("#tBtn").onclick = () => tfPick(true); $("#fBtn").onclick = () => tfPick(false);
+
+// ---------- level 7: your turn (feeling → predict → reveal, then the turn) ----------
+let Y = { part: 1 };
+function phase(n) { ["#ph1", "#ph2", "#ph3"].forEach((p, i) => $(p).classList.toggle("on", i + 1 === n)); $("#s-you").scrollTop = 0; }
+function youStart() { screen("s-you"); S.res.you = []; Y.part = 1; youAsk(); }
+function youAsk() {
+  const first = Y.part === 1, codes = first ? SENT.slice(0, 5) : AG.slice(0, 3), lab = first ? SL : AL;
+  $("#youKick").textContent = first ? "Your turn · question 1 of 2 · the survey's own question" : "Your turn · question 2 of 2 · same survey";
+  $("#t-you").textContent = first ? D.q.sentiment : D.q.agency;
+  $("#opts1").innerHTML = codes.map(([c, v]) => `<button data-a="${c}" style="--c:var(${v})">${esc(lab[c])}</button>`).join("");
+  $$("#opts1 button").forEach(b => b.onclick = () => {
+    if (first) S.you1 = b.dataset.a; else S.you2 = b.dataset.a;
+    $$("#opts1 button").forEach(x => { x.classList.toggle("picked", x === b); x.disabled = true; });
+    later(() => { $("#predQ").innerHTML = first ? "Now guess: how many of 100 US adults said they are <u>concerned</u> (somewhat or very)?" : `Now guess: how many of 100 US adults chose “${esc(AL.inevitable)}”?`;
+      $("#predRange").value = 50; $("#predVal").textContent = 50; phase(2); }, reduce ? 0 : 400);
+  });
+  phase(1);
+}
+$("#predRange").oninput = e => $("#predVal").textContent = e.target.value;
+$("#predLock").onclick = () => {
+  const first = Y.part === 1, v = +$("#predRange").value, real = first ? concerned("total") : G.total.agency.inevitable;
+  const off = Math.abs(v - Math.round(real)), pts = Math.max(0, 200 - 8 * off);
+  S.pred[Y.part] = v; S.res.you.push(off <= 10); add(pts, null); if (off <= 5) badge("mind");
+  $("#youBig").textContent = in100(real); $("#youGuess").textContent = v; $("#youPts").textContent = "+" + pts;
+  if (first) {
+    $("#youBig").style.color = "var(--vcon)";
+    $("#youBigTxt").textContent = `US adults are concerned about AI. You felt “${SL[S.you1]}”, like ${in100(G.total.sentiment[S.you1])}.`;
+    youGroups("total");
+    note("fact", `${plain(D.words.concerned)} US adults`, `are concerned about AI's growing role (${pct(concerned("total"))}). Only ${in100(G.total.sentiment.very_excited + G.total.sentiment.somewhat_excited)} are excited.`, "you1");
+    $("#youSrc").textContent = `Question: “${D.q.sentiment}” · ${SRC}`;
+    $("#youNext").textContent = "Last question →";
+  } else {
+    $("#youBig").style.color = "var(--inev)";
+    $("#youBigTxt").textContent = `say “${AL.inevitable}”. You chose “${AL[S.you2]}”, like ${in100(G.total.agency[S.you2])}.`;
+    const t = G.total.agency;
+    $("#youViz").innerHTML = `<div class="stack" role="img" aria-label="${AG.map(([c]) => `${esc(AL[c])}: ${pct(t[c])}`).join(", ")}">${AG.map(([c, v]) => `<i style="width:${t[c]}%;background:var(${v})"></i>`).join("")}</div>` +
+      `<ul class="legend" style="margin-top:8px">${AG.map(([c, v]) => `<li style="--c:var(${v})" class="${c === S.you2 ? "me" : ""}"><b>${pct(t[c])}</b> ${esc(AL[c])}</li>`).join("")}</ul>` +
+      `<p class="small" style="margin-top:12px"><b>But it depends on age.</b> Who says “${esc(AL.can_shape)}”?</p><div class="ages">${AGES.map(g => `<div><span>${G[g].label}</span><span class="t"><i style="width:0" data-w="${G[g].agency.can_shape}"></i></span><b>${in100(G[g].agency.can_shape)}</b></div>`).join("")}</div>`;
+    requestAnimationFrame(() => requestAnimationFrame(() => $$("#youViz .ages i").forEach(i => i.style.width = i.dataset.w + "%")));
+    const y = G.age_18_34.agency.can_shape, o = G.age_65_plus.agency.can_shape, m = G.age_35_49.agency.can_shape;
+    $("#youNote").innerHTML = (D.shapeGapReal ? `<b>18–34: ${in100(y)}</b> vs <b>65+: ${in100(o)}</b> think it can still be shaped. That gap is bigger than the margin of error, so it's a real difference. `
+      : `The age groups are within the margin of error of each other. `) + (D.shapeGap1835 ? "" : `18–34 and 35–49 (${in100(m)}) are about the same.`);
+    note("fact", `${plain(D.words.inevitable)} US adults`, `say AI is coming whether we want it or not (${pct(t.inevitable)}).` + (D.shapeGapReal ? " Younger adults are more likely than older adults to think it can still be shaped." : ""), "you2");
+    $("#youSrc").textContent = `Question: “${D.q.agency}” · ${SRC}`;
+    $("#youNext").textContent = "See my final score 🏆";
+  }
+  phase(3); if (off <= 5) confetti(40);
+};
+function youGroups(g) {   // feeling: 100 dots for America + age chips
+  const dist = G[g].sentiment, counts = (() => { const raw = SENT.map(([c]) => dist[c]), base = raw.map(Math.floor), left = 100 - base.reduce((a, b) => a + b, 0);
+    raw.map((v, i) => [v - base[i], i]).sort((a, b) => b[0] - a[0]).slice(0, Math.max(0, left)).forEach(([, i]) => base[i]++); return base; })();
+  const dots = SENT.flatMap(([c, v], i) => Array(counts[i]).fill([c, v]));
+  $("#youViz").innerHTML = `<div class="chips" role="group" aria-label="Show a group">${["total", ...AGES].map(x => `<button aria-pressed="${x === g}" data-grp="${x}">${G[x].label}</button>`).join("")}</div>` +
+    `<div class="dots" style="max-width:300px;margin:12px 0 6px;gap:5px" role="img" aria-label="100 dots, ${esc(G[g].label)}">${dots.map(([c, v]) => `<i style="background:var(${v})${c === S.you1 ? ";box-shadow:0 0 0 2px var(--ink)" : ""}"></i>`).join("")}</div>` +
+    `<ul class="legend">${SENT.map(([c, v]) => `<li style="--c:var(${v})" class="${c === S.you1 ? "me" : ""}"><b>${pct(dist[c])}</b> ${esc(SL[c])}</li>`).join("")}</ul>`;
+  $$("#youViz [data-grp]").forEach(b => b.onclick = () => youGroups(b.dataset.grp));
+  const a = concerned(g), b = concerned("total");
+  $("#youNote").innerHTML = g === "total" ? `Tap an age group. Differences smaller than the margin of error aren't called differences.`
+    : `${G[g].label}: ${in100(a)} are concerned, ` + (realGap(g, "total", a, b) ? `<b>${a > b ? "more" : "less"}</b> than all US adults (${in100(b)}).` : `<b>about the same</b> as all US adults (${in100(b)}); the difference is within the margin of error.`) + ` (n = ${G[g].n}, ±${Math.round(G[g].moe)} points)`;
+}
+$("#youNext").onclick = () => { if (Y.part === 1) { Y.part = 2; youAsk(); } else level(S.lv + 1); };
+
+// ---------- end ----------
+const BOARD_KEY = "realOrAI.board.v7";
+function end() {
+  clearAll(); S.done = true; S.lv = LEVELS.length; hud();
+  if (!S.hints) badge("nohint");
+  screen("s-end");
+  const right = ["warm", "hard", "text"].flatMap(k => S.res[k] || []).filter(x => x === true).length;
+  $("#endScore").textContent = "0"; $("#endScore").dataset.v = 0; countTo($("#endScore"), S.score);
+  $("#endRank").textContent = rankOf(S.score);
+  $("#endSub").textContent = `${right} of 10 pictures and texts right · best streak ${S.bestStreak} · ${S.badges.size} badge${S.badges.size === 1 ? "" : "s"}` + (vs ? ` · ${S.score >= vs.score ? "🥊 you beat " : "🥊 not quite: "}${vs.name} (${vs.score.toLocaleString("en")})` : "");
+  $("#trophy").textContent = vs && S.score >= vs.score ? "🥊" : S.score / maxScore() >= .68 ? "🏆" : S.score / maxScore() >= .4 ? "🥈" : "🎮";
+  $("#earned").innerHTML = BADGES.filter(b => S.badges.has(b[0])).map(b => `<span>${b[1]} ${b[2]}</span>`).join("") || `<span class="muted" style="background:none;padding:0;font-weight:400">No badges this time. Play again: new pictures every round.</span>`;
+  $("#t-end").innerHTML = `Most Americans are worried about AI, and most think it's coming anyway.` + (D.shapeGapReal ? ` <span>Younger adults are more likely than older adults to think it can still be shaped.</span>` : "");
+  const facts = S.notes.filter(n => n.kind === "fact").slice(0, 4).reverse(), clues = S.notes.filter(n => n.kind === "clue").slice(0, 2);
+  $("#learned").innerHTML = [...facts, ...clues].map(n => `<li><b>${n.title}</b><br>${n.text}</li>`).join("");
+  // leaderboard + challenge link
+  const board = store.get(BOARD_KEY, []);
+  const me = { name: S.name || "Player", score: S.score, right, date: new Date().toISOString().slice(0, 10), id: Date.now() };
+  if (!q.has("step")) { board.push(me); board.sort((a, b) => b.score - a.score); store.set(BOARD_KEY, board.slice(0, 50)); }   // review shortcuts never save
+  S.myId = me.id; renderBoard();
+  const u = new URL(location.href); u.search = "";
+  u.searchParams.set("p", S.play.p.join(".")); u.searchParams.set("t", S.play.t.join(".")); u.searchParams.set("r", S.seed);
+  u.searchParams.set("vs", S.name || "A friend"); u.searchParams.set("s", S.score);
+  $("#shareUrl").value = u.toString();
+  const pos = board.findIndex(b => b.id === me.id) + 1;
+  if (pos === 1 && board.length > 1) { toast("🥇 New high score on this device!"); confetti(120); }
+  else if (pos <= 3) confetti(70);
+}
+function renderBoard() {
+  const board = store.get(BOARD_KEY, []).slice(0, 10).map(b => ({ ...b }));
+  if (vs) { board.push({ name: vs.name + " (challenge)", score: vs.score, right: "?", vs: true }); board.sort((a, b) => b.score - a.score); }
+  $("#board").innerHTML = board.slice(0, 11).map(b => `<li class="${b.id && b.id === S.myId ? "me" : ""} ${b.vs ? "vs" : ""}"><span>${esc(b.name)}<span class="sub">${b.vs ? "score to beat" : `${b.right}/10 spotted · ${b.date}`}</span></span><span class="pts">${b.score.toLocaleString("en")}</span></li>`).join("");
+  $("#boardEmpty").style.display = board.length ? "none" : "block";
+}
+$("#copyBtn").onclick = async () => {
+  try { await navigator.clipboard.writeText($("#shareUrl").value); toast("📋 Link copied: send it to a friend"); }
+  catch { $("#shareUrl").select(); toast("Select the link and copy it"); }
+};
+$("#boardBtn").onclick = () => { tab("board"); openSheet(); };
+const COLS = [["n", g => G[g].n], ["±", g => Math.round(G[g].moe)], ["Concerned", g => concerned(g)], ["Excited", g => G[g].sentiment.very_excited + G[g].sentiment.somewhat_excited],
+  ["None", g => G[g].sentiment.none], ["Can shape", g => G[g].agency.can_shape], ["Coming anyway", g => G[g].agency.inevitable], ["Neither", g => G[g].agency.neither]];
+$("#tbl").innerHTML = `<table><tr><th>Group</th>${COLS.map(c => `<th>${c[0]}</th>`).join("")}</tr>` +
+  ["total", ...AGES].map(g => `<tr><td>${G[g].label}</td>${COLS.map(([h, f], i) => `<td>${i < 2 ? f(g) : f(g).toFixed(1)}</td>`).join("")}</tr>`).join("") + `</table>` +
+  `<table style="margin-top:10px"><tr><th>Seen in their community (have seen)</th><th>%</th></tr>${D.community.map(c => `<tr><td>${esc(c.text)}</td><td>${c.dist.have_seen.toFixed(1)}</td></tr>`).join("")}</table>` +
+  `<table style="margin-top:10px"><tr><th>Next 20 years: already happening</th><th>%</th></tr>${D.risks.map(c => `<tr><td>${esc(c.text)}</td><td>${c.dist.already.toFixed(1)}</td></tr>`).join("")}</table>` +
+  `<table style="margin-top:10px"><tr><th>Families: AI makes it worse (somewhat + much)</th><th>%</th></tr>${D.family.map(c => `<tr><td>${esc(c.text)}</td><td>${(c.dist.somewhat_worse + c.dist.much_worse).toFixed(1)}</td></tr>`).join("")}</table>` +
+  `<p class="tiny">Percent of each group. ± = margin of error in points (estimated for age groups).</p>`;
+$("#srcAll").innerHTML = `<b>Questions, word for word:</b> “${esc(D.stems.ai_community_impact)}” · “${esc(D.q.sentiment)}” · “${esc(D.q.agency)}” · “${esc(D.stems.ai_risks)}” · “${esc(D.stems.ai_family_impact)}”<br>` +
+  `<b>Data:</b> ${SRC}. Latest wave only; the June pilot used a different method and is left out. Gaps smaller than the margin of error aren't called gaps.<br>` +
+  `<b>Pictures:</b> real photos from Wikimedia Commons (CC BY / CC BY-SA, photographer named after each answer). AI pictures: Commons (public domain, VulcanSphere, Adobe Firefly, Gemini) and 8 made for this prototype with gpt-image-2.5 and gemini-3.1-flash-image (Figma AI, 12 Nov 2026). Every picture is cropped and compressed the same way, so file size and format give nothing away.<br>` +
+  `<b>Texts:</b> human texts word for word from Wikivoyage (“Verzasca Valley”, rev. 4275033, 2021; “Lauterbrunnen”, rev. 4407914, 2022), CC BY-SA 3.0. AI texts written by Claude (Anthropic).<br>` +
+  `The true-or-false claims show either the real number or a deliberately wrong one; the answer always shows the real number. Prototype v7 by Adhurim Thaqi, HSLU Data Storytelling, built with Claude.`;
+
+// ---------- sheet (phone) + tabs ----------
+function tab(t) { $$(".tabs [data-tab]").forEach(b => b.setAttribute("aria-selected", b.dataset.tab === t)); $("#pane-notes").classList.toggle("on", t === "notes"); $("#pane-board").classList.toggle("on", t === "board"); if (t === "board") renderBoard(); }
+$$(".tabs [data-tab]").forEach(b => b.onclick = () => tab(b.dataset.tab));
+function openSheet() { $("#sheet").classList.add("open"); $("#scrim").classList.add("on"); }
+function closeSheet() { $("#sheet").classList.remove("open"); $("#scrim").classList.remove("on"); }
+$("#sheetBtn").onclick = () => { tab("notes"); openSheet(); };
+$("#scrim").onclick = closeSheet;
+
+// ---------- intro ----------
+const randomName = () => ADJ[Math.floor(Math.random() * ADJ.length)] + " " + ANI[Math.floor(Math.random() * ANI.length)];
+S.name = store.get("realOrAI.name", "") || "";
+$("#nameIn").value = S.name;
+$("#nameIn").oninput = e => { S.name = e.target.value.trim().slice(0, 18); hud(); };
+$("#dice").onclick = () => { S.name = randomName(); $("#nameIn").value = S.name; hud(); };
+if (vs) { $("#challenge").innerHTML = `🥊 <b>${esc(vs.name)}</b> challenges you: <b>${vs.score.toLocaleString("en")} points</b> with the same pictures. Can you beat it?`; $("#challenge").classList.add("on"); }
+(() => {   // the intro mosaic: two real, two AI from the hard pool, labelled (as a teaser)
+  const hard = POOL.filter(p => p.level === 2), r = hard.filter(p => p.truth === "real"), a = hard.filter(p => p.truth === "ai");
+  const four = [r[0], a[a.length - 1], a[2], r[3]].filter(Boolean);
+  $("#mosaic").innerHTML = four.map(p => `<div style="background-image:url('${p.file}')"><span>?</span></div>`).join("");
+})();
+function startGame() {
+  if (!S.name) { S.name = randomName(); $("#nameIn").value = S.name; }
+  store.set("realOrAI.name", S.name);
+  const keepName = S.name, keepPlayed = S.playedOnce, last = S.items;
+  fresh(); S.name = keepName; S.playedOnce = keepPlayed; S.items = last;
+  $("#notes").innerHTML = ""; $("#notesEmpty").style.display = ""; $("#noteCnt").textContent = 0; $("#hudNotes").textContent = 0;
+  $$("#badges div").forEach(d => d.classList.remove("on"));
+  draw(); level(0);
+}
+$("#start").onclick = startGame;
+$("#again").onclick = () => { clearAll(); screen("s-intro"); S.lv = -1; hud(); $("#hudLv").textContent = "Real or AI?"; $("#hudIc").textContent = "🎮"; };
+if (q.has("reset")) { store.set(SEEN_KEY + ".1", []); store.set(SEEN_KEY + ".2", []); store.set(TSEEN_KEY, []); }
+
+// ---------- keys ----------
+addEventListener("keydown", e => {
+  if (e.target.tagName === "INPUT" && e.target.type !== "range") return;
+  const on = id => $(id).classList.contains("on"), k = e.key;
+  if (on("#s-guess")) {
+    if (!G_.answered) { if (k === "ArrowLeft" || k === "a" || k === "A") guess("ai"); if (k === "ArrowRight" || k === "r" || k === "R") guess("real"); if (k === "h" || k === "H") hint(); }
+    else if (k === " " || k === "Enter") { e.preventDefault(); skipAuto(); }
+  } else if (on("#s-hilo")) { if (k === "ArrowUp") hiloPick(true); if (k === "ArrowDown") hiloPick(false); }
+  else if (on("#s-tf")) { if (k === "t" || k === "T" || k === "ArrowRight") tfPick(true); if (k === "f" || k === "F" || k === "ArrowLeft") tfPick(false); }
+  else if (on("#s-level") && (k === " " || k === "Enter")) { e.preventDefault(); $("#lvGo").click(); }
+});
+
+// ---------- review shortcuts: ?step=warm|hard|text|boss|hilo|tf|you|turn|end ----------
+hud(); renderBoard();
+const want = q.get("step");
+const IDX = { warm: 0, hard: 1, text: 2, boss: 3, hilo: 4, tf: 5, you: 6, turn: 6 };
+if (want && (want in IDX || want === "end")) {
+  if (!S.name) S.name = "Reviewer";
+  draw();
+  const upto = want === "end" ? LEVELS.length : IDX[want];
+  LEVELS.slice(0, upto).forEach(l => { S.res[l.id] = l.id === "text" ? [true, false] : [true, false, true, null].slice(0, l.kind === "pic" ? 4 : 3); });
+  if (upto > 3) { note("fact", `${H.have_seen} in 100 Americans`, "already see people around them struggling to tell what's real from what's fake because of AI.", "boss"); S.score = 1200; }
+  if (want === "end") { S.you1 = "somewhat_concerned"; S.you2 = "inevitable"; S.score = 2140; badge("eagle"); badge("bullseye"); end(); }
+  else { S.lv = upto; hud(); RUN[LEVELS[upto].kind](LEVELS[upto]);
+    if (want === "turn") { S.you1 = "somewhat_concerned"; Y.part = 2; youAsk(); } }
+}
+</script>
+</body>
+</html>

@@ -267,6 +267,41 @@ Keep everything else from v5. Copy the sprint 1 files into W46_sprint2 and call 
 - screenshots of the intro, the text guess (`?step=text`) and the result in headless Edge
 - Not yet: a real phone and a real tester.
 
+## Prompt 8: v7, the full game (sprint 3, 12.11.2026)
+Model: Claude (Anthropic), in Claude Code. Files: `exercises/W47_sprint3/` (`prepare_images.py` → `pool.json`, `template.html` → `build.py` → `v7.html`).
+
+```
+Lecturer feedback: improve the UI. The user always has to scroll and click "Next". The sides are empty:
+use them and come up with a good UI/UX design. Gamification is a good idea, but it's only at the beginning:
+add more game features, and when the data is shown the user should learn something while playing, maybe
+compete with a leaderboard. Make it responsive and good-looking. The pictures are easy to tell apart:
+make it harder with better-quality AI pictures and real photos. Save it as v7.
+```
+Decisions asked back and answered: AI pictures are **generated in Figma AI** (not only Commons); the leaderboard is **on the device + a challenge link** (no server).
+
+**Image prompts (Figma AI, file "Real or AI v7 – generated valleys", 12.11.2026), 4:3:**
+1. gpt-image-2.5: *Ordinary amateur travel photo taken with a phone, Val Bavona in Ticino, Switzerland, in May. A clear green-turquoise mountain river runs over big grey granite boulders …, a few old stone houses with stone-slab roofs …, a small footpath with a wooden railing. Slightly overcast midday light, a bit of haze …, some overexposed sky, natural colours, slight lens distortion, nothing staged. No text, no watermark, no people.*
+2. gemini-3.1-flash-image: *Realistic snapshot by a hiker, looking up a narrow Alpine valley in Ticino … A gravel road with a crash barrier and a yellow hiking signpost …, a concrete bridge …, a wooden power-line pole …, a waterfall … JPEG look from a 2019 smartphone.*
+3. gpt-image-2.5: *Documentary landscape photograph, Verzasca valley: an emerald river pool …, a small stone hamlet with a church tower …, a plastic bottle and a towel on one of the rocks … Shot on a Canon compact camera.*
+4. gpt-image-2.5: *A wide photo of the Lauterbrunnen valley on a cloudy spring morning: sheer grey limestone walls, a thin waterfall blown into mist, … a parked white van, … a slightly crooked horizon. Looks like an unedited tourist photo from a phone.*
+5. gemini-3.1-flash-image: *Photo from a mountain path above Val Bavona in early autumn: a deep U-shaped valley with a braided grey river, rustico stone huts …, a dry-stone wall in the foreground with moss … slightly underexposed.*
+6. gpt-image-2.5: *Golden-hour landscape photograph by a good amateur photographer: a Swiss alpine valley …, a wooden footbridge, larch trees, a small chapel … a little lens flare, some noise in the shadows, shot on a DSLR at f/8.*
+7. gpt-image-2.5: *Casual photo taken out of a slightly dirty car window … a narrow valley in Graubünden: a rocky glacier-fed river, … a stone arch railway bridge …, road markings and part of the side mirror visible …*
+8. gemini-3.1-flash-image: *Realistic photograph of the waterfall of Foroglio in Val Bavona: a tall white waterfall … behind a cluster of grey stone houses …, a meadow with a wooden fence and a few picnic tables … Ordinary tourist photo, slightly tilted.*
+
+Full prompts: the Figma file; full-size results: `exercises/W47_sprint3/img/originals/`. The "how to tell" line of each AI picture was written **after looking at the result** (e.g. picture 2's signpost names Val Verzasca and Lauterbrunnen, about 100 km apart).
+
+**What was checked (12.11.2026):**
+- `check.py`: 149 checks, 0 mismatches (now also the community, risks and family items)
+- full playthrough in headless Edge at 3 sizes (desktop, tablet dark, phone with a swipe): no script error, no sideways scroll, challenge link reproduces the same round
+- Not yet: a real phone and a real tester.
+
+## How the pictures were chosen (v7)
+- **Warm-up (level 1):** the 16 pictures of v4–v6 (older AI models vs. Val Bavona photos).
+- **Hard mode (level 2), AI:** the 8 generated pictures above + 2 photoreal ones from Commons (Adobe Firefly ridge, Gemini village; both public domain). Left out: the FLUX.2/FLUX.3 "Path to the Mountain" pictures (painterly, and two have "Black Forest Labs presents Flux" written in the image), the Imagen 4.0 valley (corner badge), "Cold mountains of middle east" (deletion request, April 2026).
+- **Hard mode, real:** 9 Commons photos of the same places that look "too good": Foroglio in mist (Valenic), a heavily edited hut near Foroglio (Koustav Kumar Dutta), Foroglio 2021 (SchmalspurDVZO), the striped rocks and turquoise pools of Lavertezzo (Einaz80, Diriye Amey, Wladyslaw), Mürren and Männlichen views of Lauterbrunnen (Ximonic), Sonogno from the air (Adrian Michael). Licences CC BY / CC BY-SA, named after every answer.
+- **Same treatment for all 35:** centre crop 4:3, 1200 × 900, JPEG quality 80, no EXIF, neutral names `p01…p35`.
+
 ## How the texts were chosen (v6)
 - **Human texts (4):** word for word from Wikivoyage, CC BY-SA 3.0, from revisions saved before ChatGPT existed, so they can't be AI-written:
   - "Verzasca Valley", revision 4275033 (13 Aug 2021): the emerald river and the swimming warning
