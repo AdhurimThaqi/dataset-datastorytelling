@@ -173,7 +173,11 @@ section.on{display:flex;animation:in .35s ease}
 .media .quote p{font:500 clamp(17px,2.2vw,22px)/1.55 Georgia,"Times New Roman",serif}
 .media .quote .src{font:600 12px/1 system-ui;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
 .media.text img{display:none}.media.text .quote{display:flex}
-.media.text{aspect-ratio:auto;min-height:calc(var(--mw) * .75)}.media.text .quote{position:relative;inset:auto;min-height:inherit}
+.media.text{aspect-ratio:auto;min-height:calc(var(--mw) * .75)}.media.text .quote{position:relative;inset:auto;min-height:inherit;overflow:visible}
+/* the text card is a scroll box, and a scroll box ignores the card's pan-y, so on phones the browser took the
+   sideways swipe. Tell the text itself: vertical is page scroll, sideways is ours. */
+.media .quote,.media .quote *{touch-action:pan-y;-webkit-touch-callout:none}
+.media.text.coached .quote{padding-bottom:72px}
 /* first pictures: show that the card can be dragged */
 .coach{display:none;position:absolute;left:50%;bottom:16px;transform:translateX(-50%);align-items:center;gap:10px;padding:10px 16px;border-radius:999px;background:rgba(10,12,20,.8);color:#fff;font:600 14px/1.2 system-ui;white-space:nowrap;pointer-events:none;z-index:3;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);box-shadow:0 6px 20px rgba(0,0,0,.3)}
 .coach.on{display:flex;animation:in .35s ease}
@@ -571,7 +575,7 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
         <div class="quote"><p class="src">From a travel guide about Swiss valleys</p><p id="quote"></p></div>
         <div class="loading" id="loading">Loading…</div>
         <span class="stamp ai" id="stAi">AI</span><span class="stamp real" id="stReal">REAL</span>
-        <div class="coach" id="coach" aria-hidden="true"><span class="hand">👆</span><span><span id="coachVerb">Drag</span> the picture: <b class="c-ai">← AI</b> · <b class="c-real">Real →</b></span></div>
+        <div class="coach" id="coach" aria-hidden="true"><span class="hand">👆</span><span><span id="coachVerb">Drag</span> <span id="coachWhat">the picture</span>: <b class="c-ai">← AI</b> · <b class="c-real" id="coachReal">Real →</b></span></div>
       </div>
         <div class="verdict" id="verdict" aria-live="assertive"></div>
       </div>
@@ -1004,7 +1008,11 @@ function show() {
   setRing(1, G_.limit); $("#ring").className = "ring"; $("#fuse").className = "fuse"; $("#fusebar").style.transform = "scaleX(1)";
   $("#say").textContent = p.kind === "text" ? SAY_TEXT[5] : SAY[G_.n % 4][5];
   stamps(0);
-  const coach = G_.L.id === "warm" && G_.n < 2 && p.kind !== "text";   // the first two pictures say the card can be dragged
+  // the first two pictures and the first text say the card can be dragged
+  const coach = (G_.L.id === "warm" && G_.n < 2) || (p.kind === "text" && G_.n === 0);
+  $("#coachWhat").textContent = p.kind === "text" ? "the text" : "the picture";
+  $("#coachReal").textContent = p.kind === "text" ? "Person →" : "Real →";
+  m.classList.toggle("coached", coach);
   $("#coachVerb").textContent = matchMedia("(hover:none)").matches ? "Swipe" : "Drag";
   $("#coach").classList.toggle("on", coach);
   if (coach && G_.n === 0 && !reduce) m.classList.add("demo");
