@@ -143,6 +143,8 @@ section.on{display:flex;animation:in .35s ease}
 .lvname{font:700 clamp(36px,6vw,60px)/1 var(--display);letter-spacing:-.03em}
 .lvtype{display:inline-block;padding:5px 12px;border-radius:999px;background:var(--panel);border:1px solid var(--line);font-weight:700;font-size:13px}
 .lvhow{font-size:14px;color:var(--muted);line-height:1.6;max-width:440px}
+.lvbridge{max-width:520px;font-size:15px;line-height:1.5;color:var(--ink2);padding:12px 16px;border-radius:14px;background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--ai);text-align:left}
+.lvbridge:empty{display:none}
 .lvblurb{max-width:460px;color:var(--ink2);font-size:17px}
 .lvcount{font:700 96px/1 var(--display);letter-spacing:-.05em;min-height:96px}
 .lvcount.tick{animation:tick .8s ease-out}
@@ -172,6 +174,14 @@ section.on{display:flex;animation:in .35s ease}
 .media .quote .src{font:600 12px/1 system-ui;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
 .media.text img{display:none}.media.text .quote{display:flex}
 .media.text{aspect-ratio:auto;min-height:calc(var(--mw) * .75)}.media.text .quote{position:relative;inset:auto;min-height:inherit}
+/* first pictures: show that the card can be dragged */
+.coach{display:none;position:absolute;left:50%;bottom:16px;transform:translateX(-50%);align-items:center;gap:10px;padding:10px 16px;border-radius:999px;background:rgba(10,12,20,.8);color:#fff;font:600 14px/1.2 system-ui;white-space:nowrap;pointer-events:none;z-index:3;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);box-shadow:0 6px 20px rgba(0,0,0,.3)}
+.coach.on{display:flex;animation:in .35s ease}
+.coach .c-ai{color:#c4b5fd}.coach .c-real{color:#5eead4}
+.coach .hand{display:inline-block;font-size:18px;animation:handdrag 1.8s ease-in-out infinite}
+@keyframes handdrag{0%,100%{transform:none}25%{transform:translateX(-12px) rotate(-10deg)}75%{transform:translateX(12px) rotate(10deg)}}
+.media.demo{animation:cardDemo 1.6s ease-in-out .4s 1}
+@keyframes cardDemo{0%,100%{transform:none}25%{transform:translateX(-34px) rotate(-1.6deg)}50%{transform:none}75%{transform:translateX(34px) rotate(1.6deg)}}
 .stamp{position:absolute;top:22px;padding:8px 16px;border:4px solid;border-radius:12px;font:700 30px/1 var(--display);letter-spacing:.06em;opacity:0;pointer-events:none;background:rgba(0,0,0,.25);color:#fff}
 .stamp.ai{right:22px;border-color:var(--ai);transform:rotate(12deg)}
 .stamp.real{left:22px;border-color:var(--real);transform:rotate(-12deg)}
@@ -194,7 +204,8 @@ section.on{display:flex;animation:in .35s ease}
 .auto.paused i{animation-play-state:paused}
 @keyframes fill{to{width:100%}}
 .vrow{display:flex;gap:8px;align-items:center;margin-top:8px;font-size:12px;opacity:.75}
-.vrow button{min-height:30px;padding:3px 10px;font-size:12px;border-radius:999px;background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.2);color:#fff}
+.vrow button{min-height:30px;padding:3px 12px;font-size:12px;border-radius:999px;background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.2);color:#fff;white-space:nowrap;margin-left:auto}
+.vrow button.go{background:#fff;color:#11131c;border-color:#fff;font-weight:700}
 .media.right{box-shadow:0 0 0 4px var(--good),var(--shadow)}
 .media.wrong{box-shadow:0 0 0 4px var(--bad),var(--shadow)}
 .media.late{box-shadow:0 0 0 4px var(--muted),var(--shadow)}
@@ -296,6 +307,11 @@ input[type=range]{width:100%;accent-color:var(--ai);height:36px}
 .endscore{font:700 72px/1 var(--display);letter-spacing:-.04em}
 .message{font:700 clamp(22px,3vw,30px)/1.2 var(--display);letter-spacing:-.015em}
 .message span{color:var(--ink2)}
+.vsus{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.vsus li{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:14px;color:var(--ink2)}
+.vsus li b{color:var(--ink)}
+.vsus .us{font:700 15px/1.2 var(--display);color:var(--ink);text-align:right;white-space:nowrap}
+.vsus .us small{display:block;font:500 11px/1.3 system-ui;color:var(--muted)}
 .learned{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .learned li{background:var(--panel2);border-radius:14px;padding:12px 14px;font-size:14px}
 .share{display:flex;gap:8px}.share input{flex:1;min-width:0;font:13px ui-monospace,monospace;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--panel2);color:var(--ink)}
@@ -344,7 +360,7 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
 .verdict .vc{display:flex;gap:10px;align-items:center;justify-content:space-between}
 /* ---------- side pillars (desktop/tablet): slim while you play, the full panel slides out on hover, focus or tap ---------- */
 .full{display:flex;flex-direction:column;min-height:0}
-.peek,.pin{display:none}
+.peek,.pin,.sheetclose{display:none}
 @media (min-width:861px){
   .app{--pw:76px;--lo:272px;--ro:330px;grid-template-columns:var(--pw) minmax(0,1fr) var(--pw);transition:grid-template-columns .45s cubic-bezier(.2,.8,.2,1)}
   .app.dock-l{grid-template-columns:var(--lo) minmax(0,1fr) var(--pw)}
@@ -385,7 +401,7 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
   .pk-btn{position:relative;width:46px;height:46px;min-height:0;padding:0;border-radius:14px;display:grid;place-items:center;font-size:20px;background:var(--panel2);border-color:transparent;flex:none}
   .pk-btn:hover{background:color-mix(in srgb,var(--ai) 14%,var(--panel2))}
   .pk-cnt{position:absolute;right:-6px;top:-6px;min-width:20px;padding:0 5px;border-radius:999px;background:var(--ai);color:#fff;font:700 11px/20px system-ui;border:2px solid var(--panel)}
-  .pk-cnt:empty,.pk-cnt[data-n="0"]{display:none}
+  .pk-cnt:empty,.pk-cnt[data-c="0"]{display:none}
   .pk-top{font:700 13px/1 var(--display);font-variant-numeric:tabular-nums;text-align:center}
   .pk-top:empty{display:none}
   .pk-vert{writing-mode:vertical-rl;transform:rotate(180deg);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-top:6px;white-space:nowrap}
@@ -416,6 +432,8 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
   .hud{display:flex}
   .rail.right{position:fixed;left:0;right:0;bottom:0;max-height:72dvh;border-radius:22px 22px 0 0;z-index:40;transform:translateY(105%);transition:transform .35s ease;padding-bottom:env(safe-area-inset-bottom)}
   .rail.right.open{transform:none}
+  .tabs [role=tab]{white-space:nowrap}
+  .tabs .sheetclose{display:grid;place-items:center;flex:none;width:40px;min-height:40px;padding:0;border-radius:50%;background:var(--panel2);border-color:transparent;font-size:15px}
   .rail.right::before{content:"";display:block;width:40px;height:5px;border-radius:3px;background:var(--line);margin:10px auto 0}
   .scrim.on{display:block}
   .hero{grid-template-columns:1fr}.mosaic{display:none}
@@ -531,6 +549,7 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
       <p class="lvnum" id="lvNum">Level 1 of 7</p>
       <div class="lvicon" id="lvIcon">🌄</div>
       <h2 class="lvname" id="lvName">Warm-up</h2>
+      <p class="lvbridge" id="lvBridge"></p>
       <p class="lvblurb" id="lvBlurb"></p>
       <span class="mult" id="lvMult" hidden></span>
       <p class="lvhow" id="lvHow"></p>
@@ -552,6 +571,7 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
         <div class="quote"><p class="src">From a travel guide about Swiss valleys</p><p id="quote"></p></div>
         <div class="loading" id="loading">Loading…</div>
         <span class="stamp ai" id="stAi">AI</span><span class="stamp real" id="stReal">REAL</span>
+        <div class="coach" id="coach" aria-hidden="true"><span class="hand">👆</span><span><span id="coachVerb">Drag</span> the picture: <b class="c-ai">← AI</b> · <b class="c-real">Real →</b></span></div>
       </div>
         <div class="verdict" id="verdict" aria-live="assertive"></div>
       </div>
@@ -568,7 +588,7 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
   <!-- boss: guess the number -->
   <section id="s-boss" aria-labelledby="t-boss">
     <div class="wrap">
-      <p class="kicker">Boss level · Americans on AI · <span data-dates></span></p>
+      <p class="kicker">Boss level · survey of US adults · <span data-dates></span> · n = <span data-n></span></p>
       <p class="bossq" id="t-boss">Out of 100 US adults, how many have <u>already</u> seen people in their community struggle to tell real from fake because of AI?</p>
       <p class="tiny" id="bossCtx"></p>
       <div class="bossgrid">
@@ -598,7 +618,7 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
   <!-- higher or lower -->
   <section id="s-hilo" aria-labelledby="t-hilo">
     <div class="wrap">
-      <p class="kicker">In their community</p>
+      <p class="kicker">Survey of US adults · their local community · <span data-dates></span></p>
       <h2 class="q" id="t-hilo">More or fewer Americans already see this?</h2>
       <div class="pips" id="hiloPips"></div>
       <div class="hilo">
@@ -620,6 +640,7 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
         <div class="reveal" id="tfRev"><div class="tfbar" id="tfBar"><i id="tfFill"></i><span id="tfMark"></span></div><p class="hlmsg" id="tfMsg"></p></div>
       </div>
       <div class="tfbtns"><button class="t" id="tBtn">✓ True</button><button class="f" id="fBtn">✗ False</button></div>
+      <p class="tiny" style="text-align:center">Survey of US adults · <span data-dates></span> · n = <span data-n></span></p>
     </div>
   </section>
 
@@ -656,6 +677,7 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
         <div><p class="kicker">Final score · <span id="endRank"></span></p><p class="endscore" id="endScore">0</p><p class="small" id="endSub"></p></div></div>
       <div class="earned" id="earned"></div>
       <h2 class="message" id="t-end"></h2>
+      <div><p class="kicker" style="margin-bottom:8px">You vs. US adults</p><ul class="vsus" id="vsUS"></ul></div>
       <div><p class="kicker" style="margin-bottom:8px">What you learned</p><ul class="learned" id="learned"></ul></div>
       <div class="card" style="display:flex;flex-direction:column;gap:10px">
         <p class="kicker">🥊 Challenge a friend</p>
@@ -671,7 +693,7 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
 <div class="dock right" id="dockR">
 <aside class="rail right" id="sheet" aria-label="Field notes and leaderboard">
   <div class="peek" id="peekR">
-    <button class="pk-btn" data-open="notes" aria-label="Show field notes" title="Field notes">📓<b class="pk-cnt" id="pkNotes" data-n="0">0</b></button>
+    <button class="pk-btn" data-open="notes" aria-label="Show field notes" title="Field notes">📓<b class="pk-cnt" id="pkNotes" data-c="0">0</b></button>
     <button class="pk-btn" data-open="board" aria-label="Show leaderboard" title="Leaderboard">🏆</button>
     <span class="pk-top" id="pkTop" title="Best score on this device"></span>
     <span class="pk-vert" aria-hidden="true">Notes · Leaderboard</span>
@@ -682,6 +704,7 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
     <button role="tab" aria-selected="true" data-tab="notes">📓 Field notes<span class="cnt" id="noteCnt">0</span></button>
     <button role="tab" aria-selected="false" data-tab="board">🏆 Leaderboard</button>
     <button class="pin" data-pin="r" aria-pressed="false" aria-label="Keep this panel open" title="Keep open">📌</button>
+    <button class="sheetclose" id="sheetClose" aria-label="Close field notes and leaderboard">✕</button>
   </div>
   <div class="pane on" id="pane-notes" role="tabpanel">
     <div class="empty" id="notesEmpty"><b>📓</b>Every answer unlocks a clue or a survey fact. They collect here so you can read them again.</div>
@@ -752,13 +775,13 @@ const SAY_TEXT = { 5: "Read it 📖", 4: "Person or machine?", 3: "Too smooth?",
 
 // ---------- game setup ----------
 const LEVELS = [
-  { id: "warm", ic: "🌄", name: "Warm-up", kind: "pic", type: "📷 Image challenge", how: "Tap AI or Real · 100 points + up to 50 for speed", blurb: "4 valleys. Real photo or AI?", d: "Older AI models · 5 s each" },
+  { id: "warm", ic: "🌄", name: "Warm-up", kind: "pic", bridge: "First your eyes, then the data: what US adults told a survey about AI.", type: "📷 Image challenge", how: "Drag the picture left for AI, right for Real, or tap the buttons · 100 points + up to 50 for speed", blurb: "4 valleys. Real photo or AI?", d: "Older AI models · 5 s each" },
   { id: "hard", ic: "🧨", name: "Hard mode", kind: "pic", mult: 1.5, type: "📷 Image challenge", how: "Tap AI or Real · 150 points + up to 50 for speed", blurb: "Newest AI vs. real photos that look fake.", d: "4 pictures · ×1.5 points" },
   { id: "text", ic: "✍️", name: "Texts", kind: "text", type: "✍️ Text challenge", how: "Tap AI or Person · 120 points + up to 50 for speed", blurb: "Person or AI? Read fast.", d: "2 short travel texts" },
-  { id: "boss", ic: "🎯", name: "The number", kind: "boss", type: "📊 Data challenge", how: "Slide to your guess · up to 300 points, 10 fewer per point off", blurb: "How many Americans see this happening?", d: "Guess on 100 dots · up to 300 points" },
-  { id: "hilo", ic: "↕️", name: "More or fewer", kind: "hilo", type: "📊 Data challenge", how: "Pick More or Fewer · 100 points each", blurb: "What else do Americans see AI changing?", d: "4 quick picks: more or fewer" },
-  { id: "tf", ic: "⚡", name: "True or false", kind: "tf", type: "🧠 Knowledge check", how: "Is the number real? · 100 points + up to 30 for speed", blurb: "Real number or fake number?", d: "3 claims · 8 s each" },
-  { id: "you", ic: "🫵", name: "Your turn", kind: "you", type: "🗳️ Your opinion", how: "Answer, then guess America · up to 200 points per guess", blurb: "Answer like the survey. Then guess America.", d: "2 questions + 2 guesses" },
+  { id: "boss", ic: "🎯", name: "The number", kind: "boss", bridge: "That was hard for you. Is it hard in real life too? A survey asked US adults (not Swiss residents) whether people where they live already struggle with this.", type: "📊 Data challenge", how: "Slide to your guess · up to 300 points, 10 fewer per point off", blurb: "How many Americans see this happening?", d: "Guess on 100 dots · up to 300 points" },
+  { id: "hilo", ic: "↕️", name: "More or fewer", kind: "hilo", bridge: "Fakes are only one change. What else do US adults already see AI changing in their community?", type: "📊 Data challenge", how: "Pick More or Fewer · 100 points each", blurb: "What else do Americans see AI changing?", d: "4 quick picks: more or fewer" },
+  { id: "tf", ic: "⚡", name: "True or false", kind: "tf", bridge: "Same skill as spotting a fake picture, now with numbers: a real survey figure or a made-up one?", type: "🧠 Knowledge check", how: "Is the number real? · 100 points + up to 30 for speed", blurb: "Real number or fake number?", d: "3 claims · 8 s each" },
+  { id: "you", ic: "🫵", name: "Your turn", kind: "you", bridge: "You have seen what Americans notice. Now answer the survey's own questions and guess how US adults answered.", type: "🗳️ Your opinion", how: "Answer, then guess America · up to 200 points per guess", blurb: "Answer like the survey. Then guess America.", d: "2 questions + 2 guesses" },
 ];
 const BADGES = [
   ["eagle", "🦅", "Eagle eye", "All hard-mode pictures right"], ["lightning", "⚡", "Lightning", "A right answer in under 1.5 s"],
@@ -880,7 +903,7 @@ function note(kind, title, text, key) {
   $("#notes").insertAdjacentHTML("afterbegin", `<div class="note"><span class="tag ${kind}">${kind === "clue" ? "Clue" : "Fact"}</span><b>${title}</b>${text}</div>`);
   $("#notesEmpty").style.display = "none";
   $("#noteCnt").textContent = S.notes.length; $("#hudNotes").textContent = S.notes.length;
-  const pk = $("#pkNotes"); pk.textContent = pk.dataset.n = S.notes.length; bump(pk.parentElement);
+  const pk = $("#pkNotes"); pk.textContent = pk.dataset.c = S.notes.length; bump(pk.parentElement);
 }
 function bump(el) { if (reduce || !el) return; el.classList.remove("bump"); void el.offsetWidth; el.classList.add("bump"); }
 
@@ -953,7 +976,7 @@ function level(i) {
   if (i >= LEVELS.length) return end();
   const L = LEVELS[i];
   $("#lvNum").textContent = `Level ${i + 1} of ${LEVELS.length}`; $("#lvIcon").textContent = L.ic; $("#lvName").textContent = L.name; $("#lvBlurb").textContent = L.blurb;
-  $("#lvType").textContent = L.type;
+  $("#lvType").textContent = L.type; $("#lvBridge").textContent = L.bridge || "";
   $("#lvHow").innerHTML = esc(L.how) + (L.kind === "pic" || L.kind === "text" ? "<br>🔥 +20 per answer in a row · 💡 a hint costs 40" : "");
   $("#lvMult").hidden = !L.mult; $("#lvMult").textContent = `×${L.mult} points`;
   screen("s-level");
@@ -961,8 +984,9 @@ function level(i) {
   const go = () => { clearAll(); SFX.play("go"); RUN[L.kind](L); };
   $("#lvGo").onclick = go;
   if (reduce) return;
-  [3, 2, 1].forEach((k, j) => later(() => { SFX.play("count"); const c = $("#lvCount"); c.textContent = k; c.classList.remove("tick"); void c.offsetWidth; c.classList.add("tick"); }, j * 750));
-  later(go, 2300);
+  const wait = L.bridge ? 2400 : 0;   // a story line needs a moment to read; "I'm ready" skips it
+  [3, 2, 1].forEach((k, j) => later(() => { SFX.play("count"); const c = $("#lvCount"); c.textContent = k; c.classList.remove("tick"); void c.offsetWidth; c.classList.add("tick"); }, wait + j * 750));
+  later(go, wait + 2300);
 }
 const RUN = { pic: startGuess, text: startGuess, boss, hilo, tf, you: youStart };
 
@@ -980,11 +1004,15 @@ function show() {
   setRing(1, G_.limit); $("#ring").className = "ring"; $("#fuse").className = "fuse"; $("#fusebar").style.transform = "scaleX(1)";
   $("#say").textContent = p.kind === "text" ? SAY_TEXT[5] : SAY[G_.n % 4][5];
   stamps(0);
+  const coach = G_.L.id === "warm" && G_.n < 2 && p.kind !== "text";   // the first two pictures say the card can be dragged
+  $("#coachVerb").textContent = matchMedia("(hover:none)").matches ? "Swipe" : "Drag";
+  $("#coach").classList.toggle("on", coach);
+  if (coach && G_.n === 0 && !reduce) m.classList.add("demo");
   if (p.kind === "text") { $("#quote").textContent = p.text; $("#loading").style.display = "none"; G_.shownAt = performance.now(); startTimer(); return; }
   const img = $("#img"); $("#loading").style.display = "grid"; $("#loading").textContent = "Loading…";
   img.onload = () => { $("#loading").style.display = "none"; G_.shownAt = performance.now(); startTimer(); };
   img.onerror = () => { $("#loading").textContent = "The picture couldn't load."; };
-  img.alt = `Picture ${G_.n + 1}: a mountain valley`;
+  img.alt = `Picture ${G_.n + 1} of ${G_.list.length}: a Swiss mountain valley landscape. Is it a real photo or made by AI?`;
   img.src = p.file;
   if (img.complete && img.naturalWidth) img.onload();
 }
@@ -1029,7 +1057,7 @@ function guess(g) {
   if (!right) why = "0 points" + (hadStreak ? ` · your ${hadStreak} streak is reset` : "");
   add(pts, late ? false : right); SFX.play(right ? "right" : "wrong");
   $$("[data-g]").forEach(b => { b.disabled = true; b.classList.toggle("picked", b.dataset.g === g); });
-  $("#hintBtn").disabled = true;
+  $("#hintBtn").disabled = true; $("#coach").classList.remove("on");
   const m = $("#media"); m.classList.add(late ? "late" : right ? "right" : "wrong"); if (!right && !late) m.classList.add("shake");
   m.style.transform = ""; stamps(0);
   const what = p.kind === "text" ? (p.truth === "ai" ? "Written by AI" : "Written by a person") : (p.truth === "ai" ? "Made by AI" : "A real photo");
@@ -1039,20 +1067,30 @@ function guess(g) {
   $("#verdict").innerHTML = `<div class="vh">${head}<span class="pts">${pts ? "+" + pts : ""}</span></div>` +
     `<div class="pbrk">${why}</div>` +
     `<div class="vt">💡 ${esc(tell)}</div>` +
-    `<div class="auto" id="auto"><i></i></div><div class="vrow vc"><span title="${esc(p.detail)}">${link}</span><button id="pauseBtn" aria-label="Keep open">⏸</button></div>`;
+    `<div class="auto" id="auto"><i></i></div><div class="vrow vc"><span title="${esc(p.detail)}">${link}</span><button id="pauseBtn" aria-label="Pause: keep this answer open">⏸ Pause</button></div>`;
   $("#verdict").classList.add("on"); $("#s-guess").classList.add("answered");
   if (matchMedia(STACKED).matches) later(() => $("#verdict").scrollIntoView({ block: "nearest", behavior: reduce ? "auto" : "smooth" }), 60);
   $("#say").textContent = late ? "Too slow, the feed moved on 🫠" : right ? ["Locked in! 🔒", "Nice eyes ⚡", "Called it 😎", "Easy 💅"][G_.n % 4] : ["Fooled you 😈", "Ouch 🙃", "Sneaky one 🫣", "It got you 😬"][G_.n % 4];
   note("clue", p.kind === "text" ? (p.truth === "ai" ? "AI text" : "Human text") : (p.truth === "ai" ? "AI picture" : "Real photo") + (L.id === "hard" ? " · hard mode" : ""), esc(tell), p.file || p.text);
-  autoNext(G_.limit > 9 ? 6500 : 4800, nextItem);
+  autoNext(G_.limit > 9 ? 9000 : 6500, nextItem);
   $("#pauseBtn").onclick = e => { e.stopPropagation(); pauseAuto(); };
+  // reading it? it waits: the mouse on the card, keyboard focus in it, or opening the photo credit pauses the timer
+  const v = $("#verdict");
+  v.onpointerenter = e => { if (e.pointerType === "mouse") pauseAuto(); };
+  v.onfocusin = pauseAuto;
+  v.querySelectorAll("a").forEach(a => a.addEventListener("click", pauseAuto));
 }
 let autoT = null, autoFn = null;
 function autoNext(ms, fn) {
   autoFn = fn; const a = $("#auto"); a.style.setProperty("--t", ms + "ms"); a.classList.add("run");
   autoT = later(() => { autoT = null; fn(); }, reduce ? ms + 3000 : ms);
 }
-function pauseAuto() { if (!autoT) return; clearTimeout(autoT); autoT = null; $("#auto").classList.add("paused"); $("#pauseBtn").textContent = "▶"; $("#pauseBtn").onclick = e => { e.stopPropagation(); skipAuto(); }; }
+function pauseAuto() {
+  if (!autoT) return; clearTimeout(autoT); autoT = null; $("#auto").classList.add("paused");
+  const b = $("#pauseBtn"); if (!b) return;
+  b.textContent = "Next ▶"; b.setAttribute("aria-label", "Paused. Go to the next one"); b.classList.add("go");
+  b.onclick = e => { e.stopPropagation(); skipAuto(); };
+}
 function skipAuto() { if (!autoFn) return; if (autoT) clearTimeout(autoT); autoT = null; const f = autoFn; autoFn = null; f(); }
 function nextItem() {
   autoFn = null;
@@ -1067,7 +1105,7 @@ $("#verdict").addEventListener("click", e => { if (!e.target.closest("a,button")
 // swipe: right = real, left = AI
 (() => {
   const m = $("#media"); let x0 = null, dx = 0, id = null;
-  m.addEventListener("pointerdown", e => { if (G_.answered || !G_.ticking) return; x0 = e.clientX; dx = 0; id = e.pointerId; m.setPointerCapture(id); m.classList.add("drag"); });
+  m.addEventListener("pointerdown", e => { if (G_.answered || !G_.ticking) return; m.classList.remove("demo"); $("#coach").classList.remove("on"); x0 = e.clientX; dx = 0; id = e.pointerId; m.setPointerCapture(id); m.classList.add("drag"); });
   m.addEventListener("pointermove", e => { if (x0 === null) return; dx = e.clientX - x0; m.style.transform = `translateX(${dx}px) rotate(${dx / 25}deg)`; stamps(dx); });
   const up = () => { if (x0 === null) return; m.classList.remove("drag"); x0 = null; if (Math.abs(dx) > 80) guess(dx > 0 ? "real" : "ai"); else { m.style.transform = ""; stamps(0); } };
   m.addEventListener("pointerup", up); m.addEventListener("pointercancel", up);
@@ -1092,6 +1130,7 @@ function boss() {
 $("#bossRange").oninput = e => bossPaint(+e.target.value);
 $("#bossLock").onclick = () => {
   const v = +$("#bossRange").value, real = H.have_seen, off = Math.abs(v - real), pts = Math.max(0, 300 - 10 * off);
+  S.bossGuess = v;
   $("#bossAsk").style.display = "none";
   const dots = $$("#bossDots i"); dots.forEach(d => d.className = "");
   const fill = k => { dots[k].className = KINDS[k] + (k === v - 1 ? " mark" : "") + (reduce ? "" : " pp"); later(() => dots[k].classList.remove("pp"), 180); };
@@ -1144,7 +1183,7 @@ function autoHilo() {
     const order = CI.map((c, i) => i).sort((x, y) => seenOf(y) - seenOf(x));
     note("fact", "What Americans already see AI doing around them", order.map(i => `${Math.round(seenOf(i))} · ${esc(CI[i].text.replace(/^People are /, ""))}`).join("<br>"), "hilo");
     level(S.lv + 1);
-  }, 2600);
+  }, 3800);
 }
 $("#hiBtn").onclick = () => hiloPick(true); $("#loBtn").onclick = () => hiloPick(false);
 
@@ -1183,7 +1222,7 @@ function tfPick(said) {
   $("#tfRev").classList.add("on"); requestAnimationFrame(() => requestAnimationFrame(() => $("#tfFill").style.width = c.v + "%"));
   $("#tfMsg").textContent = (said === null ? "⏱ Time's up. " : right ? `✅ Right! +${pts} · ` : "❌ Wrong · ") + (c.truth ? `True: ${pct(c.v)}.` : `False: it's ${pct(c.v)}, not ${c.shown}.`);
   note("fact", `${in100(c.v)} Americans`, esc(c.what) + ".", "tf" + c.what);
-  later(() => { if (++TF.k < 3) return tfShow(); if (S.res.tf.every(x => x === true)) badge("fact"); level(S.lv + 1); }, 3000);
+  later(() => { if (++TF.k < 3) return tfShow(); if (S.res.tf.every(x => x === true)) badge("fact"); level(S.lv + 1); }, 4500);
 }
 $("#tBtn").onclick = () => tfPick(true); $("#fBtn").onclick = () => tfPick(false);
 
@@ -1262,6 +1301,15 @@ function end() {
   $("#trophy").textContent = vs && S.score >= vs.score ? "🥊" : S.score / maxScore() >= .68 ? "🏆" : S.score / maxScore() >= .4 ? "🥈" : "🎮";
   $("#earned").innerHTML = BADGES.filter(b => S.badges.has(b[0])).map(b => `<span>${b[1]} ${b[2]}</span>`).join("") || `<span class="muted" style="background:none;padding:0;font-weight:400">No badges this time. Play again: new pictures every round.</span>`;
   $("#t-end").innerHTML = `Most Americans are worried about AI, and most think it's coming anyway.` + (D.shapeGapReal ? ` <span>Younger adults are more likely than older adults to think it can still be shaped.</span>` : "");
+  // your answers next to the survey: the point of the game, not only the score
+  const row = (you, us, lab) => `<li><span>${you}</span><span class="us">${us}<small>${lab}</small></span></li>`;
+  $("#vsUS").innerHTML = [
+    row(`You spotted <b>${right} of 10</b> pictures and texts. Telling real from fake is hard.`, in100(H.have_seen), "US adults already see people around them struggle with it"),
+    S.bossGuess != null ? row(`You guessed <b>${S.bossGuess} in 100</b> already see that struggle.`, in100(H.have_seen), "real answer") : "",
+    S.pred[1] != null ? row(`You guessed <b>${S.pred[1]} in 100</b> are concerned about AI.`, in100(concerned("total")), "real answer") : "",
+    S.you1 ? row(`You feel “${esc(SL[S.you1])}”.`, in100(G.total.sentiment[S.you1]), "feel the same") : "",
+    S.you2 ? row(`You think “${esc(AL[S.you2])}”.`, in100(G.total.agency[S.you2]), "think the same") : "",
+  ].join("");
   const facts = S.notes.filter(n => n.kind === "fact").slice(0, 4).reverse(), clues = S.notes.filter(n => n.kind === "clue").slice(0, 2);
   $("#learned").innerHTML = [...facts, ...clues].map(n => `<li><b>${n.title}</b><br>${n.text}</li>`).join("");
   // leaderboard + challenge link
@@ -1307,8 +1355,16 @@ $("#srcAll").innerHTML = `<b>Questions, word for word:</b> “${esc(D.stems.ai_c
 // ---------- sheet (phone) + tabs ----------
 function tab(t) { $$(".tabs [data-tab]").forEach(b => b.setAttribute("aria-selected", b.dataset.tab === t)); $("#pane-notes").classList.toggle("on", t === "notes"); $("#pane-board").classList.toggle("on", t === "board"); if (t === "board") renderBoard(); }
 $$(".tabs [data-tab]").forEach(b => b.onclick = () => tab(b.dataset.tab));
-function openSheet() { $("#sheet").classList.add("open"); $("#scrim").classList.add("on"); }
-function closeSheet() { $("#sheet").classList.remove("open"); $("#scrim").classList.remove("on"); }
+const PHONE = matchMedia("(max-width:860px)");
+function sheetInert() { $("#sheet").inert = PHONE.matches && !$("#sheet").classList.contains("open"); }   // a closed sheet can't be tabbed into
+function openSheet() { $("#sheet").classList.add("open"); $("#scrim").classList.add("on"); sheetInert(); if (PHONE.matches) setTimeout(() => $("#sheetClose").focus(), 60); }
+function closeSheet() {
+  const was = $("#sheet").classList.contains("open"), back = was && $("#sheet").contains(document.activeElement);
+  $("#sheet").classList.remove("open"); $("#scrim").classList.remove("on"); sheetInert();
+  if (back) $("#sheetBtn").focus();
+}
+$("#sheetClose").onclick = closeSheet;
+PHONE.addEventListener("change", sheetInert); sheetInert();
 $("#sheetBtn").onclick = () => { tab("notes"); openSheet(); };
 $("#scrim").onclick = closeSheet;
 
@@ -1348,6 +1404,7 @@ $$(".pin").forEach(b => b.onclick = () => { const k = b.dataset.pin; PIN[k] = !P
 document.addEventListener("pointerdown", e => { for (const k of ["l", "r"]) if (UI[k].tap && !DOCK[k].contains(e.target)) { UI[k].tap = 0; pillars(); } });
 addEventListener("keydown", e => {
   if (e.key !== "Escape") return;
+  if ($("#sheet").classList.contains("open")) return closeSheet();
   for (const k of ["l", "r"]) { const u = UI[k]; if (u.hover || u.tap || u.kbd) { u.hover = u.tap = u.kbd = 0; if (DOCK[k].contains(document.activeElement)) document.activeElement.blur(); } }
   pillars();
 });
@@ -1370,7 +1427,7 @@ function startGame() {
   store.set("realOrAI.name", S.name);
   const keepName = S.name, keepPlayed = S.playedOnce, last = S.items;
   fresh(); S.name = keepName; S.playedOnce = keepPlayed; S.items = last;
-  $("#notes").innerHTML = ""; $("#notesEmpty").style.display = ""; $("#noteCnt").textContent = 0; $("#hudNotes").textContent = 0; $("#pkNotes").textContent = $("#pkNotes").dataset.n = 0;
+  $("#notes").innerHTML = ""; $("#notesEmpty").style.display = ""; $("#noteCnt").textContent = 0; $("#hudNotes").textContent = 0; $("#pkNotes").textContent = $("#pkNotes").dataset.c = 0;
   $$("#badges div").forEach(d => d.classList.remove("on"));
   tab("notes"); draw(); level(0);
 }
