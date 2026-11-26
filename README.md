@@ -106,6 +106,18 @@ The GitHub repo does **not** need to be connected to Supabase.
 
 To delete a room's scores after the talk, run this in the Supabase SQL editor: `delete from room_scores where room = 'hslu';`
 
+### Final presentation (17.12.2026)
+Everything is in **`Final-presentation/`**, built on my own slide template (`Adhurim Thaqi — School Template.pptx`, Syne + Outfit):
+- **`slides.html`**: [open it](https://adhurimthaqi.github.io/dataset-datastorytelling/Final-presentation/slides.html). Arrow keys or Space, **F** fullscreen,
+  **N** speaker notes; slide 2 links straight to the live room. Each slide builds in, and the chart bars grow.
+- **`Real-or-AI_final-presentation.pptx`**: the same 13 slides with speaker notes, fade transitions and build-in animations
+  (they run by themselves, no extra clicks). The fonts are embedded.
+- **`Real-or-AI_final-presentation.pdf`**: backup without animations.
+- Rebuild the PowerPoint and PDF with `python Final-presentation/build_deck.py` (needs PowerPoint for the PDF).
+
+Order of the talk (about 7 minutes plus the live round): scan and play → why (interviews) → 57 in 100 → the game →
+what it looks like → key message → by age → what testing changed → honesty → conclusion.
+
 ### How it's built
 - **One HTML file** with no framework. It's generated: `template.html` + the survey CSV + `pool.json` + `alt.json` + `icons.json` + `room.json` → `build.py` → `v8.html`
   (and `live_template.html` → `live.html`, the projector page; QR codes with the vendored `vendor/qrcode.js`, MIT).
@@ -142,7 +154,7 @@ dots forms around them) and **C "Dinner table"** (branched animatic: age groups 
 | W46 · 12.11 | Mentoring 2 (Alain) → v7: the full game (game layout, 7 levels, harder AI pictures, the data as games, leaderboard and challenge link) | ✅ [v7](https://adhurimthaqi.github.io/dataset-datastorytelling/exercises/W47_sprint3/v7.html) |
 | W47 · 19.11 | Coaching → v8: 5 levels instead of 7 ("more or fewer" removed, one picture level that gets harder), tap/click on the answer buttons, challenge link with a head-to-head and reply | ✅ [v8](https://adhurimthaqi.github.io/dataset-datastorytelling/exercises/W47_sprint3/v8.html) |
 | W48 · 26.11 | Results of the user test; test v8 on a real phone | ⏳ next |
-| W51 · 17.12 | Interactive prototype + short rationale (max. 2 pages), presented to Interactive Things | ⏳ |
+| W51 · 17.12 | Interactive prototype + short rationale (max. 2 pages), presented to Interactive Things | 🟡 slides ready: [`Final-presentation/`](https://adhurimthaqi.github.io/dataset-datastorytelling/Final-presentation/slides.html); rationale still to write |
 
 **W43 lesson (Gordan Savičić):** a prototype tests *one* aspect of the data with *one* interaction. Build it as one HTML file
 with an LLM: interaction first, one change per prompt, save versions (`v1.html`, `v2.html` …), and check every number

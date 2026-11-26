@@ -147,5 +147,6 @@ I work alone, so every contribution below is mine. AI tools I used (Claude) are 
   - one icon family (Lucide outline, `icons.json`) instead of emoji, in the game and on the homepage; icon-only buttons have tooltips and labels; right/wrong never by colour alone
   - start screen polished: a clearer sentence, a tidy 4-picture preview, a labelled name field joined with the dice button, a play icon on Start; no progress or badges before you start
   - true or false: the explanation stays 9 s (tap to pause, Next to go on); alt texts for all 35 pictures (`alt.json`, never the answer); the end screen starts with the key message and three big numbers
-- **Still open:** test on a real phone
+  - final presentation drafted in `Final-presentation/` on my own slide template: 13 slides as HTML, PowerPoint and PDF, with speaker notes and animations; every number taken from v8
+- **Still open:** the short rationale (max. 2 pages); rehearse the talk with the live room
 - **Data / sources:** `exercises/W47_sprint3/` (built with Claude)
