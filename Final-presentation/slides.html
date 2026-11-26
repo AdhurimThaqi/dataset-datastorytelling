@@ -7,7 +7,7 @@
 <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 <!--
   Final presentation (W51, 17.12.2026), the HTML twin of Real-or-AI_final-presentation.pptx.
-  Same template (Adhurim Thaqi — School Template): Syne + Outfit, 960 x 540 canvas, same positions and colours.
+  Same template (Adhurim Thaqi — School Template): Syne + Outfit, 960 x 540 canvas, same positions, sizes and colours as build_deck.py.
   Keys: → / Space next, ← back, Home / End, F fullscreen, N speaker notes. Print (Ctrl+P) gives one slide per page.
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,66 +23,67 @@ body{font:400 15px/1.5 Outfit,system-ui,sans-serif;color:var(--ink);-webkit-font
 .stage{position:relative;width:960px;height:540px;transform-origin:center;flex:none}
 .slide{position:absolute;inset:0;background:var(--bg);overflow:hidden;visibility:hidden;opacity:0;transition:opacity .45s ease,visibility 0s .45s}
 .slide.on{visibility:visible;opacity:1;transition:opacity .45s ease}
+.slide.tint{background:var(--bg2)}
 /* build-in, the same order as the PowerPoint: each element fades up, chart bars grow from the baseline */
 .slide.on .anim{animation:rise .5s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--d,0ms)}
 .slide.on .bar::before{animation:grow .6s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--d,0ms)}
 .slide.on .bar i,.slide.on .bar s{animation:rise .4s ease both;animation-delay:calc(var(--d,0ms) + 380ms)}
 @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 @keyframes grow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
-.slide.tint{background:var(--bg2)}
 .a{position:absolute}
 h1,h2,.syne{font-family:Syne,sans-serif;font-weight:700;letter-spacing:-.01em}
-h2{font-size:36px;line-height:1.15}
-.pill{position:absolute;left:64px;top:64px;height:25px;padding:0 11px;display:inline-flex;align-items:center;border-radius:99px;background:var(--pill);border:.5px solid var(--pillb);color:var(--teal);font-size:12px}
+h2{font-size:40px;line-height:1.1}
+.pill{position:absolute;left:64px;top:64px;height:28px;padding:0 13px;display:inline-flex;align-items:center;border-radius:99px;background:var(--pill);border:.5px solid var(--pillb);color:var(--teal);font-size:14px}
 .title{left:64px;top:99px;width:856px}
-.body{color:var(--ink2);font-size:15px;line-height:1.5}
+.body{color:var(--ink2);font-size:21px;line-height:1.6}
 .foot{position:absolute;bottom:31px;left:64px;right:65px;display:flex;justify-content:space-between;font-size:12px;color:var(--mut)}
-.points{left:586px;top:171px;width:309px;display:flex;flex-direction:column;gap:9px}
-.points div{height:45px;display:flex;align-items:center;padding:0 14px;background:#fff;border:.5px solid var(--pillb);border-radius:6px;font-size:13px;color:var(--ink)}
-.card{position:absolute;background:#fff;border:.5px solid var(--line);border-radius:14px}
-.card img{position:absolute;inset:0;margin:auto;max-width:calc(100% - 40px);max-height:calc(100% - 40px)}
-.cap{color:var(--mut);font-size:12px}
-/* gradient art from the template */
-.band{position:absolute;left:680px;top:0;width:280px;height:540px;background:linear-gradient(170deg,var(--cyan) 0%,var(--cyan2) 60%,var(--lav) 100%)}
-.ring{position:absolute;left:600px;top:150px;width:208px;height:208px;border:1px solid var(--ink);border-radius:50%}
-.mono{position:absolute;left:64px;top:64px;font:700 15px/27px Syne;letter-spacing:.08em;color:var(--ink)}
+.points{left:546px;top:182px;width:350px;display:flex;flex-direction:column;gap:14px}
+.points div{height:68px;display:flex;align-items:center;padding:0 16px;background:#fff;border:.5px solid var(--pillb);border-radius:8px;font-size:18px;line-height:1.25;color:var(--ink)}
+.card{position:absolute;background:#fff;border:.5px solid var(--line);border-radius:16px}
+.card img{position:absolute;inset:0;margin:auto;max-width:calc(100% - 36px);max-height:calc(100% - 36px)}
+.cap{color:var(--mut);font-size:14px;line-height:1.3}
+/* gradient art from the template, with a soft edge into the white page */
+.band{position:absolute;left:560px;top:0;width:400px;height:540px;background:linear-gradient(160deg,var(--cyan) 0%,var(--cyan2) 60%,var(--lav) 100%)}
+.fade{position:absolute;left:560px;top:0;width:230px;height:540px;background:linear-gradient(90deg,#FAFBFC 0%,rgba(250,251,252,.7) 45%,rgba(250,251,252,0) 100%)}
+.logo{position:absolute;left:616px;top:166px;width:176px;height:176px}
+.mono{position:absolute;left:64px;top:64px;font:700 15px/28px Syne;letter-spacing:.08em;color:var(--ink)}
 .mono b{color:var(--teal);font-weight:700}
-/* chart */
-.chart{left:64px;top:150px;width:524px;height:290px}
-.chart .base{position:absolute;left:0;right:0;top:242px;border-top:1px solid var(--ink)}
-.bar{position:absolute;bottom:48px;width:70px}
+/* chart: baseline at y=404, bars 92 wide, tallest 205 */
+.chart{left:64px;top:0;width:540px;height:540px}
+.chart .base{position:absolute;left:0;right:0;top:404px;border-top:1px solid var(--ink)}
+.bar{position:absolute;bottom:136px;width:92px}
 .bar::before{content:"";position:absolute;inset:0;background:var(--barl);transform-origin:bottom}
 .bar.hl::before{background:var(--teal)}
-.bar i{position:absolute;left:0;right:0;top:-25px;text-align:center;font:700 13px/21px Outfit;font-style:normal}
+.bar i{position:absolute;left:0;right:0;top:-34px;text-align:center;font:700 22px/28px Outfit;font-style:normal}
 .bar.hl i{color:var(--teal)}
-.bar s{position:absolute;left:-25px;right:-25px;bottom:-34px;text-align:center;font-size:12px;color:var(--ink2);text-decoration:none;white-space:nowrap}
+.bar s{position:absolute;left:-26px;right:-26px;bottom:-34px;text-align:center;font-size:15px;color:var(--ink2);text-decoration:none;white-space:nowrap}
 .bar.hl s{color:var(--teal);font-weight:600}
-.take{left:636px;top:254px;width:260px;padding:20px;background:var(--bg2);border-radius:12px}
-.take b{display:block;font:700 15px/22px Syne;margin-bottom:8px}
-.take p{font-size:12.5px;line-height:1.45;color:var(--ink2)}
-.take small{display:block;margin-top:8px;font-size:11px;color:var(--mut)}
+.take{left:640px;top:178px;width:256px;height:250px;padding:22px;background:var(--bg2);border-radius:14px}
+.take b{display:block;font:700 19px/1.1 Syne;margin-bottom:12px}
+.take p{font-size:17px;line-height:1.55;color:var(--ink2)}
+.take small{position:absolute;left:22px;right:22px;top:194px;font-size:12px;line-height:1.25;color:var(--mut)}
 /* steps */
-.steps{left:64px;top:296px;width:831px;display:grid;grid-template-columns:repeat(4,1fr);gap:13px}
-.step{height:158px;padding:20px;background:#fff;border:.5px solid var(--line);border-radius:12px}
-.step .n{font:700 28px/41px Syne;color:var(--teal)}
-.step h3{font:700 15px/22px Syne;margin-top:8px}
-.step p{font-size:12px;color:var(--ink2);margin-top:6px;line-height:1.4}
+.steps{left:64px;top:262px;width:831px;display:grid;grid-template-columns:repeat(4,1fr);gap:13px}
+.step{height:200px;padding:20px;background:#fff;border:.5px solid var(--line);border-radius:14px}
+.step .n{font:700 34px/44px Syne;color:var(--teal)}
+.step h3{font:700 20px/1.1 Syne;margin-top:10px;white-space:nowrap;letter-spacing:-.02em}
+.step p{font-size:16px;color:var(--ink2);margin-top:10px;line-height:1.5}
 .step.last{background:var(--violetbg);border-color:var(--lav)}
 .step.last .n{color:var(--violet)}
 /* table */
-table{left:64px;top:168px;width:831px;border-collapse:collapse;font-size:12px}
-th{background:var(--ink);color:#fff;text-align:left;font-weight:600;padding:11px 14px}
+table{left:64px;top:176px;width:831px;border-collapse:collapse;font-size:15px;line-height:1.2}
+th{background:var(--ink);color:#fff;text-align:left;font-weight:600;padding:0 14px;height:44px}
 th:nth-child(2){color:var(--cyan)}
-td{padding:9.5px 14px;border:.5px solid var(--line);color:var(--ink)}
+td{padding:0 14px;height:46px;border:.5px solid var(--line);color:var(--ink)}
 tr:nth-child(odd) td{background:var(--bg2)}
 tr:nth-child(even) td{background:#fff}
 /* conclusion */
 .concl{background:linear-gradient(135deg,var(--cyan),var(--cyan2))}
-.concl .tag{position:absolute;left:64px;top:121px;height:25px;padding:0 11px;display:inline-flex;align-items:center;border:1px solid var(--ink);border-radius:99px;font-size:12px}
-.concl h2{position:absolute;left:64px;top:173px;width:772px;font-size:40px;line-height:1.12}
+.concl .tag{position:absolute;left:64px;top:121px;height:28px;padding:0 13px;display:inline-flex;align-items:center;border:1px solid var(--ink);border-radius:99px;font-size:14px}
+.concl h2{position:absolute;left:64px;top:172px;width:840px;font-size:42px;line-height:1.1}
 /* references */
-.refs{left:64px;top:167px;width:832px}
-.refs p{padding:10px 0;border-top:.5px solid var(--line);font-size:12px;color:var(--ink2)}
+.refs{left:64px;top:172px;width:832px}
+.refs p{height:66px;padding-top:12px;border-top:.5px solid var(--line);font-size:15px;line-height:1.5;color:var(--ink2)}
 .refs p:last-child{border-bottom:.5px solid var(--line)}
 /* presenter chrome (not part of the slide) */
 .ui{position:fixed;right:14px;bottom:12px;display:flex;gap:6px;opacity:.25;transition:opacity .2s}
@@ -94,16 +95,15 @@ tr:nth-child(even) td{background:#fff}
 .notes{position:fixed;left:0;right:0;bottom:0;max-height:34vh;overflow:auto;padding:14px 22px 46px;background:#11131a;color:#e6e8ee;font-size:16px;line-height:1.5;display:none}
 .notes.on{display:block}
 .notes b{color:var(--cyan2);font-weight:600;margin-right:8px}
-.live{display:inline-flex;margin-top:14px;padding:8px 14px;border-radius:99px;background:var(--ink);color:#fff;font-size:13px;font-weight:500;text-decoration:none}
+.live{display:inline-flex;margin-top:12px;padding:9px 16px;border-radius:99px;background:var(--ink);color:#fff;font-size:15px;font-weight:500;text-decoration:none}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 @media print{
   @page{size:960px 540px;margin:0}
   html,body{overflow:visible;background:#fff}
   .viewport{position:static;display:block}
   .stage{transform:none!important;width:auto;height:auto}
-  .slide{position:relative;width:960px;height:540px;visibility:visible;break-after:page}
+  .slide{position:relative;width:960px;height:540px;visibility:visible;opacity:1;break-after:page}
   .ui,.notes{display:none!important}
-  .slide{opacity:1}
   *{animation:none!important}
 }
 </style>
@@ -113,24 +113,26 @@ tr:nth-child(even) td{background:#fff}
 
 <!-- 1 · cover -->
 <section class="slide" data-notes="Hi, I'm Adhurim. My project turns the Americans on AI survey into a short game. Before I explain anything, I'd like you to play it.">
-  <div class="band"></div><div class="ring"></div>
+  <div class="band"></div><div class="fade"></div>
+  <img class="logo" src="img/favicon.svg" alt="Real or AI? logo: a white question mark on a teal-to-violet square">
   <div class="mono"><b>A</b>T</div>
   <span class="pill" style="left:114px">Data Storytelling · HS26</span>
-  <h1 class="a" style="left:64px;top:201px;font-size:54px;line-height:1.05;letter-spacing:-.02em">Real or AI?</h1>
-  <p class="a body" style="left:64px;top:262px">A four-minute game about the Americans on AI survey</p>
-  <p class="a" style="left:64px;top:457px;font-size:12px;display:flex;gap:16px"><span>Adhurim Thaqi</span><span style="color:var(--mut)">Alain Leclerc von Bonin · Gordan Savičić · Fiona Zellweger</span><span style="color:var(--mut)">17.12.2026</span></p>
+  <h1 class="a" style="left:64px;top:168px;font-size:72px;line-height:1;letter-spacing:-.02em">Real or AI?</h1>
+  <p class="a" style="left:64px;top:270px;width:530px;font-size:22px;line-height:1.25;color:var(--ink2)">A four-minute game about the Americans on AI survey</p>
+  <p class="a" style="left:64px;top:420px;font-size:15px;display:flex;gap:0"><span style="width:150px">Adhurim Thaqi</span><span style="color:var(--mut)">17.12.2026</span></p>
+  <p class="a" style="left:64px;top:446px;font-size:14px;color:var(--mut)">Alain Leclerc von Bonin · Gordan Savičić · Fiona Zellweger</p>
 </section>
 
 <!-- 2 · scan and play -->
 <section class="slide tint" data-notes="Open the live room page (button on this slide), press F for fullscreen, and give people about four minutes. Then show the top 10 and come back. If the Wi-Fi fails, play it yourself on a phone with screen mirroring.">
-  <span class="pill" style="top:190px">Play along</span>
-  <h2 class="a" style="left:64px;top:227px">Scan and play</h2>
-  <p class="a body" style="left:64px;top:281px;width:355px">Everyone in the room gets the same pictures and questions. It takes about four minutes. At the end, your name shows up on the big screen.</p>
-  <div class="a" style="left:64px;top:372px">
+  <span class="pill" style="top:150px">Play along</span>
+  <h2 class="a" style="left:64px;top:186px;white-space:nowrap">Scan and play</h2>
+  <p class="a body" style="left:64px;top:250px;width:350px;font-size:20px">Everyone in the room gets the same pictures and questions. It takes about four minutes. At the end, your name shows up on the big screen.</p>
+  <div class="a" style="left:64px;top:392px">
     <p class="cap">Room HSLU</p>
     <a class="live" href="../exercises/W47_sprint3/live.html?room=hslu" target="_blank" rel="noopener">Open the live room</a>
   </div>
-  <div class="card" style="left:456px;top:77px;width:439px;height:369px"><img src="img/qr-hslu.png" alt="QR code that opens the game in room HSLU" style="max-height:300px"></div>
+  <div class="card" style="left:446px;top:60px;width:450px;height:410px"><img src="img/qr-hslu.png" alt="QR code that opens the game in room HSLU" style="max-width:322px;max-height:322px"></div>
   <div class="foot"><span>Data Storytelling · HSLU</span><span>02</span></div>
 </section>
 
@@ -138,8 +140,8 @@ tr:nth-child(even) td{background:#fff}
 <section class="slide" data-notes="I started with three interviews with people from the target group, 20 to 35, using AI regularly. All three told me about a time they couldn't tell if something was real. None of them reads surveys. A representative survey can answer the question in that quote.">
   <span class="pill">Why</span>
   <h2 class="a title">Nobody reads surveys</h2>
-  <p class="a body" style="left:64px;top:170px;width:488px">“The challenge is knowing whether the people commenting represent the wider population or just a very vocal group.” (interview 2)</p>
-  <div class="a points"><div>All 3 interviewees had a real-or-fake story</div><div>None of them reads surveys</div><div>Opinions come from Reddit and comments</div></div>
+  <p class="a body" style="left:64px;top:182px;width:446px">“The challenge is knowing whether the people commenting represent the wider population or just a very vocal group.” (interview 2)</p>
+  <div class="a points"><div>All 3 had a real-or-fake story</div><div>None of them reads surveys</div><div>Opinions come from comment sections</div></div>
   <div class="foot"><span>Data Storytelling · HSLU</span><span>03</span></div>
 </section>
 
@@ -149,10 +151,10 @@ tr:nth-child(even) td{background:#fff}
   <h2 class="a title">57 in 100 already see it around them</h2>
   <div class="a chart" role="img" aria-label="Already see it 57, starting to see it 24, expect it or don't 11, not sure 8 (of 100 US adults)">
     <div class="base"></div>
-    <div class="bar hl" style="left:23px;height:190px"><i>57</i><s>Already see it</s></div>
-    <div class="bar" style="left:159px;height:80px"><i>24</i><s>Starting to see it</s></div>
-    <div class="bar" style="left:295px;height:36.7px"><i>11</i><s>Expect it, or don't</s></div>
-    <div class="bar" style="left:431px;height:26.7px"><i>8</i><s>Not sure</s></div>
+    <div class="bar hl" style="left:22px;height:205px"><i>57</i><s>Already see it</s></div>
+    <div class="bar" style="left:157px;height:86.3px"><i>24</i><s>Starting to see it</s></div>
+    <div class="bar" style="left:292px;height:39.6px"><i>11</i><s>Expect it, or don't</s></div>
+    <div class="bar" style="left:427px;height:28.8px"><i>8</i><s>Not sure</s></div>
   </div>
   <div class="a take"><b>Key takeaway</b><p>Only 2 in 100 don't expect it at all. Being fooled by AI isn't a personal weakness.</p><small>Source: Americans on AI, 10–14 Sep 2026, n = 1,083</small></div>
   <div class="foot"><span>Data Storytelling · HSLU</span><span>04</span></div>
@@ -162,7 +164,7 @@ tr:nth-child(even) td{background:#fff}
 <section class="slide" data-notes="From the first version, the plan was that you experience it before you read the number. Level 1 is the hook, Swiss valley photos against AI pictures; it gets hard from picture 3. Then the survey levels: guess the number, true or false, and your own answer compared with the US.">
   <span class="pill">The game</span>
   <h2 class="a title">Play first, then see the data</h2>
-  <p class="a body" style="left:64px;top:170px;width:560px">Five levels in about four minutes. Every level ends with a real number from the survey, so you compare your guess with 1,083 US adults.</p>
+  <p class="a body" style="left:64px;top:166px;width:760px">Five levels in about four minutes. Every level ends with a real number from the survey, so you compare your guess with 1,083 US adults.</p>
   <div class="a steps">
     <div class="step"><div class="n">01</div><h3>Spot the fakes</h3><p>6 pictures, 2 texts: real or AI?</p></div>
     <div class="step"><div class="n">02</div><h3>The number</h3><p>Guess how many of 100 see it</p></div>
@@ -174,11 +176,11 @@ tr:nth-child(even) td{background:#fff}
 
 <!-- 6 · what it looks like -->
 <section class="slide tint" data-notes="Left: you guessed AI, it was a real photo. Right: the number level, your guess against the real 57.">
-  <span class="pill" style="top:190px">Prototype v8</span>
-  <h2 class="a" style="left:64px;top:227px">What it looks like</h2>
-  <p class="a body" style="left:64px;top:281px;width:355px">You get fooled first. Then the survey shows you're not alone: most Americans already see it happen.</p>
-  <p class="a cap" style="left:64px;top:372px;width:355px">Fig. 1 — v8 on a phone: a picture answer and the number level</p>
-  <div class="card" style="left:456px;top:77px;width:439px;height:369px"><img src="img/phones2.png" alt="Two phone screenshots of the game: a real photo answered wrong, and the number level showing 57 in 100"></div>
+  <span class="pill" style="top:150px">Prototype v8</span>
+  <h2 class="a" style="left:64px;top:186px;white-space:nowrap">What it looks like</h2>
+  <p class="a body" style="left:64px;top:250px;width:350px;font-size:20px">You get fooled first. Then the survey shows you're not alone: most Americans already see it happen.</p>
+  <p class="a cap" style="left:64px;top:392px;width:350px">Fig. 1 — v8 on a phone: a picture answer and the number level</p>
+  <div class="card" style="left:446px;top:60px;width:450px;height:410px"><img src="img/phones2.png" alt="Two phone screenshots of the game: a real photo answered wrong, and the number level showing 57 in 100"></div>
   <div class="foot"><span>Data Storytelling · HSLU</span><span>06</span></div>
 </section>
 
@@ -186,7 +188,7 @@ tr:nth-child(even) td{background:#fff}
 <section class="slide" data-notes="If people remember one sentence, it should be this one. 69 in 100 are concerned, 68 in 100 say AI is coming whether we want it or not. Only 17 in 100 think society can still shape it.">
   <span class="pill">Key message</span>
   <h2 class="a title">Worried, but it's coming anyway</h2>
-  <p class="a body" style="left:64px;top:170px;width:488px">Most Americans are worried about AI, and most think it's coming anyway. Younger adults are more likely than older adults to think it can still be shaped.</p>
+  <p class="a body" style="left:64px;top:182px;width:446px">Most Americans are worried about AI, and most think it's coming anyway. Younger adults are more likely than older adults to think it can still be shaped.</p>
   <div class="a points"><div>69 in 100 are concerned about AI</div><div>68 in 100 say it's coming anyway</div><div>17 in 100 think it can still be shaped</div></div>
   <div class="foot"><span>Data Storytelling · HSLU</span><span>07</span></div>
 </section>
@@ -194,13 +196,13 @@ tr:nth-child(even) td{background:#fff}
 <!-- 8 · by age -->
 <section class="slide" data-notes="Share who say society can still shape AI, by age. 18 to 34: 27 in 100. 65 plus: 8 in 100. The groups are small, so I checked the margin of error: this gap is bigger, so it's a real difference. 18–34 and 35–49 are too close to call, and the game says so.">
   <span class="pill">By age</span>
-  <h2 class="a title">Younger adults think it can still be shaped</h2>
+  <h2 class="a title">Younger adults: it can still be shaped</h2>
   <div class="a chart" role="img" aria-label="Think AI can still be shaped, of 100 per age group: 18–34 27, 35–49 23, 50–64 10, 65+ 8">
     <div class="base"></div>
-    <div class="bar hl" style="left:23px;height:190px"><i>27</i><s>18–34</s></div>
-    <div class="bar" style="left:159px;height:161.9px"><i>23</i><s>35–49</s></div>
-    <div class="bar" style="left:295px;height:70.4px"><i>10</i><s>50–64</s></div>
-    <div class="bar" style="left:431px;height:56.3px"><i>8</i><s>65+</s></div>
+    <div class="bar hl" style="left:22px;height:205px"><i>27</i><s>18–34</s></div>
+    <div class="bar" style="left:157px;height:174.6px"><i>23</i><s>35–49</s></div>
+    <div class="bar" style="left:292px;height:75.9px"><i>10</i><s>50–64</s></div>
+    <div class="bar" style="left:427px;height:60.7px"><i>8</i><s>65+</s></div>
   </div>
   <div class="a take"><b>Key takeaway</b><p>27 in 100 of 18–34 vs 8 in 100 of 65+. The gap is bigger than the margin of error.</p><small>Source: Americans on AI, 10–14 Sep 2026, n = 1,083</small></div>
   <div class="foot"><span>Data Storytelling · HSLU</span><span>08</span></div>
@@ -211,7 +213,7 @@ tr:nth-child(even) td{background:#fff}
   <span class="pill">Iteration</span>
   <h2 class="a title">What testing changed</h2>
   <table class="a">
-    <colgroup><col style="width:250px"><col style="width:150px"><col style="width:341px"><col style="width:90px"></colgroup>
+    <colgroup><col style="width:280px"><col style="width:150px"><col style="width:306px"><col style="width:95px"></colgroup>
     <tr><th>Feedback</th><th>From</th><th>What changed</th><th>Version</th></tr>
     <tr><td>Pictures too easy to tell apart</td><td>Mentoring, 12.11</td><td>Hard mode with new 2026 AI pictures</td><td>v7</td></tr>
     <tr><td>Always scrolling and clicking Next</td><td>Mentoring, 12.11</td><td>The game moves on by itself</td><td>v7</td></tr>
@@ -226,7 +228,7 @@ tr:nth-child(even) td{background:#fff}
 <section class="slide" data-notes="Because this is your data, I was careful. No hand-typed numbers. Differences inside the margin of error are called too close to call. True or false always shows the real number afterwards, so nobody leaves with a wrong one.">
   <span class="pill">Honesty</span>
   <h2 class="a title">Every number is checked</h2>
-  <p class="a body" style="left:64px;top:170px;width:488px">The game reads every survey number from the official CSV, and a script compares the page with the data. These are US adults, not Swiss, and the game says so.</p>
+  <p class="a body" style="left:64px;top:182px;width:446px">The game reads every survey number from the official CSV, and a script compares the page with the data. These are US adults, not Swiss, and the game says so.</p>
   <div class="a points"><div>149 checks, 0 mismatches</div><div>Within the margin: “too close to call”</div><div>The real number is always shown</div></div>
   <div class="foot"><span>Data Storytelling · HSLU</span><span>10</span></div>
 </section>
@@ -235,7 +237,7 @@ tr:nth-child(even) td{background:#fff}
 <section class="slide concl" data-notes="Thank you. I'd like to hear what you think, especially about how the game uses the data.">
   <span class="tag">Conclusion</span>
   <h2>Being fooled by AI isn't a personal weakness. Most Americans already see it around them.</h2>
-  <p class="a" style="left:64px;top:396px;font-size:15px">The game lets you feel it first and then shows you the number.</p>
+  <p class="a" style="left:64px;top:404px;width:760px;font-size:21px">The game lets you feel it first and then shows you the number.</p>
 </section>
 
 <!-- 12 · references -->
@@ -253,11 +255,12 @@ tr:nth-child(even) td{background:#fff}
 
 <!-- 13 · thank you -->
 <section class="slide" data-notes="Questions.">
-  <div class="band"></div><div class="ring"></div>
+  <div class="band"></div><div class="fade"></div>
+  <img class="logo" src="img/favicon.svg" alt="Real or AI? logo: a white question mark on a teal-to-violet square">
   <div class="mono"><b>A</b>T</div>
-  <h2 class="a" style="left:64px;top:188px;font-size:64px;letter-spacing:-.03em">Thank you<span style="color:var(--teal)">.</span></h2>
-  <p class="a body" style="left:64px;top:339px">Questions &amp; discussion</p>
-  <p class="a" style="left:64px;top:457px;font-size:12px;display:flex;gap:22px"><span>Adhurim Thaqi</span><a href="https://adhurimthaqi.github.io/dataset-datastorytelling/" style="color:var(--mut)">adhurimthaqi.github.io/dataset-datastorytelling</a></p>
+  <h2 class="a" style="left:64px;top:176px;font-size:80px;line-height:1;letter-spacing:-.03em">Thank you<span style="color:var(--teal)">.</span></h2>
+  <p class="a" style="left:64px;top:300px;font-size:22px;color:var(--ink2)">Questions &amp; discussion</p>
+  <p class="a" style="left:64px;top:438px;font-size:15px;display:flex"><span style="width:150px">Adhurim Thaqi</span><a href="https://adhurimthaqi.github.io/dataset-datastorytelling/" style="color:var(--mut)">adhurimthaqi.github.io/dataset-datastorytelling</a></p>
 </section>
 
 </main></div>
@@ -274,9 +277,9 @@ tr:nth-child(even) td{background:#fff}
 
 <script>
 const slides = [...document.querySelectorAll(".slide")], stage = document.getElementById("stage");
-// stagger the build-in: everything on a slide except the footer, the gradient art and the chart baseline
+// stagger the build-in: everything on a slide except the footer, the gradient band and the chart baseline
 slides.forEach(s => {
-  const parts = [...s.querySelectorAll(":scope > *:not(.foot):not(.band):not(.base), .points > div, .steps > .step, .bar, .refs > p")]
+  const parts = [...s.querySelectorAll(":scope > *:not(.foot):not(.band):not(.fade):not(.base), .points > div, .steps > .step, .bar, .refs > p")]
     .filter(el => !el.matches(".chart, .points, .steps, .refs"));
   parts.forEach((el, k) => { el.style.setProperty("--d", k * 110 + "ms"); if (!el.classList.contains("bar")) el.classList.add("anim"); });
 });

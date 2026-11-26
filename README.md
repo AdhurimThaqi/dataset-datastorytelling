@@ -113,7 +113,7 @@ Everything is in **`Final-presentation/`**, built on my own slide template (`Adh
 - **`Real-or-AI_final-presentation.pptx`**: the same 13 slides with speaker notes, fade transitions and build-in animations
   (they run by themselves, no extra clicks). The fonts are embedded.
 - **`Real-or-AI_final-presentation.pdf`**: backup without animations.
-- Rebuild the PowerPoint and PDF with `python Final-presentation/build_deck.py` (needs PowerPoint for the PDF).
+- Rebuild the PowerPoint and PDF with `python Final-presentation/build_deck.py path/to/template.pptx` (needs PowerPoint for the PDF).
 
 Order of the talk (about 7 minutes plus the live round): scan and play → why (interviews) → 57 in 100 → the game →
 what it looks like → key message → by age → what testing changed → honesty → conclusion.

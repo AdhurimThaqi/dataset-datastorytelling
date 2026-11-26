@@ -1,6 +1,6 @@
 """Final presentation (W51, 17.12.2026): fills "Adhurim Thaqi — School Template.pptx" with the project content.
 
-Run from the repo root:  python Final-presentation/build_deck.py
+Run from the repo root:  python Final-presentation/build_deck.py [path/to/template.pptx]
 Writes Final-presentation/Real-or-AI_final-presentation.pptx (+ .pdf when PowerPoint is installed). The template's fonts (Syne + Outfit, embedded),
 colours and slide designs are kept; only text, bar heights and pictures change.
 Survey numbers are the ones v8 shows (from the official CSV, checked by check.py).
@@ -13,7 +13,8 @@ from pptx.util import Pt, Emu
 
 ROOT = Path(__file__).resolve().parents[1]
 HERE = Path(__file__).parent
-TEMPLATE = ROOT / "Adhurim Thaqi — School Template.pptx"
+import sys
+TEMPLATE = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "Adhurim Thaqi — School Template.pptx"   # or pass the template path
 OUT = HERE / "Real-or-AI_final-presentation.pptx"
 IMG = HERE / "img"
 FOOT = "Data Storytelling · HSLU"
@@ -131,7 +132,18 @@ def label_fit(slide, name, text, per_char=6.6, pad=22):
 cover, s_play, s_why, s_57, s_game, s_look, s_key, s_age, s_table, s_honest, s_end, s_refs, s_thanks = (
     T[0], dup(T[7]), T[3], T[6], T[8], T[7], dup(T[3]), dup(T[6]), T[5], dup(T[3]), T[9], T[10], T[11])
 
+def logo(slide):
+    """Swap the template's ring for the project's favicon (the ? on the teal-to-violet square), same centre."""
+    ring = shape(slide, "Shape 1")
+    size = Pt(176)
+    cx, cy = ring.left + ring.width // 2, ring.top + ring.height // 2
+    ring._element.getparent().remove(ring._element)
+    pic = slide.shapes.add_picture(str(IMG / "favicon.png"), cx - size // 2, cy - size // 2, size, size)
+    pic._element.nvPicPr.cNvPr.set("descr", "Real or AI? logo: a white question mark on a teal-to-violet square")
+
+
 # 1 · cover
+logo(cover)
 txt(cover, "Text 3", "Data Storytelling · HS26", width=170)
 txt(cover, "Text 4", "Real or AI?")
 txt(cover, "Text 5", "A four-minute game about the Americans on AI survey", width=500, top=262)
@@ -156,7 +168,7 @@ notes(s_play, "Switch to live.html?room=hslu (press F for fullscreen) while peop
 # 3 · why
 three(s_why, "Why", "Nobody reads surveys",
       "“The challenge is knowing whether the people commenting represent the wider population or just a very vocal group.” (interview 2)",
-      ["All 3 interviewees had a real-or-fake story", "None of them reads surveys", "Opinions come from Reddit and comments"], 3)
+      ["All 3 had a real-or-fake story", "None of them reads surveys", "Opinions come from comment sections"], 3)
 label_fit(s_why, "Text 0", "Why")
 notes(s_why, "I started with three interviews with people from the target group, 20 to 35, using AI regularly. "
              "All three told me about a time they couldn't tell if something was real. None of them reads surveys. "
@@ -220,7 +232,7 @@ notes(s_key, "If people remember one sentence, it should be this one. 69 in 100 
 
 # 8 · by age (bar chart)
 label_fit(s_age, "Text 0", "By age")
-txt(s_age, "Text 1", "Younger adults think it can still be shaped")
+txt(s_age, "Text 1", "Younger adults: it can still be shaped")
 bars(s_age, [27, 23, 10, 8], ["18–34", "35–49", "50–64", "65+"], 0,
      "27 in 100 of 18–34 vs 8 in 100 of 65+. The gap is bigger than the margin of error.",
      "Source: Americans on AI, 10–14 Sep 2026, n = 1,083")
@@ -242,7 +254,7 @@ tbl = shape(s_table, "Table 0").table
 for r, row in enumerate(rows):
     for c, val in enumerate(row):
         put(tbl.cell(r, c).text_frame, val)
-for c, w in enumerate([250, 150, 341, 90]):
+for c, w in enumerate([280, 150, 306, 95]):
     tbl.columns[c].width = Pt(w)
 foot(s_table, 9)
 notes(s_table, "Eight versions since October. These are the changes that mattered most, each one from a test or a review. "
@@ -273,6 +285,7 @@ foot(s_refs, 12)
 notes(s_refs, "Sources.")
 
 # 13 · thank you
+logo(s_thanks)
 txt(s_thanks, "Text 5", "Adhurim Thaqi", width=110)
 txt(s_thanks, "Text 6", "adhurimthaqi.github.io/dataset-datastorytelling", left=186, width=300)
 notes(s_thanks, "Questions.")
@@ -288,6 +301,147 @@ for el in list(lst):
 for el in keep:
     lst.remove(el); lst.append(el)
 
+# ---------- bigger type, fuller layout (projector-friendly) ----------
+from pptx.oxml.ns import qn
+from lxml import etree as _et
+
+
+def big(slide, name, size=None, bold=None, lh=1.25, **g):
+    """Set the font size on every run, a proportional line height, and optionally the box geometry (pt)."""
+    sh = shape(slide, name)
+    for k, v in g.items():
+        setattr(sh, k, Pt(v))
+    if size and sh.has_text_frame:
+        for para in sh.text_frame.paragraphs:
+            para.line_spacing = lh                      # the template used fixed line heights for 12–15 pt text
+            for r in para.runs:
+                r.font.size = Pt(size)
+                if bold is not None:
+                    r.font.bold = bold
+    return sh
+
+
+def pill(slide, name="Text 0", top=None):
+    sh = big(slide, name, 14)
+    sh.height = Pt(28); sh.width = Pt(len(sh.text_frame.text) * 7.4 + 28)
+    if top is not None:
+        sh.top = Pt(top)
+
+
+def title(slide, top=99, width=856):
+    big(slide, "Text 1", 40, lh=1.1, top=top, height=50, width=width)
+
+
+def refit(slide, card_name, pad):
+    """Re-centre the picture(s) inside a resized image card."""
+    card = shape(slide, card_name)
+    for pic in [sh for sh in slide.shapes if sh.shape_type == 13]:
+        ratio = pic.width / pic.height
+        bw, bh = card.width - Pt(2 * pad), card.height - Pt(2 * pad)
+        w, h = (bw, int(bw / ratio)) if bw / ratio <= bh else (int(bh * ratio), bh)
+        pic.left, pic.top, pic.width, pic.height = card.left + (card.width - w) // 2, card.top + (card.height - h) // 2, w, h
+
+
+def soft_edge(slide):
+    """Widen the gradient band and fade it into the white page, so there is no hard line."""
+    band = shape(slide, "Shape 0")
+    band.left, band.width = Pt(560), Pt(400)
+    fade = slide.shapes.add_shape(1, Pt(560), 0, Pt(230), Pt(540))   # rectangle
+    fade.name = "Fade"; fade.line.fill.background()
+    spPr = fade._element.spPr
+    for el in spPr.findall(qn("a:solidFill")) + spPr.findall(qn("a:noFill")):
+        spPr.remove(el)
+    grad = _et.fromstring('<a:gradFill xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" rotWithShape="1"><a:gsLst>'
+                          '<a:gs pos="0"><a:srgbClr val="FAFBFC"><a:alpha val="100000"/></a:srgbClr></a:gs>'
+                          '<a:gs pos="45000"><a:srgbClr val="FAFBFC"><a:alpha val="70000"/></a:srgbClr></a:gs>'
+                          '<a:gs pos="100000"><a:srgbClr val="FAFBFC"><a:alpha val="0"/></a:srgbClr></a:gs>'
+                          '</a:gsLst><a:lin ang="0" scaled="0"/></a:gradFill>')
+    spPr.insert(list(spPr).index(spPr.find(qn("a:prstGeom"))) + 1, grad)
+    if fade.has_text_frame:
+        fade.text_frame.text = ""
+    band._element.addnext(fade._element)                # right above the band, under the text and logo
+
+
+# cover
+soft_edge(cover)
+pill(cover, "Text 3")
+big(cover, "Text 4", 72, lh=1.0, top=168, height=90, width=520)
+big(cover, "Text 5", 22, top=270, width=530, height=40)
+big(cover, "Text 6", 15, top=420, left=64, width=150, height=22)
+big(cover, "Text 8", 15, top=420, left=214, width=140, height=22)
+big(cover, "Text 7", 14, top=446, left=64, width=480, height=22)
+
+# text + three points
+for sl in (s_why, s_key, s_honest):
+    pill(sl); title(sl)
+    big(sl, "Text 2", 21, lh=1.35, top=182, left=64, width=446, height=240)
+    for k, n in enumerate(["Text 3", "Text 4", "Text 5"]):
+        big(sl, n, 18, top=182 + k * 82, left=546, width=350, height=68)
+
+# bar charts: wider bars, bigger numbers, a larger takeaway card
+for sl in (s_57, s_age):
+    pill(sl); title(sl)
+    base, top_h = 404, 205
+    vals = [int(shape(sl, n).text_frame.text) for n in ["Text 3", "Text 5", "Text 7", "Text 9"]]
+    geo(sl, "Shape 2", left=64, top=base, width=540)
+    for k, (b, v, c) in enumerate(zip(["Shape 4", "Shape 6", "Shape 8", "Shape 10"], ["Text 3", "Text 5", "Text 7", "Text 9"], ["Text 15", "Text 16", "Text 17", "Text 18"])):
+        cx = 132 + k * 135; h = top_h * vals[k] / max(vals)
+        geo(sl, b, left=cx - 46, width=92, top=base - h, height=h)
+        big(sl, v, 22, lh=1.0, left=cx - 46, width=92, top=base - h - 32, height=28)
+        big(sl, c, 15, lh=1.1, left=cx - 72, width=144, top=base + 12, height=40)
+    geo(sl, "Shape 11", left=640, top=178, width=256, height=250)
+    big(sl, "Text 12", 19, lh=1.1, left=662, top=200, width=214, height=28)
+    big(sl, "Text 13", 17, lh=1.3, left=662, top=238, width=214, height=120)
+    big(sl, "Text 14", 12, lh=1.25, left=662, top=372, width=214, height=40)
+
+# the game: bigger lead, taller cards
+pill(s_game); title(s_game)
+big(s_game, "Lead", 21, lh=1.35, top=166, width=760, height=70)
+for k in range(4):
+    sh, n, t, d = [f"Shape {2 + 4 * k}", f"Text {3 + 4 * k}", f"Text {4 + 4 * k}", f"Text {5 + 4 * k}"]
+    geo(s_game, sh, top=262, height=200)
+    big(s_game, n, 34, lh=1.0, top=282, height=44)
+    big(s_game, t, 20, lh=1.1, top=336, height=30)
+    big(s_game, d, 16, lh=1.3, top=374, height=76)
+
+# image slides: bigger card and text
+for sl, pad in ((s_play, 44), (s_look, 18)):
+    geo(sl, "Shape 4", left=446, top=60, width=450, height=410)
+    pill(sl, top=150)
+    big(sl, "Text 1", 40, lh=1.1, top=186, width=360, height=50)
+    big(sl, "Text 2", 20, lh=1.35, top=250, width=350, height=130)
+    big(sl, "Text 3", 14, lh=1.3, top=392, width=350, height=50)
+    refit(sl, "Shape 4", pad)
+
+# table
+pill(s_table); title(s_table)
+tf = shape(s_table, "Table 0"); tf.top = Pt(176)
+for r, row in enumerate(tf.table.rows):
+    row.height = Pt(46 if r else 44)
+    for cell in row.cells:
+        for para in cell.text_frame.paragraphs:
+            for run in para.runs:
+                run.font.size = Pt(15)
+
+# conclusion
+big(s_end, "Text 1", 14)
+big(s_end, "Text 2", 42, lh=1.1, top=172, width=840, height=200)
+big(s_end, "Text 3", 21, top=404, width=760, height=34)
+
+# references
+pill(s_refs); title(s_refs)
+for k, ln in enumerate(["Shape 2", "Shape 4", "Shape 6", "Shape 8", "Shape 9"]):
+    geo(s_refs, ln, top=172 + k * 66)
+for k, t in enumerate(["Text 3", "Text 5", "Text 7", "Text 10"]):
+    big(s_refs, t, 15, lh=1.3, top=184 + k * 66, height=48, width=832)
+
+# thank you
+soft_edge(s_thanks)
+big(s_thanks, "Text 3", 80, lh=1.0, top=176, height=110, width=520)
+big(s_thanks, "Text 4", 22, top=300, height=34, width=470)
+big(s_thanks, "Text 5", 15, top=438, width=150, height=22)
+big(s_thanks, "Text 6", 15, top=438, left=214, width=340, height=22)
+
 # ---------- animations: a fade between slides, then each slide builds itself (no extra clicks) ----------
 from lxml import etree
 P = "http://schemas.openxmlformats.org/presentationml/2006/main"
@@ -300,8 +454,8 @@ def animate(slide, is_chart=False):
         sp.remove(old)
     items = []
     for sh in slide.shapes:
-        if sh.top >= Pt(480) or (sh.width >= Pt(950) and sh.height >= Pt(530)):
-            continue                                        # footer and full-slide backgrounds stay put
+        if sh.top >= Pt(480) or sh.height >= Pt(530) or sh.name == "Fade":
+            continue                                        # footer, backgrounds and the gradient band stay put
         wipe = is_chart and sh.name in BARS
         items.append((sh.shape_id, wipe, sh.has_text_frame and bool(sh.text_frame.text.strip())))
     ids = iter(range(3, 10_000))
