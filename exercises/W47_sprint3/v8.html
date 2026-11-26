@@ -228,8 +228,7 @@ section.on{display:flex;animation:in .35s ease}
 .choices .g.picked{opacity:1;color:#fff}.choices .g.ai.picked{background:var(--ai)}.choices .g.real.picked{background:var(--real)}
 .choices .g small{display:block;font:500 11px/1 system-ui;letter-spacing:0;opacity:.7;margin-top:4px}
 .hintbtn{min-height:58px;padding:6px 14px;border-radius:14px;font-size:14px;background:var(--panel2);border-color:transparent;white-space:nowrap}
-.kbd-only{display:none}
-@media (hover:hover) and (pointer:fine){.kbd-only{display:block}.choices .g small{display:none}}
+@media (hover:hover) and (pointer:fine){.choices .g small{display:none}}
 .tip{text-align:center;font-size:14px;color:var(--ink2);min-height:20px}
 .tip.on{color:var(--ink);animation:in .3s}
 
@@ -329,7 +328,7 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
 .board li{transition:transform .25s,background .25s,padding .25s}
 .board .sub{max-height:0;opacity:0;overflow:hidden;transition:max-height .3s,opacity .25s}
 .board li.me .sub,.board li.vs .sub{max-height:20px;opacity:1}
-.note,.player,.learned li,.pills span{transition:transform .25s,box-shadow .25s}
+.note,.player,.learned li{transition:transform .25s,box-shadow .25s}
 @media (hover:hover) and (pointer:fine){
   .levels li:hover{background:var(--panel2);transform:translateX(4px);padding:12px 10px;color:var(--ink)}
   .levels li:hover .ic{transform:scale(1.18) rotate(-6deg)}
@@ -340,14 +339,10 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
   .board li:hover .sub{max-height:20px;opacity:1}
   .note:hover,.learned li:hover{transform:translateY(-3px) scale(1.02);box-shadow:var(--shadow)}
   .player:hover{transform:scale(1.02)}
-  .pills span:hover{transform:translateY(-3px) scale(1.06)}
 }
 .badges div:nth-child(4n+1)::after{left:0;transform:translate(0,6px)}.badges div:nth-child(4n)::after{left:auto;right:0;transform:translate(0,6px)}
 @media (hover:hover) and (pointer:fine){.badges div:nth-child(4n+1):hover::after,.badges div:nth-child(4n):hover::after{transform:none}}
 .badges{padding-top:4px}
-/* intro: three short pills instead of three text blocks */
-.pills{display:flex;flex-wrap:wrap;gap:8px}
-.pills span{padding:10px 14px;border-radius:999px;background:var(--panel);border:1px solid var(--line);font-weight:700;font-size:15px}
 .soundbtn{position:absolute;right:12px;top:12px;min-height:34px;width:34px;padding:0;border-radius:50%;background:var(--panel);font-size:15px}
 .verdict .vc{display:flex;gap:10px;align-items:center;justify-content:space-between}
 /* ---------- side pillars (desktop/tablet): slim while you play, the full panel slides out on hover, focus or tap ---------- */
@@ -522,14 +517,11 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
         <div class="mosaic" aria-hidden="true" id="mosaic"></div>
       </div>
       <div class="challenge" id="challenge"></div>
-      <div class="pills" aria-label="How it works"><span>👀 Real or AI?</span><span>🎯 Guess the numbers</span><span>🏆 Top the board</span></div>
       <div class="namerow">
         <input id="nameIn" maxlength="18" autocomplete="nickname" aria-label="Your player name" placeholder="Your player name">
         <button class="ghost" id="dice" title="Pick a random name" aria-label="Pick a random name">🎲</button>
       </div>
-      <p class="tiny" style="margin-top:-6px">Saved only in this browser. It is shared only if you send a challenge link.</p>
       <button class="start" id="start">Start the game ▶</button>
-      <p class="tiny kbd-only" style="text-align:center">Keyboard: <b>←</b> AI · <b>→</b> Real · <b>H</b> hint · <b>Space</b> next</p>
     </div>
   </section>
 
@@ -589,7 +581,6 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
             <p class="guessnum"><span id="bossVal">50</span><small>of 100 Americans</small></p>
             <input type="range" id="bossRange" min="0" max="100" value="50" aria-label="Your guess, out of 100">
             <div class="cta"><button class="primary" id="bossLock">Lock in my guess 🔒</button></div>
-            <p class="tiny" style="margin-top:8px">Up to 300 points. The closer, the more.</p>
           </div>
           <div class="reveal" id="bossRev">
             <div class="cmp"><div><span class="small">You said</span><b id="bossYou"></b></div><div class="real"><span class="small">Real answer</span><b id="bossReal"></b></div></div>
@@ -625,12 +616,12 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
       <p class="kicker" id="youKick">Your turn · the survey's own question</p>
       <!-- phase 1: your feeling -->
       <div class="phase on" id="ph1"><p class="q" id="t-you"></p><div class="opts" id="opts1"></div>
-        <p class="tiny">The survey's own question.</p></div>
+        </div>
       <!-- phase 2: predict -->
       <div class="phase" id="ph2"><p class="q" id="predQ"></p>
         <p class="guessnum"><span id="predVal">50</span><small>of 100 US adults</small></p>
         <input type="range" id="predRange" min="0" max="100" value="50" aria-label="Your guess, out of 100">
-        <div class="cta"><button class="primary" id="predLock">Lock in 🔒</button></div><p class="tiny">Up to 200 points.</p></div>
+        <div class="cta"><button class="primary" id="predLock">Lock in 🔒</button></div></div>
       <!-- phase 3: reveal -->
       <div class="phase" id="ph3">
         <div class="two">
@@ -657,9 +648,7 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
       <div class="card" style="display:flex;flex-direction:column;gap:10px">
         <p class="kicker" id="shareKick">🥊 Challenge a friend</p>
         <ul class="vsus h2h" id="h2h" hidden></ul>
-        <p class="small" id="shareTxt">Same pictures, same questions, your score to beat.</p>
         <div class="share"><input id="shareUrl" readonly aria-label="Challenge link"><button class="primary" id="shareBtn" hidden>Share</button><button class="primary" id="copyBtn">Copy</button></div>
-        <p class="tiny">The link holds only your player name, your points and which pictures you got. Nothing is uploaded.</p>
       </div>
       <div class="cta"><button class="ghost" id="boardBtn">🏆 Leaderboard</button><button class="primary" id="again">Play again · new pictures</button></div>
       <details><summary>Sources and all numbers</summary><div class="tbl" id="tbl"></div><p class="source" id="srcAll"></p></details>
@@ -689,7 +678,6 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
     <div id="notes" style="display:flex;flex-direction:column;gap:10px"></div>
   </div>
   <div class="pane" id="pane-board" role="tabpanel">
-    <p class="tiny">Top 10 in this browser · not a global ranking</p>
     <ol class="board" id="board"></ol>
     <div class="empty" id="boardEmpty"><b>🏆</b>No scores yet. Be the first.</div>
   </div>
@@ -712,7 +700,7 @@ const WV = (page, oldid, date) => ({ url: `https://en.wikivoyage.org/w/index.php
   detail: `Wikivoyage, page “${page}”, as saved on ${date}, before ChatGPT existed.`, credit: "Wikivoyage contributors, CC BY-SA 3.0" });
 const HUMAN = (text, src, tell) => ({ kind: "text", truth: "real", text, tell, ...src });
 const AIT = (text, tell) => ({ kind: "text", truth: "ai", text, tell,
-  detail: "Written by Claude (Anthropic) for this prototype from a one-line prompt.", credit: "AI text, prompt 7 in prompts.md", url: "" });
+  detail: "Written by Claude (Anthropic) for this prototype from a one-line prompt.", credit: "AI text, written by Claude", url: "" });
 const VERZ = WV("Verzasca Valley", 4275033, "13 Aug 2021"), LAUT = WV("Lauterbrunnen", 4407914, "13 Mar 2022");
 const TEXTS = [
   HUMAN("This valley offers a wild and fascinating landscape, with the Alps on one side and a lake on the other. The river has an emerald green color, and thanks to its good visibility, it is famous as a river diving destination.",
@@ -753,11 +741,11 @@ const SAY_TEXT = { 5: "Read it 📖", 4: "Person or machine?", 3: "Too smooth?",
 
 // ---------- game setup ----------
 const LEVELS = [
-  { id: "pics", ic: "🌄", name: "Real or AI?", kind: "pic", bridge: "First your eyes, then the data: what US adults told a survey about AI.", type: "📷 Image challenge", how: "Drag the picture left for AI, right for Real, or tap the buttons · 100 points + up to 50 for speed · from picture 3: 🧨 hard mode, ×1.5", blurb: "6 valleys. Real photo or AI? It gets harder.", d: "2 easy, then 4 hard · ×1.5" },
-  { id: "text", ic: "✍️", name: "Texts", kind: "text", type: "✍️ Text challenge", how: "Tap AI or Person · 120 points + up to 50 for speed", blurb: "Person or AI? Read fast.", d: "2 short travel texts" },
-  { id: "boss", ic: "🎯", name: "The number", kind: "boss", bridge: "That was hard for you. Is it hard in real life too? A survey asked US adults (not Swiss residents) whether people where they live already struggle with this.", type: "📊 Data challenge", how: "Slide to your guess · up to 300 points, 10 fewer per point off", blurb: "How many Americans see this happening?", d: "Guess on 100 dots · up to 300 points" },
-  { id: "tf", ic: "⚡", name: "True or false", kind: "tf", bridge: "Same skill as spotting a fake picture, now with numbers: a real survey figure or a made-up one?", type: "🧠 Knowledge check", how: "Is the number real? · 100 points + up to 30 for speed", blurb: "Real number or fake number?", d: "3 claims · 8 s each" },
-  { id: "you", ic: "🫵", name: "Your turn", kind: "you", bridge: "You have seen what Americans notice. Now answer the survey's own questions and guess how US adults answered.", type: "🗳️ Your opinion", how: "Answer, then guess America · up to 200 points per guess", blurb: "Answer like the survey. Then guess America.", d: "2 questions + 2 guesses" },
+  { id: "pics", chip: "🧨 Hard mode from picture 3 · ×1.5", ic: "🌄", name: "Real or AI?", kind: "pic", bridge: "First your eyes, then the data.", type: "📷 Image challenge", how: "Swipe or tap: ← AI · Real →", blurb: "6 valleys: real photo or AI?", d: "2 easy, then 4 hard · ×1.5" },
+  { id: "text", ic: "✍️", name: "Texts", kind: "text", type: "✍️ Text challenge", how: "Swipe or tap: ← AI · Person →", blurb: "Written by a person or by AI?", d: "2 short travel texts" },
+  { id: "boss", ic: "🎯", name: "The number", kind: "boss", bridge: "Hard for you. Is it hard in real life too? A survey of US adults asked.", type: "📊 Data challenge", how: "Slide to guess · the closer, the more points", blurb: "How many of 100 already see it around them?", d: "Guess on 100 dots · up to 300 points" },
+  { id: "tf", ic: "⚡", name: "True or false", kind: "tf", bridge: "Now spot the fake number.", type: "🧠 Knowledge check", how: "True or false · 8 seconds each", blurb: "Real survey number or made up?", d: "3 claims · 8 s each" },
+  { id: "you", ic: "🫵", name: "Your turn", kind: "you", bridge: "Now you answer the survey's own questions.", type: "🗳️ Your opinion", how: "Answer, then guess", blurb: "Then guess how US adults answered.", d: "2 questions + 2 guesses" },
 ];
 const BADGES = [
   ["eagle", "🦅", "Eagle eye", "All hard-mode pictures right"], ["lightning", "⚡", "Lightning", "A right answer in under 1.5 s"],
@@ -963,15 +951,17 @@ function level(i) {
   const L = LEVELS[i];
   $("#lvNum").textContent = `Level ${i + 1} of ${LEVELS.length}`; $("#lvIcon").textContent = L.ic; $("#lvName").textContent = L.name; $("#lvBlurb").textContent = L.blurb;
   $("#lvType").textContent = L.type; $("#lvBridge").textContent = L.bridge || "";
-  $("#lvHow").innerHTML = esc(L.how) + (L.kind === "pic" || L.kind === "text" ? "<br>🔥 +20 per answer in a row · 💡 a hint costs 40" : "");
-  $("#lvMult").hidden = !L.mult; $("#lvMult").textContent = `×${L.mult} points`;
+  $("#lvHow").textContent = L.how;
+  $("#lvMult").hidden = !L.chip; $("#lvMult").textContent = L.chip || "";
   screen("s-level");
   (S.items[L.id] || []).forEach(p => { if (p.file) { const im = new Image(); im.src = p.file; } });   // preload
   const go = () => { clearAll(); SFX.play("go"); RUN[L.kind](L); };
   $("#lvGo").onclick = go;
+  // the countdown stays hidden while you read (otherwise the last level's "1" would still show), then 3-2-1
+  const c = $("#lvCount"); c.style.visibility = "hidden"; c.textContent = "3";
   if (reduce) return;
-  const wait = L.bridge ? 2400 : 0;   // a story line needs a moment to read; "I'm ready" skips it
-  [3, 2, 1].forEach((k, j) => later(() => { SFX.play("count"); const c = $("#lvCount"); c.textContent = k; c.classList.remove("tick"); void c.offsetWidth; c.classList.add("tick"); }, wait + j * 750));
+  const wait = 2000;   // 2 s to read the level screen; "I'm ready" skips it
+  [3, 2, 1].forEach((k, j) => later(() => { SFX.play("count"); c.style.visibility = ""; c.textContent = k; c.classList.remove("tick"); void c.offsetWidth; c.classList.add("tick"); }, wait + j * 750));
   later(go, wait + 2300);
 }
 const RUN = { pic: startGuess, text: startGuess, boss, tf, you: youStart };
@@ -1256,7 +1246,7 @@ function end() {
   $("#endRank").textContent = rankOf(S.score);
   $("#endSub").textContent = `${right} of ${of} pictures and texts right · best streak ${S.bestStreak} · ${S.badges.size} badge${S.badges.size === 1 ? "" : "s"}` + (vs ? ` · ${S.score >= vs.score ? "🥊 you beat " : "🥊 not quite: "}${vs.name} (${vs.score.toLocaleString("en")})` : "");
   $("#trophy").textContent = vs && S.score >= vs.score ? "🥊" : S.score / maxScore() >= .68 ? "🏆" : S.score / maxScore() >= .4 ? "🥈" : "🎮";
-  $("#earned").innerHTML = BADGES.filter(b => S.badges.has(b[0])).map(b => `<span>${b[1]} ${b[2]}</span>`).join("") || `<span class="muted" style="background:none;padding:0;font-weight:400">No badges this time. Play again: new pictures every round.</span>`;
+  $("#earned").innerHTML = BADGES.filter(b => S.badges.has(b[0])).map(b => `<span>${b[1]} ${b[2]}</span>`).join("");
   $("#t-end").innerHTML = `Most Americans are worried about AI, and most think it's coming anyway.` + (D.shapeGapReal ? ` <span>Younger adults are more likely than older adults to think it can still be shaped.</span>` : "");
   // your answers next to the survey: the point of the game, not only the score
   const row = (you, us, lab) => `<li><span>${you}</span><span class="us">${us}<small>${lab}</small></span></li>`;
@@ -1303,12 +1293,10 @@ function shareCard(right, of) {
     $("#h2h").innerHTML = `<li><span class="muted">Level</span><span class="us">You</span><span class="us">${esc(vs.name)}</span></li>` +
       (vs.lv ? LEVELS.map((l, i) => { const a = S.lvPts[l.id] || 0, b = vs.lv[i]; return `<li><span>${l.ic} ${l.name}</span>${cell(a, b)}${cell(b, a)}</li>`; }).join("") : "") +
       `<li class="tot"><span><b>Total</b></span>${cell(S.score, vs.score)}${cell(vs.score, S.score)}</li>`;
-    $("#shareTxt").textContent = `Send ${vs.name} your result. They see who won, level by level, and get a rematch on the same pictures.`;
     $("#shareBtn").textContent = `Send to ${vs.name}`;
     S.shareMsg = tie ? `We tied on Real or AI? with ${fmt(S.score)} each. Decider, same pictures:` : won ? `I beat your ${fmt(vs.score)} on Real or AI? with ${fmt(S.score)} 😎 Rematch, same pictures:` : `I got ${fmt(S.score)} vs your ${fmt(vs.score)} on Real or AI? Rematch, same pictures:`;
   } else {
     $("#shareKick").textContent = "🥊 Challenge a friend"; $("#h2h").hidden = true;
-    $("#shareTxt").textContent = "Same pictures, same questions, your score to beat. When they finish, they can send their result back.";
     $("#shareBtn").textContent = "Share";
     S.shareMsg = `I spotted ${right} of ${of} fakes and scored ${fmt(S.score)} on Real or AI? Can you beat me? Same pictures:`;
   }

@@ -138,5 +138,7 @@ I work alone, so every contribution below is mine. AI tools I used (Claude) are 
   - the AI / REAL / Hint buttons work on tap and click (in v7 they had no click handler)
   - the challenge link carries the points per level: head-to-head at the end, a reply link back, friends' scores on the device leaderboard (🔗), the phone's share sheet. Still no server
   - `check.py`: 149 checks, 0 mismatches
-- **Still open:** less text on the level screens · remove "prompt 7 in prompts.md" from the AI-text credit · test on a real phone
+  - level screens cut to three short lines (story bridge, what you do, how to answer); AI-text credit now says "written by Claude", no prompts.md on the page
+  - countdown fix: hidden for 2 s while you read, then 3-2-1 (before, the old "1" showed first); helper texts removed around the game (intro boxes, privacy line, keyboard line, points notes, challenge explanations); the survey question, source and margin of error stay
+- **Still open:** test on a real phone
 - **Data / sources:** `exercises/W47_sprint3/` (built with Claude)
