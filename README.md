@@ -168,6 +168,7 @@ against the source. Then watch a stranger use it for three minutes and ask "What
 | [Milestone 1](https://adhurimthaqi.github.io/dataset-datastorytelling/w41.html) | Rebriefing, user survey, concept |
 | [Milestone 2](https://adhurimthaqi.github.io/dataset-datastorytelling/w43.html) | Hand sketches, directions, wireframes, comparison, AI draft |
 | [Prototype v8](https://adhurimthaqi.github.io/dataset-datastorytelling/exercises/W47_sprint3/v8.html) | The current prototype: Real or AI? as a game, then the survey data as games (5 levels, about 4 minutes) |
+| [Slide presentation](https://adhurimthaqi.github.io/dataset-datastorytelling/Final-presentation/slides.html) | The final presentation (17.12): slides in the browser, plus [PDF](https://adhurimthaqi.github.io/dataset-datastorytelling/Final-presentation/Real-or-AI_final-presentation.pdf) and [PowerPoint](https://adhurimthaqi.github.io/dataset-datastorytelling/Final-presentation/Real-or-AI_final-presentation.pptx) |
 | [Exercises & process](https://adhurimthaqi.github.io/dataset-datastorytelling/exercises.html) | Process log, W38–W40 exercises, file list |
 | [Practice report](https://adhurimthaqi.github.io/dataset-datastorytelling/output/report.html) | Warm-up with four public datasets |
 
