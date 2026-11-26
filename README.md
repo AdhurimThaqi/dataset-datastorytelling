@@ -88,7 +88,8 @@ At the end: your **final score and rank**, your **badges**, the **key message**,
 
 ### Live round for the presentation: "scan the QR code and let's play together"
 1. On the projector, open **https://adhurimthaqi.github.io/dataset-datastorytelling/exercises/W47_sprint3/live.html?room=hslu** (any room code works, e.g. `?room=it-final`). Press **F** for fullscreen.
-2. The audience scans the QR code. It opens the game in that room (`v8.html?room=…`), so **everyone plays the same round**.
+2. The audience scans the QR code (on the projector page, or on your slide: `exercises/W47_sprint3/qr/slide-hslu.png`, or just the code
+   `qr/qr-hslu.png` / `.svg`; for another room run `python make_qr.py <room>`). It opens the game in that room (`v8.html?room=…`), so **everyone plays the same round**.
 3. The start screen says clearly that the player name and score will appear on the big screen. At the end, each phone shows
    *"You're #3 of 18 in the room"*, and the projector shows the **live top 10** (best round per name) and the number of players.
 4. Rude name? **Click it on the projector** to hide it there ("Show hidden" brings it back).

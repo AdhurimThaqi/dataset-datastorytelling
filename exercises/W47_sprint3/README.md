@@ -61,6 +61,7 @@ Honesty rules still apply: "too close to call" in more-or-fewer when two items a
 | `prepare_images.py` | Downloads the Commons pictures, crops/compresses every picture the same way, writes `img/p01…p35.jpg` and `pool.json` (answer, credit, licence, "how to tell" per picture) |
 | `img/originals/` | The 8 generated AI pictures at full size (proof of origin; not used by the page) |
 | `live_template.html` → `live.html` | The projector page for a live round (QR code + room leaderboard) |
+| `make_qr.py` → `qr/` | QR code for a room as PNG (slides), SVG (print) and a ready 16:9 slide: `python make_qr.py hslu`. Checked with a QR decoder |
 | `room.json` | Supabase URL + publishable key for the room leaderboard (safe to publish: the table only allows adding and reading) |
 | `vendor/qrcode.js` | QR code generator by Kazuhiko Arase (MIT), used by `live.html` |
 | `icons.json` | The Lucide icons the page uses (inner SVG markup, ISC licence) |
