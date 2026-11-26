@@ -23,7 +23,7 @@
 | Leaderboard: only on the device | Still no server (nothing is uploaded), but the **challenge link does more:** it carries your points per level. Your friend gets a **head-to-head per level** at the end and a **"Send to …" reply link**. When you open it you see who won and can play the rematch on the same pictures. Every score that reaches you by link goes on your device's leaderboard, marked 🔗. On a phone, **Share** opens the system share sheet (WhatsApp, Messages, …) with a ready-made message. |
 
 Leaderboard key is now `realOrAI.board.v8`: v8 has fewer pictures, so v7 scores would not compare.
-Checked 26.11: `check.py` 149 checks, 0 mismatches. Played through three times in headless Edge at 390×844 (touch): player A, then B from A's link, then A opening B's reply. All 5 levels, the head-to-head and the 🔗 board entries worked, with no script errors and no sideways scrolling. Still to do: try it on a real phone.
+Checked 26.11: `check.py` 149 checks, 0 mismatches. Played through three times in headless Edge at 390×844 (touch): player A, then B from A's link, then A opening B's reply. All 5 levels, the head-to-head and the 🔗 board entries worked, with no script errors and no sideways scrolling. Tried on a real phone (26.11): some screens scrolled, fixed and measured again at four phone heights (see the table above).
 
 ---
 

@@ -4,7 +4,7 @@ HSLU · I.BA_DAS Data Storytelling · autumn semester 2026 · solo project by Ad
 **Live site:** https://adhurimthaqi.github.io/dataset-datastorytelling/
 
 ## The idea
-A short interactive web game (about 5 minutes, phone first) that lets young adults in Switzerland find out
+A short interactive web game (about 4 minutes, phone first) that lets young adults in Switzerland find out
 how their own feeling about AI compares with what Americans actually think, using a real, representative survey
 instead of comment sections.
 
@@ -29,7 +29,6 @@ already see this around them, and what they think about AI.** The experience on 
 | 1 | 🌄 **Real or AI?** | 6 pictures of Swiss mountain valleys: **real photo or AI?** 5 seconds each. The first 2 are easy (older AI); then 🧨 **hard mode**, ×1.5 points: new 2026 AI models against real photos that *look* fake. | Older AI pictures are "too perfect", but "too beautiful" is no proof; look at signs, repeating houses, staged mess. |
 | 2 | ✍️ **Texts** | 2 short travel texts: **written by a person or by AI?** | AI text sounds like a brochure and has no names or details you could check. |
 | 3 | 🎯 **The number** | Guess with a slider: how many of 100 Americans already see people struggling to tell real from fake? | **57 in 100** already see it, only 2 in 100 don't expect it. |
-| 5 | ↕️ **More or fewer** | Higher-or-lower with other changes Americans see AI causing in their community (saving time, losing connections, …). | Which changes people actually notice, and what "within the margin of error" means. |
 | 4 | ⚡ **True or false** | 3 quick claims about AI risks and families. Some use the real number, some a wrong one. 8 seconds each. | The real numbers, for example how many say AI is making families' job security worse. |
 | 5 | 🫵 **Your turn** | Answer the survey's own two questions, then guess how America answered. | **2 in 3** are concerned; **2 in 3** say AI is coming anyway; younger adults (18–34) are more likely than 65+ to think it can still be shaped. |
 
@@ -41,6 +40,9 @@ At the end: your **final score and rank**, your **badges**, the **key message**,
 - **No "Next" button and no scrolling:** after each answer the result slides over the picture (right or wrong, who made it,
   *how to tell*, the photographer and licence), then the game moves on by itself. Tap or press **Space** to skip,
   or **Keep open** to read it calmly.
+- **Fits a phone:** every playing screen fits without scrolling at real phone heights (checked at 375×553, 390×664, 393×740,
+  412×780, i.e. with the browser bars). On *The number*, the dots and your guess sit side by side and the exact survey question
+  opens with a tap. The two result screens can be longer than a phone, but **Next** stays pinned at the bottom.
 - **Hint:** 💡 shows what to look at (never the answer) and costs 40 points.
 - **True or false:** after each answer the real number stays up for 9 seconds (tap to pause, **Next ▶** to go on).
 - **Screen readers:** every picture has a scene description (`alt.json`) that never gives away the answer.
@@ -57,7 +59,8 @@ At the end: your **final score and rank**, your **badges**, the **key message**,
   Scores that reach you by link go on your leaderboard, marked 🔗. There's no server: the link itself carries the name and the points.
 
 ### The screen
-- **Start screen:** the title, one sentence on what you'll do, a preview of four pictures, your player name (with a dice button for
+- **Start screen:** the title, one sentence (*"First, spot the AI fakes among real photos and texts of Swiss valleys. Then guess what US
+  adults think about AI and see how your guesses compare."*), a preview of four pictures, your player name (with a dice button for
   a random name) and **Start the game**. No score, levels or badges yet; the header button opens only the leaderboard.
 - **While you play, only the challenge:** a minimal top bar (level, points, **☰ Progress**). No side panels.
 - **☰ Progress** opens one drawer with three tabs: **You** (score, streak, levels, badges), **Notes**, **Board** (leaderboard).
