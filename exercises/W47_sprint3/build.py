@@ -8,6 +8,7 @@ ai_community_impact (all 5 items), ai_risks and ai_family_impact, so the numbers
 """
 import csv
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -91,9 +92,35 @@ data = {
 }
 
 pool = json.loads((HERE / "pool.json").read_text(encoding="utf-8"))
+alt = json.loads((HERE / "alt.json").read_text(encoding="utf-8"))   # v8: a scene description per picture for screen readers
+for pic in pool:
+    if pic["file"] not in alt:
+        raise SystemExit(f"alt.json has no description for {pic['file']}")
+    pic["alt"] = alt[pic["file"]]
 html = (HERE / "template.html").read_text(encoding="utf-8")
-out = html.replace("__DATA__", json.dumps(data, ensure_ascii=False)).replace("__POOL__", json.dumps(pool, ensure_ascii=False))
+# v8: one icon family (Lucide, outline). {{i:name}} or {{i:name cls}} in the template becomes an inline SVG;
+# the same icons are injected as __ICONS__ for the ones the script draws.
+icons = json.loads((HERE / "icons.json").read_text(encoding="utf-8")); icons.pop("_license", None)
+
+
+def svg(m):
+    name, cls = m.group(1), m.group(2)
+    if name not in icons:
+        raise SystemExit(f"icons.json has no icon {name}")
+    return f'<svg class="i{" " + cls if cls else ""}" viewBox="0 0 24 24" aria-hidden="true" focusable="false">{icons[name]}</svg>'
+
+
+html = re.sub(r"\{\{i:([a-z0-9-]+)(?: ([a-z0-9-]+))?\}\}", svg, html)
+out = (html.replace("__DATA__", json.dumps(data, ensure_ascii=False)).replace("__POOL__", json.dumps(pool, ensure_ascii=False))
+       .replace("__ICONS__", json.dumps(icons, ensure_ascii=False)))
+room = json.loads((HERE / "room.json").read_text(encoding="utf-8")); room.pop("_note", None)
+out = out.replace("__ROOM__", json.dumps(room))
 (HERE / "v8.html").write_text(out, encoding="utf-8")
 print("wrote", HERE / "v8.html")
+# the projector page for a live round: QR code + room leaderboard (same database, same icons)
+live = (HERE / "live_template.html").read_text(encoding="utf-8")
+live = re.sub(r"\{\{i:([a-z0-9-]+)(?: ([a-z0-9-]+))?\}\}", svg, live).replace("__ROOM__", json.dumps(room))
+(HERE / "live.html").write_text(live, encoding="utf-8")
+print("wrote", HERE / "live.html")
 if D.missing:
     print("not reported in the CSV, shown as 0:", ", ".join(sorted(set(D.missing))))

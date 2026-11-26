@@ -51,24 +51,24 @@ button[disabled]{opacity:.45;cursor:default;transform:none}
 .primary{background:var(--ink);color:var(--bg);border-color:var(--ink);font-weight:700}
 .ghost{background:transparent}
 .disp{font-family:var(--display);letter-spacing:-.02em}
+/* one icon family: Lucide outline icons, 18 px in the interface, stroke = text colour */
+.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.22em}
+.i-sm{width:16px;height:16px}.i-md{width:20px;height:20px}.i-lg{width:32px;height:32px}.i-xl{width:44px;height:44px;stroke-width:1.75}
 .kicker{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:0;font-weight:600}
 .muted{color:var(--muted)}.ink2{color:var(--ink2)}.tiny{font-size:12px;color:var(--muted)}.small{font-size:14px;color:var(--ink2)}
 h1,h2,h3,p{margin:0}
+[hidden]{display:none!important}
 
-/* ---------- layout: rail | stage | rail ---------- */
-.app{display:grid;grid-template-columns:270px minmax(0,1fr) 310px;gap:18px;height:100dvh;padding:18px;max-width:1500px;margin:0 auto}
-.rail{background:var(--panel);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:auto;display:flex;flex-direction:column;min-height:0}
-.stage{position:relative;display:flex;flex-direction:column;min-height:0;min-width:0}
-.hud{display:none}
+/* ---------- layout: one column, a minimal top bar, everything else in one drawer on demand ---------- */
+.app{display:flex;flex-direction:column;height:100dvh;padding:14px 18px calc(14px + env(safe-area-inset-bottom));max-width:1100px;margin:0 auto}
+.stage{position:relative;display:flex;flex-direction:column;flex:1;min-height:0;min-width:0}
 section{display:none;flex:1;min-height:0;flex-direction:column;overflow:auto;scrollbar-width:thin}
 section.on{display:flex;animation:in .35s ease}
 @keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 .wrap{width:100%;max-width:760px;margin:auto;padding:4px 2px;display:flex;flex-direction:column;gap:14px}
 
-/* left rail */
-.brand{display:flex;align-items:center;gap:10px;padding:18px 18px 6px;font:700 18px/1 var(--display)}
-.brand i{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--real),var(--ai));display:grid;place-items:center;font-style:normal;color:#fff;font-size:15px}
-.player{margin:12px 14px;padding:16px;border-radius:18px;background:var(--panel2);position:relative;overflow:hidden}
+/* drawer: the player */
+.player{padding:16px;border-radius:18px;background:var(--panel2);position:relative;overflow:hidden}
 .player .who{display:flex;align-items:center;gap:10px}
 .avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font:700 18px/1 var(--display);color:#fff;background:linear-gradient(135deg,var(--ai),var(--real));flex:none}
 .player .nm{font-weight:700;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -76,45 +76,57 @@ section.on{display:flex;animation:in .35s ease}
 .scoreline{display:flex;align-items:baseline;gap:8px;margin-top:14px}
 .score{font:700 44px/1 var(--display);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
 .score+span{color:var(--muted);font-size:14px}
-.pop{position:absolute;right:16px;top:58px;font:700 22px/1 var(--display);color:var(--gold);pointer-events:none;opacity:0}
+.pop{position:absolute;right:6px;top:100%;margin-top:4px;font:700 20px/1 var(--display);color:var(--gold);pointer-events:none;opacity:0}
 .pop.go{animation:float 1.1s ease-out}
 @keyframes float{0%{opacity:0;transform:translateY(10px) scale(.8)}20%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-30px)}}
 .streak{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:14px;color:var(--ink2)}
-.flames{display:flex;gap:2px}.flames b{filter:grayscale(1);opacity:.3;transition:.3s}.flames b.on{filter:none;opacity:1}
-.race{margin:0 14px 6px;padding:12px 14px;border-radius:14px;border:1px dashed var(--line);font-size:13px;display:none}
+.flames{display:flex;gap:2px}.flames b{color:var(--muted);opacity:.45;transition:.3s;display:flex}.flames b.on{color:var(--hot);opacity:1}
+.race{padding:12px 14px;border-radius:14px;border:1px dashed var(--line);font-size:13px;display:none}
 .race.on{display:block}
 .race .bar{height:8px;border-radius:4px;background:var(--panel2);margin-top:8px;position:relative;overflow:hidden}
 .race .bar i{position:absolute;inset:0 auto 0 0;background:var(--gold);border-radius:4px;transition:width .6s}
-.railh{margin:14px 18px 8px;font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
-.levels{list-style:none;margin:0;padding:0 10px}
-.levels li{display:flex;align-items:center;gap:10px;padding:8px;border-radius:12px;font-size:14px;color:var(--muted)}
+.railh{margin:8px 4px 0;font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.levels{list-style:none;margin:0;padding:0}
+.levels li{display:flex;align-items:center;flex-wrap:wrap;gap:4px 10px;padding:8px;border-radius:12px;font-size:14px;color:var(--muted)}
+.levels li .lvd{flex-basis:100%;font-size:12px;font-weight:400;color:var(--ink2);padding-left:40px}
 .levels li .ic{width:30px;height:30px;border-radius:10px;background:var(--panel2);display:grid;place-items:center;flex:none;font-size:15px}
 .levels li .tr{margin-left:auto;font-size:12px;letter-spacing:1px;white-space:nowrap}
 .levels li.done{color:var(--ink2)}.levels li.done .ic{background:color-mix(in srgb,var(--good) 18%,transparent)}
 .levels li.now{color:var(--ink);font-weight:700;background:var(--panel2)}.levels li.now .ic{background:var(--ink);color:var(--bg)}
-.badges{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 16px 18px}
-.badges div{aspect-ratio:1;border-radius:14px;background:var(--panel2);display:grid;place-items:center;font-size:22px;filter:grayscale(1);opacity:.35;transition:.4s;position:relative}
-.badges div.on{filter:none;opacity:1;background:color-mix(in srgb,var(--gold) 20%,var(--panel2));animation:badge .7s ease}
+.badges{display:flex;flex-direction:column;gap:6px}
+.badges div{display:grid;grid-template-columns:34px 1fr;gap:0 10px;align-items:center;padding:6px 8px;border-radius:12px;background:var(--panel2);font-size:13px;color:var(--ink2);opacity:.5;filter:grayscale(1)}
+.badges div .i{grid-row:span 2;justify-self:center}.badges div b{color:var(--ink);font-size:14px}
+.badges div em{font-style:normal;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-left:6px;color:var(--muted)}
+.badges div.on em{color:var(--ink)}
+.earned span{display:inline-flex;align-items:center;gap:6px}
+.trail{display:inline-flex;gap:1px;margin-left:auto}.trail .ok{color:var(--good)}.trail .no{color:var(--bad)}.trail .late{color:var(--muted)}
+.vh .i,.hlmsg .i,.tip .i,.vt .i{margin-right:4px}
+.badges div.on{filter:none;opacity:1;background:color-mix(in srgb,var(--gold) 20%,var(--panel2))}
 @keyframes badge{0%{transform:scale(.4)}60%{transform:scale(1.2)}100%{transform:none}}
 
-/* right rail */
-.tabs{display:flex;gap:6px;padding:14px 14px 4px}
-.tabs button{flex:1;min-height:40px;padding:6px 10px;border-radius:999px;font-size:14px;font-weight:600;background:transparent;border-color:transparent;color:var(--muted)}
-.tabs button[aria-selected="true"]{background:var(--panel2);color:var(--ink)}
+/* drawer: tabs */
+.tabs{display:flex;gap:6px;padding:14px 14px 4px;align-items:center;position:sticky;top:0;background:var(--panel);z-index:1}
+.tabs [role=tab]{flex:1;min-height:40px;padding:6px 8px;white-space:nowrap;border-radius:999px;font-size:14px;font-weight:600;background:transparent;border-color:transparent;color:var(--muted)}
+.tabs [role=tab][aria-selected="true"]{background:var(--panel2);color:var(--ink)}
+.tabs .cnt:empty,.tabs .cnt[data-c="0"]{display:none}
 .tabs .cnt{display:inline-block;min-width:20px;padding:0 6px;margin-left:4px;border-radius:999px;background:var(--ai);color:#fff;font-size:11px;line-height:18px}
 .pane{display:none;padding:8px 14px 18px;flex-direction:column;gap:10px}
 .pane.on{display:flex}
 .empty{padding:26px 12px;text-align:center;color:var(--muted);font-size:14px}
-.empty b{display:block;font-size:30px;margin-bottom:6px}
+.empty b{display:flex;justify-content:center;margin-bottom:8px;color:var(--muted)}
 .note{border-radius:14px;background:var(--panel2);padding:12px 14px;font-size:14px;line-height:1.4;animation:in .4s ease}
 .note .tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:999px;margin-bottom:6px}
 .note .tag.clue{background:color-mix(in srgb,var(--ai) 20%,transparent);color:var(--ai)}
 .note .tag.fact{background:color-mix(in srgb,var(--seen) 22%,transparent);color:var(--seen)}
 .note b{display:block;margin-bottom:2px}
+.boardbar{display:flex;justify-content:flex-end}
+.refresh{min-height:34px;padding:4px 12px;border-radius:999px;font-size:13px;font-weight:600;color:var(--ink2)}
+.refresh .ri{display:inline-block}.refresh.spin .ri{animation:spin .6s ease}
+@keyframes spin{to{transform:rotate(360deg)}}
 .board{list-style:none;margin:0;padding:0;counter-reset:r}
 .board li{display:grid;grid-template-columns:26px 1fr auto;gap:8px;align-items:center;padding:9px 10px;border-radius:12px;font-size:14px;counter-increment:r}
 .board li::before{content:counter(r);font:700 13px/1 var(--display);color:var(--muted);text-align:center}
-.board li:nth-child(1)::before{content:"🥇"}.board li:nth-child(2)::before{content:"🥈"}.board li:nth-child(3)::before{content:"🥉"}
+.board li:nth-child(-n+3)::before{color:var(--gold);font-size:15px}
 .board li.me{background:color-mix(in srgb,var(--gold) 18%,transparent);font-weight:700}
 .board li.vs{border:1px dashed var(--gold)}
 .board .pts{font:700 15px/1 var(--display);font-variant-numeric:tabular-nums}
@@ -128,22 +140,33 @@ section.on{display:flex;animation:in .35s ease}
 .hero{display:grid;grid-template-columns:1.1fr 1fr;gap:22px;align-items:center}
 .hero h1{font:700 clamp(40px,6vw,68px)/.95 var(--display);letter-spacing:-.04em;margin:8px 0 12px}
 .hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--real),var(--ai));-webkit-background-clip:text;background-clip:text;color:transparent}
-.mosaic{display:grid;grid-template-columns:1fr 1fr;gap:8px;transform:rotate(2deg)}
-.mosaic div{aspect-ratio:4/3;border-radius:14px;background:var(--panel2) center/cover;box-shadow:var(--shadow);position:relative}
-.mosaic div span{position:absolute;left:8px;bottom:8px;font:700 12px/1 var(--display);padding:5px 9px;border-radius:999px;background:rgba(0,0,0,.6);color:#fff}
+.hero .lead{font-size:19px;line-height:1.45;color:var(--ink2);max-width:470px}
+.mosaic{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mosaic div{aspect-ratio:4/3;border-radius:14px;background:var(--panel2) center/cover;box-shadow:var(--shadow);position:relative;transition:transform .25s ease,box-shadow .25s ease}
+.mosaic div span{position:absolute;right:8px;top:8px;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:rgba(10,12,20,.45);color:#fff;backdrop-filter:blur(4px)}
+@media (hover:hover) and (pointer:fine){.mosaic div:hover{transform:translateY(-2px);box-shadow:0 2px 4px rgba(0,0,0,.06),0 14px 34px rgba(20,21,27,.14)}}
 .how{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .how div{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px;font-size:14px;color:var(--ink2)}
 .how b{display:block;color:var(--ink);font-size:15px;margin:6px 0 2px}
-.namerow{display:flex;gap:10px;align-items:center}
-.namerow input{flex:1;min-width:0;font:inherit;padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:var(--panel);color:var(--ink);min-height:48px}
+.namelab{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:600;color:var(--ink2)}
+.namerow{display:flex;align-items:stretch;border:1px solid var(--line);border-radius:14px;background:var(--panel);overflow:hidden;height:52px}
+.namerow:focus-within{outline:3px solid var(--ai);outline-offset:2px}
+.namerow input{flex:1;min-width:0;font:inherit;padding:0 14px;border:0;background:transparent;color:var(--ink);outline:none}
+.namerow button{flex:none;width:52px;min-height:0;padding:0;border:0;border-left:1px solid var(--line);border-radius:0;display:grid;place-items:center;color:var(--ink2);background:transparent}
+.namerow button:hover{background:var(--panel2);color:var(--ink)}
+.namerow button:focus-visible{outline:none;background:var(--panel2);color:var(--ink)}
 .challenge{display:none;padding:12px 14px;border-radius:14px;background:color-mix(in srgb,var(--gold) 16%,var(--panel));border:1px solid color-mix(in srgb,var(--gold) 40%,transparent);font-size:15px}
 .challenge.on{display:block}
-.start{font-size:18px;min-height:58px;background:linear-gradient(90deg,var(--real),var(--ai));color:#fff;border:0}
+.start{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;font-size:18px;font-weight:700;min-height:58px;background:linear-gradient(90deg,var(--real),var(--ai));color:#fff;border:0;transition:filter .15s,box-shadow .15s,transform .1s}
+.start .i{fill:currentColor}
+.start:hover{filter:brightness(1.07);box-shadow:0 8px 24px var(--glow)}
+.start:active{transform:scale(.98);filter:brightness(.96)}
+.start:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 
 /* level splash */
 #s-level .wrap{text-align:center;align-items:center;justify-content:center;flex:1}
 .lvnum{font:700 14px/1 var(--display);letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
-.lvicon{font-size:64px;line-height:1;animation:badge .7s ease}
+.lvicon{width:84px;height:84px;border-radius:24px;display:grid;place-items:center;background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow);color:var(--ink);animation:badge .7s ease}
 .lvname{font:700 clamp(36px,6vw,60px)/1 var(--display);letter-spacing:-.03em}
 .lvtype{display:inline-block;padding:5px 12px;border-radius:999px;background:var(--panel);border:1px solid var(--line);font-weight:700;font-size:13px}
 .lvhow{font-size:14px;color:var(--muted);line-height:1.6;max-width:440px}
@@ -185,8 +208,9 @@ section.on{display:flex;animation:in .35s ease}
 /* first pictures: show that the card can be dragged */
 .coach{display:none;position:absolute;left:50%;bottom:16px;transform:translateX(-50%);align-items:center;gap:10px;padding:10px 16px;border-radius:999px;background:rgba(10,12,20,.8);color:#fff;font:600 14px/1.2 system-ui;white-space:nowrap;pointer-events:none;z-index:3;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);box-shadow:0 6px 20px rgba(0,0,0,.3)}
 .coach.on{display:flex;animation:in .35s ease}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .coach .c-ai{color:#c4b5fd}.coach .c-real{color:#5eead4}
-.coach .hand{display:inline-block;font-size:18px;animation:handdrag 1.8s ease-in-out infinite}
+.coach .hand{display:inline-flex;animation:handdrag 1.8s ease-in-out infinite}
 @keyframes handdrag{0%,100%{transform:none}25%{transform:translateX(-12px) rotate(-10deg)}75%{transform:translateX(12px) rotate(10deg)}}
 .media.demo{animation:cardDemo 1.6s ease-in-out .4s 1}
 @keyframes cardDemo{0%,100%{transform:none}25%{transform:translateX(-34px) rotate(-1.6deg)}50%{transform:none}75%{transform:translateX(34px) rotate(1.6deg)}}
@@ -266,6 +290,11 @@ input[type=range]{width:100%;accent-color:var(--ai);height:36px}
 .tfbtns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .tfbtns button{font:700 20px/1 var(--display);min-height:60px}
 .tfbtns .t{border-color:var(--good);color:var(--good)}.tfbtns .f{border-color:var(--bad);color:var(--bad)}
+.tfauto{display:flex;align-items:center;gap:10px}
+.tfprog{flex:1;height:4px;border-radius:2px;background:var(--panel2);overflow:hidden;display:flex}
+.tfprog i{display:block;height:100%;width:0;background:var(--ink2)}
+.tfprog.run i{animation:fill var(--t,9s) linear forwards}.tfprog.paused i{animation-play-state:paused}
+#tfNext{min-height:36px;padding:4px 14px;border-radius:999px;font-size:14px;font-weight:700}
 .tfbar{position:relative;height:30px;border-radius:8px;background:var(--panel2);margin:16px 0 26px}
 .tfbar i{position:absolute;inset:0 auto 0 0;border-radius:8px;background:var(--seen);transition:width .8s ease}
 .tfbar span{position:absolute;top:100%;transform:translateX(-50%);font-size:12px;font-weight:700;white-space:nowrap;margin-top:4px}
@@ -291,14 +320,24 @@ input[type=range]{width:100%;accent-color:var(--ai);height:36px}
 .phase{display:none}.phase.on{display:flex;flex-direction:column;gap:12px;animation:in .35s ease}
 
 /* end */
-.endtop{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center}
-.trophy{width:120px;height:120px;border-radius:30px;background:linear-gradient(135deg,var(--gold),var(--hot));display:grid;place-items:center;font-size:62px;box-shadow:var(--shadow);animation:badge .8s ease}
-.endscore{font:700 72px/1 var(--display);letter-spacing:-.04em}
+.insight{display:flex;flex-direction:column;gap:14px;padding:22px;border-radius:var(--r);background:var(--panel);border:1px solid var(--line);border-top:5px solid var(--vcon);box-shadow:var(--shadow)}
+.insight .message{font-size:clamp(26px,4vw,38px)}
+.keynums{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.keynums div{background:var(--panel2);border-radius:14px;padding:12px 14px;font-size:14px;color:var(--ink2);line-height:1.35}
+.keynums b{display:block;font:700 clamp(26px,3.4vw,36px)/1.05 var(--display);letter-spacing:-.03em;color:var(--c,var(--ink));margin-bottom:4px}
+@media (max-width:560px){.vsus:not(.h2h) li{grid-template-columns:1fr;gap:4px}.vsus:not(.h2h) .us{text-align:left;white-space:normal}.keynums{grid-template-columns:1fr}.keynums div{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center}.keynums b{margin:0;font-size:26px}}
+.endtop{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center}
+.trophy{width:72px;height:72px;border-radius:20px;background:linear-gradient(135deg,var(--gold),var(--hot));display:grid;place-items:center;font-size:38px;box-shadow:var(--shadow);animation:badge .8s ease}
+.endscore{font:700 48px/1 var(--display);letter-spacing:-.04em}
 .message{font:700 clamp(22px,3vw,30px)/1.2 var(--display);letter-spacing:-.015em}
 .message span{color:var(--ink2)}
 .vsus{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
 .vsus li{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:14px;color:var(--ink2)}
 .vsus li b{color:var(--ink)}
+.roomcard{display:flex;flex-direction:column;gap:8px;border-left:4px solid var(--ai)}
+.roomcard[hidden]{display:none}
+.roommsg{font:700 20px/1.3 var(--display)}
+.roommsg small{display:block;font:400 14px/1.4 system-ui;color:var(--ink2);margin-top:4px}
 .h2h li{grid-template-columns:1fr auto auto;font-size:13px;padding:9px 12px}
 .h2h .us{min-width:56px}.h2h .win{color:var(--good)}.h2h .tot{background:var(--panel2)}
 .vsus .us{font:700 15px/1.2 var(--display);color:var(--ink);text-align:right;white-space:nowrap}
@@ -319,117 +358,28 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
 .toast.on{transform:translate(-50%,0);visibility:visible;transition:transform .35s cubic-bezier(.2,.9,.3,1.2)}
 
 
-/* hover: the thing under the cursor grows and shows more, then goes back (mouse only) */
-.levels li{transition:background .25s,transform .25s,padding .25s,color .25s;flex-wrap:wrap;cursor:default}
-.levels li .ic{transition:transform .25s}
-.levels li .lvd{flex-basis:100%;max-height:0;opacity:0;overflow:hidden;font-size:12px;font-weight:400;color:var(--ink2);padding-left:40px;transition:max-height .3s ease,opacity .25s,margin .25s}
-.badges div{cursor:default;transition:transform .25s cubic-bezier(.2,.9,.3,1.4),filter .3s,opacity .3s,box-shadow .25s}
-.badges div::after{content:attr(data-tip);position:absolute;left:50%;bottom:calc(100% + 8px);transform:translate(-50%,6px);width:150px;padding:8px 10px;border-radius:10px;background:var(--ink);color:var(--bg);font:500 12px/1.3 system-ui;text-align:center;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:5}
-.board li{transition:transform .25s,background .25s,padding .25s}
-.board .sub{max-height:0;opacity:0;overflow:hidden;transition:max-height .3s,opacity .25s}
-.board li.me .sub,.board li.vs .sub{max-height:20px;opacity:1}
-.note,.player,.learned li{transition:transform .25s,box-shadow .25s}
-@media (hover:hover) and (pointer:fine){
-  .levels li:hover{background:var(--panel2);transform:translateX(4px);padding:12px 10px;color:var(--ink)}
-  .levels li:hover .ic{transform:scale(1.18) rotate(-6deg)}
-  .levels li:hover .lvd{max-height:60px;opacity:1;margin-top:4px}
-  .badges div:hover{transform:scale(1.18);filter:none;opacity:1;box-shadow:var(--shadow);z-index:4}
-  .badges div:hover::after{opacity:1;transform:translate(-50%,0)}
-  .board li:hover{background:var(--panel2);transform:scale(1.03);padding:13px 12px}
-  .board li:hover .sub{max-height:20px;opacity:1}
-  .note:hover,.learned li:hover{transform:translateY(-3px) scale(1.02);box-shadow:var(--shadow)}
-  .player:hover{transform:scale(1.02)}
-}
-.badges div:nth-child(4n+1)::after{left:0;transform:translate(0,6px)}.badges div:nth-child(4n)::after{left:auto;right:0;transform:translate(0,6px)}
-@media (hover:hover) and (pointer:fine){.badges div:nth-child(4n+1):hover::after,.badges div:nth-child(4n):hover::after{transform:none}}
-.badges{padding-top:4px}
-.soundbtn{position:absolute;right:12px;top:12px;min-height:34px;width:34px;padding:0;border-radius:50%;background:var(--panel);font-size:15px}
 .verdict .vc{display:flex;gap:10px;align-items:center;justify-content:space-between}
-/* ---------- side pillars (desktop/tablet): slim while you play, the full panel slides out on hover, focus or tap ---------- */
-.full{display:flex;flex-direction:column;min-height:0}
-.peek,.pin,.sheetclose{display:none}
-@media (min-width:861px){
-  .app{--pw:76px;--lo:272px;--ro:330px;grid-template-columns:var(--pw) minmax(0,1fr) var(--pw);transition:grid-template-columns .45s cubic-bezier(.2,.8,.2,1)}
-  .app.dock-l{grid-template-columns:var(--lo) minmax(0,1fr) var(--pw)}
-  .app.dock-r{grid-template-columns:var(--pw) minmax(0,1fr) var(--ro)}
-  .app.dock-l.dock-r{grid-template-columns:var(--lo) minmax(0,1fr) var(--ro)}
-  .dock{position:relative;min-height:0;min-width:0}
-  .dock .rail{position:absolute;top:0;bottom:0;width:var(--pw);overflow:hidden;z-index:20;
-    transition:width .38s cubic-bezier(.2,.8,.2,1),box-shadow .3s,border-color .2s}
-  .dock.left .rail{left:0}.dock.right .rail{right:0}
-  .dock:not(.open) .rail:hover{border-color:color-mix(in srgb,var(--ai) 40%,var(--line))}
-  .full{width:calc(var(--lo) - 2px);flex:none;opacity:0;visibility:hidden;transition:opacity .15s,visibility 0s .15s}
-  .dock.right .full{width:calc(var(--ro) - 2px);margin-left:auto}
-  .dock.open .rail{width:var(--lo);overflow:hidden auto;z-index:30;box-shadow:0 2px 4px rgba(0,0,0,.06),0 24px 60px rgba(20,21,27,.2)}
-  .dock.right.open .rail{width:var(--ro)}
-  .dock.open .full{opacity:1;visibility:visible;transition:opacity .25s .12s,visibility 0s}
-  .app.dock-l .dock.left .rail,.app.dock-r .dock.right .rail{width:100%;box-shadow:var(--shadow)}
-  .stage{transition:opacity .3s}
-  .app.peeking .stage{opacity:.7}
-
-  .peek{display:flex;flex-direction:column;align-items:center;gap:10px;position:absolute;top:0;bottom:0;width:var(--pw);padding:16px 0 14px;
-    cursor:pointer;transition:opacity .2s .1s;border-radius:22px}
-  .dock.left .peek{left:0}.dock.right .peek{right:0}
-  .dock.open .peek{opacity:0;pointer-events:none;transition:opacity .1s}
-  .peek:focus-visible{outline:3px solid var(--ai);outline-offset:-3px}
-  .pk-logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--real),var(--ai));display:grid;place-items:center;font:700 16px/1 var(--display);font-style:normal;color:#fff;flex:none}
-  .peek .avatar{width:38px;height:38px;font-size:16px;margin-top:4px}
-  .pk-score{font:700 16px/1 var(--display);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
-  .pk-sub{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-top:-6px}
-  .pk-streak{font:700 13px/1 var(--display);padding:5px 9px;border-radius:999px;background:var(--panel2);font-variant-numeric:tabular-nums;transition:background .3s}
-  .pk-streak.hot{background:color-mix(in srgb,var(--hot) 20%,var(--panel2))}
-  .pk-sep{width:28px;height:1px;background:var(--line);flex:none}
-  .pk-lv{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;align-items:center}
-  .pk-lv li{width:34px;height:34px;border-radius:11px;background:var(--panel2);display:grid;place-items:center;font-size:15px;filter:grayscale(1);opacity:.45;position:relative;transition:background .3s,opacity .3s,filter .3s,box-shadow .3s}
-  .pk-lv li.done{filter:none;opacity:1;background:color-mix(in srgb,var(--good) 18%,var(--panel2))}
-  .pk-lv li.done::after{content:"";position:absolute;right:-3px;top:-3px;width:10px;height:10px;border-radius:50%;background:var(--good);border:2px solid var(--panel)}
-  .pk-lv li.now{filter:none;opacity:1;background:var(--ink);box-shadow:0 0 0 4px var(--glow)}
-  .pk-badge{font:700 13px/1 var(--display);font-variant-numeric:tabular-nums;padding:5px 9px;border-radius:999px;background:color-mix(in srgb,var(--gold) 18%,var(--panel2))}
-  .pk-btn{position:relative;width:46px;height:46px;min-height:0;padding:0;border-radius:14px;display:grid;place-items:center;font-size:20px;background:var(--panel2);border-color:transparent;flex:none}
-  .pk-btn:hover{background:color-mix(in srgb,var(--ai) 14%,var(--panel2))}
-  .pk-cnt{position:absolute;right:-6px;top:-6px;min-width:20px;padding:0 5px;border-radius:999px;background:var(--ai);color:#fff;font:700 11px/20px system-ui;border:2px solid var(--panel)}
-  .pk-cnt:empty,.pk-cnt[data-c="0"]{display:none}
-  .pk-top{font:700 13px/1 var(--display);font-variant-numeric:tabular-nums;text-align:center}
-  .pk-top:empty{display:none}
-  .pk-vert{writing-mode:vertical-rl;transform:rotate(180deg);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-top:6px;white-space:nowrap}
-  .pk-more{margin-top:auto;color:var(--muted);font-size:20px;line-height:1;animation:nudgeR 2.6s ease-in-out infinite}
-  .dock.right .pk-more{animation-name:nudgeL}
-  @keyframes nudgeR{0%,70%,100%{transform:none}85%{transform:translateX(4px)}}
-  @keyframes nudgeL{0%,70%,100%{transform:none}85%{transform:translateX(-4px)}}
-  .bump{animation:bump .55s cubic-bezier(.2,.9,.3,1.4)}
-  @keyframes bump{40%{transform:scale(1.28)}}
-
-  .pin{display:grid;place-items:center;margin-left:auto;width:32px;height:32px;min-height:0;padding:0;border-radius:10px;border-color:transparent;background:transparent;font-size:14px;opacity:.45;filter:grayscale(1);flex:none}
-  .pin:hover{opacity:.9;background:var(--panel2)}
-  .pin[aria-pressed="true"]{opacity:1;filter:none;background:var(--panel2)}
-  .tabs .pin{flex:none;width:30px}
-  .tabs [role=tab]{white-space:nowrap;padding:6px 8px}
-}
-@media (min-width:861px) and (max-height:700px){
-  .pk-logo,.pk-sub,.pk-vert{display:none}
-  .peek{gap:8px;padding-top:12px}
-  .pk-lv li{width:30px;height:30px;font-size:14px}
-}
-
+.bump{animation:bump .55s cubic-bezier(.2,.9,.3,1.4)}
+@keyframes bump{40%{transform:scale(1.28)}}
+/* the one drawer: a side drawer over the game on wider screens, a bottom sheet on phones */
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(390px,92vw);background:var(--panel);border-left:1px solid var(--line);box-shadow:-24px 0 60px rgba(20,21,27,.2);z-index:40;overflow:auto;overscroll-behavior:contain;
+  transform:translateX(105%);visibility:hidden;transition:transform .3s cubic-bezier(.2,.8,.2,1),visibility 0s .3s}
+.drawer.open{transform:none;visibility:visible;transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.sheetclose{flex:none;width:40px;min-height:40px;padding:0;border-radius:50%;background:var(--panel2);border-color:transparent;font-size:15px;display:grid;place-items:center}
+.scrim.on{display:block}
 /* ---------- responsive ---------- */
 @media (max-width:860px){
-  .app{grid-template-columns:minmax(0,1fr);padding:10px 12px calc(10px + env(safe-area-inset-bottom));gap:10px}
-  .dock{display:contents}
-  .rail.left{display:none}
-  .hud{display:flex}
-  .rail.right{position:fixed;left:0;right:0;bottom:0;max-height:72dvh;border-radius:22px 22px 0 0;z-index:40;transform:translateY(105%);transition:transform .35s ease;padding-bottom:env(safe-area-inset-bottom)}
-  .rail.right.open{transform:none}
-  .tabs [role=tab]{white-space:nowrap}
-  .tabs .sheetclose{display:grid;place-items:center;flex:none;width:40px;min-height:40px;padding:0;border-radius:50%;background:var(--panel2);border-color:transparent;font-size:15px}
-  .rail.right::before{content:"";display:block;width:40px;height:5px;border-radius:3px;background:var(--line);margin:10px auto 0}
-  .scrim.on{display:block}
+  .app{padding:10px 12px calc(10px + env(safe-area-inset-bottom))}
+  .drawer{top:auto;left:0;width:auto;max-height:78dvh;border-left:0;border-radius:22px 22px 0 0;transform:translateY(105%);padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -20px 60px rgba(20,21,27,.2)}
+  .drawer::before{content:"";display:block;width:40px;height:5px;border-radius:3px;background:var(--line);margin:10px auto 0}
+  .hud .sheetbtn .lbl{display:none}
   .hero{grid-template-columns:1fr}.mosaic{display:none}
   .how{grid-template-columns:1fr}.how div{padding:10px 12px}.how b{display:inline;margin:0 4px}
   #s-guess{--mw:min(100%,calc((100dvh - 250px) * 4 / 3))}
   .bossgrid,.two{grid-template-columns:1fr}
   .guessnum{font-size:64px}
   .learned{grid-template-columns:1fr}
-  .endtop{grid-template-columns:1fr;justify-items:start}.trophy{width:84px;height:84px;font-size:44px;border-radius:22px}
+  .endtop{gap:12px}.trophy{width:60px;height:60px;font-size:32px;border-radius:16px}
   .claim{min-height:150px;padding:18px 8px}
   .choices .g small{display:none}
 }
@@ -437,9 +387,17 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
 .hud{align-items:center;gap:8px;margin-bottom:10px;flex-wrap:nowrap}
 .hud .lv{flex:1;min-width:0;display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .hud .lv i{font-style:normal;width:30px;height:30px;border-radius:10px;background:var(--ink);color:var(--bg);display:grid;place-items:center;flex:none}
+.hud .pill .i{color:var(--ink2)}
+/* start screen: no score and no progress yet; the header button opens only the leaderboard */
+.atintro .hud .scorepill,.atintro .tabs [data-tab=you],.atintro .tabs [data-tab=notes],.atintro .lbl-prog,.atintro .ic-prog{display:none}
+.lbl-board,.ic-board{display:none}.atintro .lbl-board,.atintro .ic-board{display:inline}
+.atintro .sheetbtn .ic-board{display:inline-block}
 .hud .pill{display:flex;align-items:center;gap:4px;padding:6px 11px;border-radius:999px;background:var(--panel);border:1px solid var(--line);font:700 15px/1 var(--display);font-variant-numeric:tabular-nums;white-space:nowrap}
 .hud button.pill{min-height:36px}
-@media (min-width:861px){.hud .sheetbtn{display:none}}
+.hud{display:flex}.scorepill{position:relative}
+.sheetbtn .lbl{font:600 14px/1 system-ui;margin-left:2px}
+.sheetbtn{position:relative}.sheetbtn .dot{position:absolute;right:-4px;top:-4px;min-width:18px;padding:0 5px;border-radius:999px;background:var(--ai);color:#fff;font:700 11px/18px system-ui;border:2px solid var(--bg)}
+.sheetbtn .dot[data-c="0"]{display:none}
 
 /* phones and short windows: the answer card goes UNDER the picture (it never fits on top of a small picture) */
 @media (max-width:860px), (max-height:640px){
@@ -461,48 +419,14 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
 </style>
 </head>
 <body>
-<div class="app dock-r">
-
-<!-- ================= left rail: the player ================= -->
-<div class="dock left" id="dockL">
-<aside class="rail left" aria-label="Your game">
-  <div class="peek" id="peekL" role="button" tabindex="0" aria-expanded="false" aria-controls="fullL" aria-label="Show score, levels and badges">
-    <i class="pk-logo" aria-hidden="true">?</i>
-    <div class="avatar" id="pkAv" aria-hidden="true">?</div>
-    <b class="pk-score" id="pkScore">0</b><span class="pk-sub">pts</span>
-    <span class="pk-streak" id="pkStreak" title="Streak">🔥 0</span>
-    <span class="pk-sep"></span>
-    <ul class="pk-lv" id="pkLv" aria-hidden="true"></ul>
-    <span class="pk-sep"></span>
-    <span class="pk-badge" id="pkBadge" title="Badges">🏅 0/8</span>
-    <span class="pk-more" aria-hidden="true">›</span>
-  </div>
-  <div class="full" id="fullL">
-  <div class="brand"><i>?</i>Real or AI?<button class="pin" data-pin="l" aria-pressed="false" aria-label="Keep this panel open" title="Keep open">📌</button></div>
-  <div class="player">
-    <button class="soundbtn" id="soundBtn" aria-label="Sound on or off" title="Sound">🔊</button>
-    <div class="who"><div class="avatar" id="av">?</div><div style="min-width:0"><div class="nm" id="pName">Player</div><div class="rk" id="pRank">Rookie</div></div></div>
-    <div class="scoreline"><span class="score" id="score">0</span><span>points</span></div>
-    <div class="pop" id="pop">+0</div>
-    <div class="streak"><span class="flames" id="flames"><b>🔥</b><b>🔥</b><b>🔥</b><b>🔥</b><b>🔥</b></span><span id="streakTxt">No streak yet</span></div>
-  </div>
-  <div class="race" id="race"><span id="raceTxt"></span><div class="bar"><i id="raceBar"></i></div></div>
-  <p class="railh">Levels</p>
-  <ul class="levels" id="levels"></ul>
-  <p class="railh">Badges</p>
-  <div class="badges" id="badges"></div>
-  </div>
-</aside>
-</div>
+<div class="app">
 
 <!-- ================= stage ================= -->
 <main class="stage">
   <div class="hud" id="hud">
-    <div class="lv"><i id="hudIc">🎮</i><span id="hudLv">Real or AI?</span></div>
-    <span class="pill" title="Streak">🔥<span id="hudStreak">0</span></span>
-    <span class="pill" title="Points">⭐<span id="hudScore">0</span></span>
-    <button class="pill" id="soundBtn2" aria-label="Sound on or off">🔊</button>
-    <button class="pill sheetbtn" id="sheetBtn" aria-label="Field notes and leaderboard">📓<span id="hudNotes">0</span></button>
+    <div class="lv"><i id="hudIc">{{i:gamepad-2 i-sm}}</i><span id="hudLv">Real or AI?</span></div>
+    <span class="pill scorepill" title="Points" aria-label="Points">{{i:star i-sm}}<span id="hudScore">0</span><span class="pop" id="pop" aria-hidden="true">+0</span></span>
+    <button class="pill sheetbtn" id="sheetBtn" aria-haspopup="dialog" aria-controls="sheet" aria-expanded="false" aria-label="Open your progress, field notes and leaderboard" title="Progress, notes and leaderboard"><span class="ic-prog">{{i:menu i-sm}}</span><span class="ic-board">{{i:trophy i-sm}}</span><span class="lbl"><span class="lbl-prog">Progress</span><span class="lbl-board">Leaderboard</span></span><b class="dot" id="hudNotes" data-c="0"></b></button>
   </div>
 
   <!-- intro -->
@@ -512,16 +436,18 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
         <div>
           <p class="kicker">5 levels · 4 minutes</p>
           <h1 id="t-intro" class="disp">Real or <em>AI?</em></h1>
-          <p class="ink2" style="font-size:19px">Spot the fakes. Guess the data. Beat your friends.</p>
+          <p class="lead">First, spot the AI fakes among real photos and texts of Swiss valleys. Then guess what US adults told a survey about AI, and compare yourself with them.</p>
         </div>
         <div class="mosaic" aria-hidden="true" id="mosaic"></div>
       </div>
       <div class="challenge" id="challenge"></div>
-      <div class="namerow">
-        <input id="nameIn" maxlength="18" autocomplete="nickname" aria-label="Your player name" placeholder="Your player name">
-        <button class="ghost" id="dice" title="Pick a random name" aria-label="Pick a random name">🎲</button>
+      <div class="namelab"><label for="nameIn">Your player name</label>
+        <div class="namerow">
+          <input id="nameIn" maxlength="18" autocomplete="nickname" placeholder="e.g. Swift Lynx">
+          <button id="dice" title="Pick a random name" aria-label="Pick a random name">{{i:dices i-md}}</button>
+        </div>
       </div>
-      <button class="start" id="start">Start the game ▶</button>
+      <button class="start" id="start">{{i:play i-md}}<span>Start the game</span></button>
     </div>
   </section>
 
@@ -530,7 +456,7 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
     <div class="wrap">
       <span class="lvtype" id="lvType"></span>
       <p class="lvnum" id="lvNum">Level 1 of 7</p>
-      <div class="lvicon" id="lvIcon">🌄</div>
+      <div class="lvicon" id="lvIcon" aria-hidden="true"></div>
       <h2 class="lvname" id="lvName">Warm-up</h2>
       <p class="lvbridge" id="lvBridge"></p>
       <p class="lvblurb" id="lvBlurb"></p>
@@ -546,7 +472,7 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
     <div class="wrap" style="gap:10px;max-width:none">
       <div class="gtop" style="width:var(--mw);margin:0 auto">
         <div class="ring" id="ring"><svg viewBox="0 0 60 60"><circle class="bg" cx="30" cy="30" r="26"/><circle class="fg" id="ringFg" cx="30" cy="30" r="26" stroke-dasharray="163.4" stroke-dashoffset="0"/></svg><b id="secs">5</b></div>
-        <div class="bubble" id="say" aria-live="polite">Take a good look 👀</div>
+        <div class="bubble" id="say" aria-live="polite">Take a good look</div>
         <span class="counter" id="ctr">1 / 4</span>
       </div>
       <div class="mwrap"><div class="media" id="media">
@@ -554,14 +480,14 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
         <div class="quote"><p class="src">From a travel guide about Swiss valleys</p><p id="quote"></p></div>
         <div class="loading" id="loading">Loading…</div>
         <span class="stamp ai" id="stAi">AI</span><span class="stamp real" id="stReal">REAL</span>
-        <div class="coach" id="coach" aria-hidden="true"><span class="hand">👆</span><span><span id="coachVerb">Drag</span> <span id="coachWhat">the picture</span>: <b class="c-ai">← AI</b> · <b class="c-real" id="coachReal">Real →</b></span></div>
+        <div class="coach" id="coach" aria-hidden="true"><span class="hand">{{i:hand i-md}}</span><span><span id="coachVerb">Drag</span> <span id="coachWhat">the picture</span>: <b class="c-ai">← AI</b> · <b class="c-real" id="coachReal">Real →</b></span></div>
       </div>
         <div class="verdict" id="verdict" aria-live="assertive"></div>
       </div>
       <div class="fuse" id="fuse" aria-hidden="true"><i id="fusebar"></i></div>
       <div class="choices">
         <button class="g ai" data-g="ai">← AI<small>swipe left</small></button>
-        <button class="hintbtn" id="hintBtn">💡 Hint <span class="muted">−40</span></button>
+        <button class="hintbtn" id="hintBtn" title="A tip on what to look at (costs 40 points)">{{i:lightbulb i-sm}} Hint <span class="muted">−40</span></button>
         <button class="g real" data-g="real"><span id="realLbl">REAL</span> →<small>swipe right</small></button>
       </div>
       <p class="tip" id="tip"></p>
@@ -580,7 +506,7 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
           <div id="bossAsk">
             <p class="guessnum"><span id="bossVal">50</span><small>of 100 Americans</small></p>
             <input type="range" id="bossRange" min="0" max="100" value="50" aria-label="Your guess, out of 100">
-            <div class="cta"><button class="primary" id="bossLock">Lock in my guess 🔒</button></div>
+            <div class="cta"><button class="primary" id="bossLock">Lock in my guess</button></div>
           </div>
           <div class="reveal" id="bossRev">
             <div class="cmp"><div><span class="small">You said</span><b id="bossYou"></b></div><div class="real"><span class="small">Real answer</span><b id="bossReal"></b></div></div>
@@ -603,9 +529,10 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
       <div class="gtop"><div class="ring" id="tfRing"><svg viewBox="0 0 60 60"><circle class="bg" cx="30" cy="30" r="26"/><circle class="fg" id="tfRingFg" cx="30" cy="30" r="26" stroke-dasharray="163.4" stroke-dashoffset="0"/></svg><b id="tfSecs">8</b></div>
         <div class="bubble" id="tfStem"></div><span class="counter" id="tfCtr">1 / 3</span></div>
       <div class="card"><p class="claim" id="t-tf"></p>
-        <div class="reveal" id="tfRev"><div class="tfbar" id="tfBar"><i id="tfFill"></i><span id="tfMark"></span></div><p class="hlmsg" id="tfMsg"></p></div>
+        <div class="reveal" id="tfRev"><div class="tfbar" id="tfBar"><i id="tfFill"></i><span id="tfMark"></span></div><p class="hlmsg" id="tfMsg"></p>
+          <div class="tfauto"><div class="tfprog" id="tfProg"><i></i></div><button class="ghost" id="tfNext">Next →</button></div></div>
       </div>
-      <div class="tfbtns"><button class="t" id="tBtn">✓ True</button><button class="f" id="fBtn">✗ False</button></div>
+      <div class="tfbtns"><button class="t" id="tBtn">{{i:check i-sm}} True</button><button class="f" id="fBtn">{{i:x i-sm}} False</button></div>
       <p class="tiny" style="text-align:center">Survey of US adults · <span data-dates></span> · n = <span data-n></span></p>
     </div>
   </section>
@@ -621,7 +548,7 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
       <div class="phase" id="ph2"><p class="q" id="predQ"></p>
         <p class="guessnum"><span id="predVal">50</span><small>of 100 US adults</small></p>
         <input type="range" id="predRange" min="0" max="100" value="50" aria-label="Your guess, out of 100">
-        <div class="cta"><button class="primary" id="predLock">Lock in 🔒</button></div></div>
+        <div class="cta"><button class="primary" id="predLock">Lock in</button></div></div>
       <!-- phase 3: reveal -->
       <div class="phase" id="ph3">
         <div class="two">
@@ -639,51 +566,62 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
   <!-- end -->
   <section id="s-end" aria-labelledby="t-end">
     <div class="wrap">
-      <div class="endtop"><div class="trophy" id="trophy">🏆</div>
+      <div class="insight">
+        <p class="kicker">What US adults told the survey · <span data-dates></span> · n = <span data-n></span></p>
+        <h2 class="message" id="t-end"></h2>
+        <div class="keynums" id="keyNums"></div>
+      </div>
+      <div><p class="kicker" style="margin-bottom:8px">You vs. US adults</p><ul class="vsus" id="vsUS"></ul></div>
+      <div class="endtop"><div class="trophy" id="trophy" aria-hidden="true"></div>
         <div><p class="kicker">Final score · <span id="endRank"></span></p><p class="endscore" id="endScore">0</p><p class="small" id="endSub"></p></div></div>
       <div class="earned" id="earned"></div>
-      <h2 class="message" id="t-end"></h2>
-      <div><p class="kicker" style="margin-bottom:8px">You vs. US adults</p><ul class="vsus" id="vsUS"></ul></div>
       <div><p class="kicker" style="margin-bottom:8px">What you learned</p><ul class="learned" id="learned"></ul></div>
-      <div class="card" style="display:flex;flex-direction:column;gap:10px">
-        <p class="kicker" id="shareKick">🥊 Challenge a friend</p>
+      <div class="card roomcard" id="roomCard" hidden aria-live="polite">
+        <p class="kicker" id="roomKick">Room</p>
+        <p class="roommsg" id="roomMsg">Sending your score to the big screen…</p>
+        <button class="ghost" id="roomRetry" hidden>Try again</button>
+      </div>
+      <div class="card" id="shareCard" style="display:flex;flex-direction:column;gap:10px">
+        <p class="kicker" id="shareKick">Challenge a friend</p>
         <ul class="vsus h2h" id="h2h" hidden></ul>
         <div class="share"><input id="shareUrl" readonly aria-label="Challenge link"><button class="primary" id="shareBtn" hidden>Share</button><button class="primary" id="copyBtn">Copy</button></div>
       </div>
-      <div class="cta"><button class="ghost" id="boardBtn">🏆 Leaderboard</button><button class="primary" id="again">Play again · new pictures</button></div>
+      <div class="cta"><button class="ghost" id="boardBtn">Leaderboard</button><button class="primary" id="again">Play again · new pictures</button></div>
       <details><summary>Sources and all numbers</summary><div class="tbl" id="tbl"></div><p class="source" id="srcAll"></p></details>
     </div>
   </section>
 </main>
 
-<!-- ================= right rail: field notes + leaderboard ================= -->
-<div class="dock right" id="dockR">
-<aside class="rail right" id="sheet" aria-label="Field notes and leaderboard">
-  <div class="peek" id="peekR">
-    <button class="pk-btn" data-open="notes" aria-label="Show field notes" title="Field notes">📓<b class="pk-cnt" id="pkNotes" data-c="0">0</b></button>
-    <button class="pk-btn" data-open="board" aria-label="Show leaderboard" title="Leaderboard">🏆</button>
-    <span class="pk-top" id="pkTop" title="Best score on this device"></span>
-    <span class="pk-vert" aria-hidden="true">Notes · Leaderboard</span>
-    <span class="pk-more" aria-hidden="true">‹</span>
-  </div>
-  <div class="full" id="fullR">
+<!-- ================= one drawer: progress, field notes, leaderboard (opens only on click, tap or keyboard) ================= -->
+<aside class="drawer" id="sheet" role="dialog" aria-modal="true" aria-label="Your progress, field notes and leaderboard" inert>
   <div class="tabs" role="tablist">
-    <button role="tab" aria-selected="true" data-tab="notes">📓 Field notes<span class="cnt" id="noteCnt">0</span></button>
-    <button role="tab" aria-selected="false" data-tab="board">🏆 Leaderboard</button>
-    <button class="pin" data-pin="r" aria-pressed="false" aria-label="Keep this panel open" title="Keep open">📌</button>
-    <button class="sheetclose" id="sheetClose" aria-label="Close field notes and leaderboard">✕</button>
+    <button role="tab" aria-selected="true" data-tab="you">You</button>
+    <button role="tab" aria-selected="false" data-tab="notes">Notes<span class="cnt" id="noteCnt" data-c="0">0</span></button>
+    <button role="tab" aria-selected="false" data-tab="board">Leaderboard</button>
+    <button class="sheetclose" id="sheetClose" aria-label="Close" title="Close (Esc)">{{i:x i-md}}</button>
   </div>
-  <div class="pane on" id="pane-notes" role="tabpanel">
-    <div class="empty" id="notesEmpty"><b>📓</b>Every answer unlocks a clue or a survey fact. They collect here so you can read them again.</div>
+  <div class="pane on" id="pane-you" role="tabpanel">
+    <div class="player">
+      <div class="who"><div class="avatar" id="av">?</div><div style="min-width:0"><div class="nm" id="pName">Player</div><div class="rk" id="pRank">Rookie</div></div></div>
+      <div class="scoreline"><span class="score" id="score">0</span><span>points</span></div>
+      <div class="streak"><span class="flames" id="flames" aria-hidden="true"><b>{{i:flame i-sm}}</b><b>{{i:flame i-sm}}</b><b>{{i:flame i-sm}}</b><b>{{i:flame i-sm}}</b><b>{{i:flame i-sm}}</b></span><span id="streakTxt">No streak yet</span></div>
+    </div>
+    <div class="race" id="race"><span id="raceTxt"></span><div class="bar"><i id="raceBar"></i></div></div>
+    <p class="railh">Levels</p>
+    <ul class="levels" id="levels"></ul>
+    <p class="railh">Badges</p>
+    <div class="badges" id="badges"></div>
+  </div>
+  <div class="pane" id="pane-notes" role="tabpanel">
+    <div class="empty" id="notesEmpty"><b>{{i:notebook-pen i-lg}}</b>Every answer unlocks a clue or a survey fact. They collect here so you can read them again.</div>
     <div id="notes" style="display:flex;flex-direction:column;gap:10px"></div>
   </div>
   <div class="pane" id="pane-board" role="tabpanel">
+    <div class="boardbar"><button class="ghost refresh" id="boardRefresh" aria-label="Refresh the leaderboard"><span class="ri">{{i:refresh-cw i-sm}}</span> Refresh</button></div>
     <ol class="board" id="board"></ol>
-    <div class="empty" id="boardEmpty"><b>🏆</b>No scores yet. Be the first.</div>
-  </div>
+    <div class="empty" id="boardEmpty"><b>{{i:trophy i-lg}}</b>No scores yet. Be the first.</div>
   </div>
 </aside>
-</div>
 <div class="scrim" id="scrim"></div>
 </div>
 <div class="toast" id="toast"></div>
@@ -692,6 +630,9 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
 // ---------- data: injected by build.py (survey numbers from the official CSV, pictures from pool.json) ----------
 const D = __DATA__;
 const POOL = __POOL__;
+const ICONS = __ICONS__;
+const ROOMDB = __ROOM__;   // live room leaderboard (Supabase): public URL + publishable key; the table only allows adding and reading scores   // Lucide outline icons (ISC), the one icon family of the page
+const I = (n, c = "") => `<svg class="i ${c}" viewBox="0 0 24 24" aria-hidden="true" focusable="false">${ICONS[n] || ""}</svg>`;
 
 // ---------- texts (same pool as v6) ----------
 // Human: Wikivoyage (CC BY-SA 3.0), word for word, from revisions saved before ChatGPT launched (30 Nov 2022).
@@ -732,26 +673,26 @@ const TIPS = {
          "Could this be about any valley in the world?", "Is the phrasing a bit clumsy? People write less smoothly than AI."],
 };
 const SAY = [
-  { 5: "Take a good look 👀", 4: "Check the light…", 3: "Hmm. Too perfect?", 2: "Your thumb wants to scroll 👆", 1: "DECIDE!! 😬" },
-  { 5: "Fresh eyes 👀", 4: "Look at the water…", 3: "Real? Fake? Real?", 2: "The feed won't wait ⏩", 1: "NOW!! 😱" },
-  { 5: "Read any signs? 🪧", 4: "Houses, fences, paths…", 3: "Trust your gut…", 2: "Tick tock ⏰", 1: "GO GO GO 🫣" },
-  { 5: "Last one here 🏁", 4: "Rocks, trees, river…", 3: "You've got this?", 2: "Scrolling in 2… 👆", 1: "CHOOSE!! 🤯" },
+  { 5: "Take a good look", 4: "Check the light…", 3: "Hmm. Too perfect?", 2: "Your thumb wants to scroll", 1: "DECIDE!!" },
+  { 5: "Fresh eyes", 4: "Look at the water…", 3: "Real? Fake? Real?", 2: "The feed won't wait", 1: "NOW!!" },
+  { 5: "Read any signs?", 4: "Houses, fences, paths…", 3: "Trust your gut…", 2: "Tick tock", 1: "GO GO GO" },
+  { 5: "Last one here", 4: "Rocks, trees, river…", 3: "You've got this?", 2: "Scrolling in 2…", 1: "CHOOSE!!" },
 ];
-const SAY_TEXT = { 5: "Read it 📖", 4: "Person or machine?", 3: "Too smooth?", 2: "Your thumb is itching 👆", 1: "DECIDE!! 😬" };
+const SAY_TEXT = { 5: "Read it", 4: "Person or machine?", 3: "Too smooth?", 2: "Your thumb is itching", 1: "DECIDE!!" };
 
 // ---------- game setup ----------
 const LEVELS = [
-  { id: "pics", chip: "🧨 Hard mode from picture 3 · ×1.5", ic: "🌄", name: "Real or AI?", kind: "pic", bridge: "First your eyes, then the data.", type: "📷 Image challenge", how: "Swipe or tap: ← AI · Real →", blurb: "6 valleys: real photo or AI?", d: "2 easy, then 4 hard · ×1.5" },
-  { id: "text", ic: "✍️", name: "Texts", kind: "text", type: "✍️ Text challenge", how: "Swipe or tap: ← AI · Person →", blurb: "Written by a person or by AI?", d: "2 short travel texts" },
-  { id: "boss", ic: "🎯", name: "The number", kind: "boss", bridge: "Hard for you. Is it hard in real life too? A survey of US adults asked.", type: "📊 Data challenge", how: "Slide to guess · the closer, the more points", blurb: "How many of 100 already see it around them?", d: "Guess on 100 dots · up to 300 points" },
-  { id: "tf", ic: "⚡", name: "True or false", kind: "tf", bridge: "Now spot the fake number.", type: "🧠 Knowledge check", how: "True or false · 8 seconds each", blurb: "Real survey number or made up?", d: "3 claims · 8 s each" },
-  { id: "you", ic: "🫵", name: "Your turn", kind: "you", bridge: "Now you answer the survey's own questions.", type: "🗳️ Your opinion", how: "Answer, then guess", blurb: "Then guess how US adults answered.", d: "2 questions + 2 guesses" },
+  { id: "pics", chip: "Hard mode from picture 3 · ×1.5", ic: "image", name: "Real or AI?", kind: "pic", bridge: "First your eyes, then the data.", type: "Image challenge", how: "Swipe or tap: ← AI · Real →", blurb: "6 valleys: real photo or AI?", d: "2 easy, then 4 hard · ×1.5" },
+  { id: "text", ic: "file-text", name: "Texts", kind: "text", type: "Text challenge", how: "Swipe or tap: ← AI · Person →", blurb: "Written by a person or by AI?", d: "2 short travel texts" },
+  { id: "boss", ic: "target", name: "The number", kind: "boss", bridge: "Hard for you. Is it hard in real life too? A survey of US adults asked.", type: "Data challenge", how: "Slide to guess · the closer, the more points", blurb: "How many of 100 already see it around them?", d: "Guess on 100 dots · up to 300 points" },
+  { id: "tf", ic: "scale", name: "True or false", kind: "tf", bridge: "Now spot the fake number.", type: "Knowledge check", how: "True or false · 8 seconds each", blurb: "Real survey number or made up?", d: "3 claims · 8 s each" },
+  { id: "you", ic: "message-square-text", name: "Your turn", kind: "you", bridge: "Now you answer the survey's own questions.", type: "Your opinion", how: "Answer, then guess", blurb: "Then guess how US adults answered.", d: "2 questions + 2 guesses" },
 ];
 const BADGES = [
-  ["eagle", "🦅", "Eagle eye", "All hard-mode pictures right"], ["lightning", "⚡", "Lightning", "A right answer in under 1.5 s"],
-  ["streak", "🔥", "On fire", "5 right in a row"], ["bullseye", "🎯", "Bullseye", "The number within ±3"],
-  ["fact", "🧠", "Fact-checker", "True or false: all right"],
-  ["mind", "🔮", "Mind reader", "A prediction within ±5"], ["nohint", "🙈", "No hints", "Finished without any hint"],
+  ["eagle", "eye", "Eagle eye", "All hard-mode pictures right"], ["lightning", "zap", "Lightning", "A right answer in under 1.5 s"],
+  ["streak", "flame", "On fire", "5 right in a row"], ["bullseye", "target", "Bullseye", "The number within ±3"],
+  ["fact", "badge-check", "Fact-checker", "True or false: all right"],
+  ["mind", "sparkles", "Mind reader", "A prediction within ±5"], ["nohint", "lightbulb-off", "No hints", "Finished without any hint"],
 ];
 const RANKS = [[0, "Doom-scroller"], [.3, "Spotter"], [.5, "Detective"], [.68, "Fact-checker"], [.82, "AI whisperer"]];
 const ADJ = ["Swift", "Sharp", "Sly", "Calm", "Bold", "Keen", "Quiet", "Lucky"], ANI = ["Lynx", "Ibex", "Marmot", "Eagle", "Fox", "Chamois", "Owl", "Trout"];
@@ -759,6 +700,9 @@ const ADJ = ["Swift", "Sharp", "Sly", "Calm", "Bold", "Keen", "Quiet", "Lucky"],
 // ---------- helpers ----------
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const q = new URLSearchParams(location.search);
+// ?room=code: everyone who scans the same QR code plays the same round, and the scores go to the room screen (live.html)
+const ROOM = /^[a-z0-9-]{2,24}$/.test((q.get("room") || "").toLowerCase()) ? q.get("room").toLowerCase() : "";
+const hashStr = t => { let h = 2166136261; for (const ch of t) h = Math.imul(h ^ ch.charCodeAt(0), 16777619); return h >>> 0; };
 if (q.get("theme")) document.documentElement.dataset.theme = q.get("theme");
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const LIMIT = Math.max(2, Math.min(30, +q.get("limit") || 5));
@@ -792,28 +736,22 @@ $$("[data-n]").forEach(e => e.textContent = D.n.toLocaleString("en"));
 $$(".limtxt").forEach(e => e.textContent = LIMIT);
 
 
-// ---------- sound: tiny synthesized effects (no files), mute button remembered on this device ----------
+// ---------- sound: only three soft cues (right, wrong, the end); no files, no toggle ----------
 const SFX = (() => {
-  let ctx = null, on = store.get("realOrAI.sound", true);
+  let ctx = null;
   const ac = () => { try { ctx = ctx || new (window.AudioContext || window.webkitAudioContext)(); if (ctx.state === "suspended") ctx.resume(); return ctx; } catch { return null; } };
-  const tone = (f, t0, dur, type = "sine", vol = .07, slide = 0) => {
+  const tone = (f, t0, dur, vol = .03) => {
     const c = ac(); if (!c) return; const t = c.currentTime + t0, o = c.createOscillator(), g = c.createGain();
-    o.type = type; o.frequency.setValueAtTime(f, t); if (slide) o.frequency.exponentialRampToValueAtTime(f * slide, t + dur);
-    g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + .012); g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+    o.type = "sine"; o.frequency.setValueAtTime(f, t);
+    g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + .015); g.gain.exponentialRampToValueAtTime(.0001, t + dur);
     o.connect(g).connect(c.destination); o.start(t); o.stop(t + dur + .03);
   };
   const S = {
-    click: () => tone(700, 0, .05, "triangle", .04),
-    count: () => tone(520, 0, .09, "sine", .06),
-    go: () => tone(440, 0, .22, "sine", .07, 2),
-    right: () => { tone(660, 0, .1, "triangle", .07); tone(990, .08, .18, "triangle", .07); },
-    wrong: () => tone(220, 0, .28, "sawtooth", .035, .55),
-    tick: () => tone(1250, 0, .035, "square", .02),
-    badge: () => [784, 988, 1319].forEach((f, i) => tone(f, i * .07, .2, "triangle", .05)),
-    end: () => [523, 659, 784, 1047].forEach((f, i) => tone(f, i * .12, .3, "triangle", .06)),
+    right: () => { tone(660, 0, .09); tone(880, .07, .14); },
+    wrong: () => tone(260, 0, .18, .025),
+    end: () => [523, 659, 784].forEach((f, i) => tone(f, i * .11, .22)),
   };
-  const paint = () => ["#soundBtn", "#soundBtn2"].forEach(id => { const b = $(id); if (b) { b.textContent = on ? "🔊" : "🔇"; b.setAttribute("aria-pressed", on); b.title = on ? "Sound is on · click to mute" : "Sound is off · click to turn on"; b.setAttribute("aria-label", b.title); } });
-  return { play(n) { if (on) try { S[n](); } catch {} }, toggle() { on = !on; store.set("realOrAI.sound", on); paint(); if (on) S.click(); }, paint };
+  return { play(n) { if (S[n]) try { S[n](); } catch {} } };   // other moments stay silent on purpose
 })();
 // ---------- state ----------
 let S;
@@ -847,8 +785,8 @@ function drawFrom(list, keyOf, perKind, seenKey, last) {
 }
 function draw() {
   const last = Object.values(S.items).flat().map(x => x.file || x.text);
-  S.seed = q.has("r") && !S.playedOnce ? (+q.get("r") >>> 0) : (Math.random() * 2 ** 31) >>> 0;
-  const fixed = !S.playedOnce && q.get("p") && q.get("t");
+  S.seed = ROOM ? hashStr(ROOM) : q.has("r") && !S.playedOnce ? (+q.get("r") >>> 0) : (Math.random() * 2 ** 31) >>> 0;
+  const fixed = !ROOM && !S.playedOnce && q.get("p") && q.get("t");
   // one picture level that gets harder: 2 easy (older AI, 1 real + 1 AI), then 4 hard (2026 AI vs. real photos that look fake)
   let warm = [], hard = [];
   if (fixed) {   // challenge link: exactly the same pictures and texts
@@ -856,7 +794,11 @@ function draw() {
     warm = P.filter(i => POOL[i].level === 1).slice(0, 2).map(i => POOL[i]); hard = P.filter(i => POOL[i].level === 2).slice(0, 4).map(i => POOL[i]);
     S.items.text = T.map(i => TEXTS[i]);
   }
-  if (!fixed || warm.length < 2 || hard.length < 4 || S.items.text.length < 2) {
+  if (ROOM) {   // a room: the round comes from the room code, so every phone gets the same pictures, texts and claims
+    rnd = mulberry32(hashStr(ROOM));
+    const pick = (list, n) => ["real", "ai"].flatMap(t => shuffle(list.filter(x => x.truth === t)).slice(0, n));
+    warm = shuffle(pick(POOL.filter(p => p.level === 1), 1)); hard = shuffle(pick(POOL.filter(p => p.level === 2), 2)); S.items.text = shuffle(pick(TEXTS, 1));
+  } else if (!fixed || warm.length < 2 || hard.length < 4 || S.items.text.length < 2) {
     rnd = Math.random;
     warm = drawFrom(POOL.filter(p => p.level === 1), p => p.file, 1, SEEN_KEY + ".1", last);
     hard = drawFrom(POOL.filter(p => p.level === 2), p => p.file, 2, SEEN_KEY + ".2", last);
@@ -875,8 +817,8 @@ function note(kind, title, text, key) {
   S.notes.unshift({ kind, title, text, key });
   $("#notes").insertAdjacentHTML("afterbegin", `<div class="note"><span class="tag ${kind}">${kind === "clue" ? "Clue" : "Fact"}</span><b>${title}</b>${text}</div>`);
   $("#notesEmpty").style.display = "none";
-  $("#noteCnt").textContent = S.notes.length; $("#hudNotes").textContent = S.notes.length;
-  const pk = $("#pkNotes"); pk.textContent = pk.dataset.c = S.notes.length; bump(pk.parentElement);
+  $("#noteCnt").textContent = $("#noteCnt").dataset.c = S.notes.length;
+  if (!$("#sheet").classList.contains("open")) { S.unread = (S.unread || 0) + 1; const d = $("#hudNotes"); d.textContent = d.dataset.c = S.unread; }
 }
 function bump(el) { if (reduce || !el) return; el.classList.remove("bump"); void el.offsetWidth; el.classList.add("bump"); }
 
@@ -888,7 +830,7 @@ function add(points, right) {
     S.score += points;
     const id = LEVELS[S.lv] && LEVELS[S.lv].id; if (id) S.lvPts[id] = (S.lvPts[id] || 0) + points;   // per level, for the head-to-head
     const p = $("#pop"); p.textContent = "+" + points; p.classList.remove("go"); void p.offsetWidth; p.classList.add("go");
-    bump($("#pkScore"));
+    bump($("#hudScore"));
   }
   hud();
 }
@@ -905,35 +847,29 @@ function hud() {
   countTo($("#score"), S.score); countTo($("#hudScore"), S.score);
   $$("#flames b").forEach((b, k) => b.classList.toggle("on", k < S.streak));
   $("#streakTxt").textContent = S.streak ? `${S.streak} in a row` + (S.streak > 1 ? ` · +${Math.min(100, 20 * (S.streak - 1))} bonus` : "") : "No streak yet";
-  $("#hudStreak").textContent = S.streak;
   $("#pRank").textContent = rankOf(S.score);
   const nm = S.name || "Player"; $("#pName").textContent = nm; $("#av").textContent = nm.trim()[0].toUpperCase();
   if (vs) {
     $("#race").classList.add("on");
     const ahead = S.score - vs.score;
-    $("#raceTxt").innerHTML = `🥊 vs <b>${esc(vs.name)}</b> (${vs.score.toLocaleString("en")}) · ` + (ahead >= 0 ? `<b style="color:var(--good)">you're ahead!</b>` : `${(-ahead).toLocaleString("en")} to go`);
+    $("#raceTxt").innerHTML = `vs <b>${esc(vs.name)}</b> (${vs.score.toLocaleString("en")}) · ` + (ahead >= 0 ? `<b style="color:var(--good)">you're ahead!</b>` : `${(-ahead).toLocaleString("en")} to go`);
     $("#raceBar").style.width = Math.min(100, S.score / Math.max(1, vs.score) * 100) + "%";
   }
   $("#levels").innerHTML = LEVELS.map((l, i) => {
-    const r = S.res[l.id], trail = r ? r.map(x => x === true ? "✅" : x === false ? "❌" : x === "tie" ? "🟨" : "⏱").join("") : "";
-    return `<li class="${i < S.lv ? "done" : i === S.lv ? "now" : ""}"><span class="ic">${l.ic}</span>${l.name}<span class="tr">${trail}</span><span class="lvd">${l.d}</span></li>`;
+    const r = S.res[l.id], trail = r ? r.map(x => x === true ? I("check", "i-sm ok") : x === false ? I("x", "i-sm no") : x === "tie" ? I("equal", "i-sm") : I("clock", "i-sm late")).join("") : "",
+      said = r ? ` (${r.filter(x => x === true).length} of ${r.length} right)` : "";
+    return `<li class="${i < S.lv ? "done" : i === S.lv ? "now" : ""}"><span class="ic">${I(l.ic, "i-sm")}</span>${l.name}${i === S.lv ? '<span class="sr"> (now)</span>' : ""}<span class="tr trail" aria-label="${said}">${trail}</span><span class="lvd">${l.d}</span></li>`;
   }).join("");
-  if (S.lv >= 0 && LEVELS[S.lv]) { $("#hudIc").textContent = LEVELS[S.lv].ic; $("#hudLv").textContent = `${S.lv + 1}/${LEVELS.length} · ${LEVELS[S.lv].name}`; }
-  // the slim pillar: only what you need at a glance
-  countTo($("#pkScore"), S.score); $("#pkAv").textContent = $("#av").textContent;
-  $("#pkStreak").textContent = "🔥 " + S.streak; $("#pkStreak").classList.toggle("hot", S.streak >= 3);
-  $("#pkBadge").textContent = `🏅 ${S.badges.size}/${BADGES.length}`;
-  $("#pkLv").innerHTML = LEVELS.map((l, i) => `<li class="${i < S.lv ? "done" : i === S.lv ? "now" : ""}" title="${l.name}">${l.ic}</li>`).join("");
+  if (S.lv >= 0 && LEVELS[S.lv]) { $("#hudIc").innerHTML = I(LEVELS[S.lv].ic, "i-sm"); $("#hudLv").textContent = `${S.lv + 1}/${LEVELS.length} · ${LEVELS[S.lv].name}`; }
 }
 function badge(id) {
   if (S.badges.has(id)) return;
-  S.badges.add(id); later(() => SFX.play("badge"), 250);
+  S.badges.add(id); 
   const b = BADGES.find(x => x[0] === id);
   $$("#badges div")[BADGES.indexOf(b)].classList.add("on");
-  $("#pkBadge").textContent = `🏅 ${S.badges.size}/${BADGES.length}`; bump($("#pkBadge"));
-  toast(`${b[1]} Badge: ${b[2]}`);
+  toast(`Badge: ${b[2]}`); const el = $$("#badges div")[BADGES.indexOf(b)].querySelector("em"); if (el) el.textContent = "Earned";
 }
-$("#badges").innerHTML = BADGES.map(b => `<div data-tip="${b[2]}: ${b[3]}" aria-label="${b[2]}: ${b[3]}">${b[1]}</div>`).join("");
+$("#badges").innerHTML = BADGES.map(b => `<div>${I(b[1], "i-md")}<b>${b[2]}<em>Locked</em></b><span>${b[3]}</span></div>`).join("");
 function toast(t) { const el = $("#toast"); el.textContent = t; el.classList.add("on"); clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove("on"), 2200); }
 function confetti(n = 80) {
   if (reduce) return;
@@ -944,24 +880,24 @@ function confetti(n = 80) {
 }
 
 // ---------- screens + levels ----------
-function screen(id) { $$("section").forEach(s => s.classList.toggle("on", s.id === id)); closeSheet(); pillars(); }
+function screen(id) { $$("section").forEach(s => s.classList.toggle("on", s.id === id)); document.body.classList.toggle("atintro", id === "s-intro"); $("#sheetBtn").setAttribute("aria-label", id === "s-intro" ? "Open the leaderboard" : "Open your progress, field notes and leaderboard"); closeSheet(); }
 function level(i) {
   clearAll(); S.lv = i; hud();
   if (i >= LEVELS.length) return end();
   const L = LEVELS[i];
-  $("#lvNum").textContent = `Level ${i + 1} of ${LEVELS.length}`; $("#lvIcon").textContent = L.ic; $("#lvName").textContent = L.name; $("#lvBlurb").textContent = L.blurb;
+  $("#lvNum").textContent = `Level ${i + 1} of ${LEVELS.length}`; $("#lvIcon").innerHTML = I(L.ic, "i-xl"); $("#lvName").textContent = L.name; $("#lvBlurb").textContent = L.blurb;
   $("#lvType").textContent = L.type; $("#lvBridge").textContent = L.bridge || "";
   $("#lvHow").textContent = L.how;
   $("#lvMult").hidden = !L.chip; $("#lvMult").textContent = L.chip || "";
   screen("s-level");
   (S.items[L.id] || []).forEach(p => { if (p.file) { const im = new Image(); im.src = p.file; } });   // preload
-  const go = () => { clearAll(); SFX.play("go"); RUN[L.kind](L); };
+  const go = () => { clearAll(); RUN[L.kind](L); };
   $("#lvGo").onclick = go;
   // the countdown stays hidden while you read (otherwise the last level's "1" would still show), then 3-2-1
   const c = $("#lvCount"); c.style.visibility = "hidden"; c.textContent = "3";
   if (reduce) return;
   const wait = 2000;   // 2 s to read the level screen; "I'm ready" skips it
-  [3, 2, 1].forEach((k, j) => later(() => { SFX.play("count"); c.style.visibility = ""; c.textContent = k; c.classList.remove("tick"); void c.offsetWidth; c.classList.add("tick"); }, wait + j * 750));
+  [3, 2, 1].forEach((k, j) => later(() => { c.style.visibility = ""; c.textContent = k; c.classList.remove("tick"); void c.offsetWidth; c.classList.add("tick"); }, wait + j * 750));
   later(go, wait + 2300);
 }
 const RUN = { pic: startGuess, text: startGuess, boss, tf, you: youStart };
@@ -973,10 +909,10 @@ function startGuess(L) { G_ = { ...G_, L, n: 0, list: S.items[L.id] }; S.res[L.i
 function show() {
   const p = G_.list[G_.n], m = $("#media");
   G_.limit = limitOf(p);
-  if (p.hard && !(G_.list[G_.n - 1] || {}).hard) { toast("🧨 Hard mode: the newest AI · ×1.5 points"); SFX.play("badge"); }
+  if (p.hard && !(G_.list[G_.n - 1] || {}).hard) { toast("Hard mode: the newest AI · ×1.5 points"); }
   m.className = "media" + (p.kind === "text" ? " text" : ""); m.style.transform = "";
   $("#s-guess").classList.remove("answered"); $("#s-guess").scrollTop = 0; $("#verdict").innerHTML = ""; $("#s-guess").classList.toggle("textmode", p.kind === "text"); $("#verdict").className = "verdict"; $("#tip").textContent = ""; $("#tip").className = "tip";
-  $("#ctr").textContent = `${p.hard ? "🧨 " : ""}${G_.n + 1} / ${G_.list.length}`;
+  $("#ctr").textContent = `${p.hard ? "Hard · " : ""}${G_.n + 1} / ${G_.list.length}`;
   $("#realLbl").textContent = p.kind === "text" ? "PERSON" : "REAL";
   $$("[data-g]").forEach(b => { b.disabled = false; b.classList.remove("picked"); });
   $("#hintBtn").disabled = false; G_.hint = false; G_.answered = false;
@@ -995,7 +931,7 @@ function show() {
   const img = $("#img"); $("#loading").style.display = "grid"; $("#loading").textContent = "Loading…";
   img.onload = () => { $("#loading").style.display = "none"; G_.shownAt = performance.now(); startTimer(); };
   img.onerror = () => { $("#loading").textContent = "The picture couldn't load."; };
-  img.alt = `Picture ${G_.n + 1} of ${G_.list.length}: a Swiss mountain valley landscape. Is it a real photo or made by AI?`;
+  img.alt = `Picture ${G_.n + 1} of ${G_.list.length}. ${p.alt || "A Swiss mountain valley."} Real photo or AI?`;
   img.src = p.file;
   if (img.complete && img.naturalWidth) img.onload();
 }
@@ -1007,7 +943,7 @@ function startTimer() {
     if (!G_.ticking) return;
     const left = Math.max(0, G_.limit - (performance.now() - G_.shownAt) / 1000), f = left / G_.limit;
     setRing(f, left); $("#fusebar").style.transform = `scaleX(${f})`;
-    const sec = Math.ceil(left); if (sec <= 2 && sec > 0 && sec !== G_.lastTick) { G_.lastTick = sec; SFX.play("tick"); }
+    const sec = Math.ceil(left); if (sec <= 2 && sec > 0 && sec !== G_.lastTick) { G_.lastTick = sec; }
     const k = Math.min(5, Math.max(1, Math.ceil(f * 5))), s = p.kind === "text" ? SAY_TEXT[k] : SAY[G_.n % 4][k];
     if ($("#say").textContent !== s && !G_.hint) $("#say").textContent = s;
     const hurry = f <= .4; $("#ring").classList.toggle("hurry", hurry); $("#fuse").classList.toggle("hurry", hurry);
@@ -1020,7 +956,7 @@ function stopTimer() { G_.ticking = false; cancelAnimationFrame(G_.raf); }
 function hint() {
   if (G_.answered || $("#hintBtn").disabled) return;
   const tips = TIPS[G_.list[G_.n].kind];
-  $("#tip").textContent = "💡 " + tips[Math.floor(Math.random() * tips.length)]; $("#tip").className = "tip on";
+  $("#tip").innerHTML = I("lightbulb", "i-sm") + esc(tips[Math.floor(Math.random() * tips.length)]); $("#tip").className = "tip on";
   $("#hintBtn").disabled = true; G_.hint = true; S.hints++;
 }
 function guess(g) {
@@ -1033,7 +969,7 @@ function guess(g) {
   if (right) {
     const speed = Math.round(50 * Math.max(0, 1 - secs / G_.limit)), streak = Math.min(100, 20 * S.streak);
     pts = Math.max(0, Math.round((base + speed) * (mult || 1)) + streak - (G_.hint ? 40 : 0));
-    why = `${mult ? "(" : ""}${base} right${speed ? ` + ${speed} speed` : ""}${mult ? `) × ${mult} hard mode` : ""}${streak ? ` + ${streak} streak 🔥` : ""}${G_.hint ? " − 40 hint" : ""}`;
+    why = `${mult ? "(" : ""}${base} right${speed ? ` + ${speed} speed` : ""}${mult ? `) × ${mult} hard mode` : ""}${streak ? ` + ${streak} streak` : ""}${G_.hint ? " − 40 hint" : ""}`;
     if (secs < 1.5) badge("lightning");
   }
   S.res[L.id].push(late ? null : right);
@@ -1045,15 +981,15 @@ function guess(g) {
   m.style.transform = ""; stamps(0);
   const what = p.kind === "text" ? (p.truth === "ai" ? "Written by AI" : "Written by a person") : (p.truth === "ai" ? "Made by AI" : "A real photo");
   const tell = p.tell || TELL[p.truth];
-  const head = late ? `⏱ Time's up · ${what}` : right ? `✅ Right! ${what}` : `❌ Nope · ${what}`;
+  const head = late ? `${I("clock", "i-md")}Time's up · ${what}` : right ? `${I("check", "i-md")}Right! ${what}` : `${I("x", "i-md")}Nope · ${what}`;
   const link = p.url ? `<a href="${p.url}" target="_blank" rel="noopener">${esc(p.credit)}</a>` : esc(p.credit);
   $("#verdict").innerHTML = `<div class="vh">${head}<span class="pts">${pts ? "+" + pts : ""}</span></div>` +
     `<div class="pbrk">${why}</div>` +
-    `<div class="vt">💡 ${esc(tell)}</div>` +
-    `<div class="auto" id="auto"><i></i></div><div class="vrow vc"><span title="${esc(p.detail)}">${link}</span><button id="pauseBtn" aria-label="Pause: keep this answer open">⏸ Pause</button></div>`;
+    `<div class="vt">${I("lightbulb", "i-sm")}${esc(tell)}</div>` +
+    `<div class="auto" id="auto"><i></i></div><div class="vrow vc"><span title="${esc(p.detail)}">${link}</span><button id="pauseBtn" aria-label="Pause: keep this answer open">Pause</button></div>`;
   $("#verdict").classList.add("on"); $("#s-guess").classList.add("answered");
   if (matchMedia(STACKED).matches) later(() => $("#verdict").scrollIntoView({ block: "nearest", behavior: reduce ? "auto" : "smooth" }), 60);
-  $("#say").textContent = late ? "Too slow, the feed moved on 🫠" : right ? ["Locked in! 🔒", "Nice eyes ⚡", "Called it 😎", "Easy 💅"][G_.n % 4] : ["Fooled you 😈", "Ouch 🙃", "Sneaky one 🫣", "It got you 😬"][G_.n % 4];
+  $("#say").textContent = late ? "Too slow, the feed moved on" : right ? ["Locked in!", "Nice eyes", "Called it", "Easy"][G_.n % 4] : ["Fooled you", "Ouch", "Sneaky one", "It got you"][G_.n % 4];
   note("clue", p.kind === "text" ? (p.truth === "ai" ? "AI text" : "Human text") : (p.truth === "ai" ? "AI picture" : "Real photo") + (p.hard ? " · hard mode" : ""), esc(tell), p.file || p.text);
   autoNext(G_.limit > 9 ? 9000 : 6500, nextItem);
   $("#pauseBtn").onclick = e => { e.stopPropagation(); pauseAuto(); };
@@ -1071,7 +1007,7 @@ function autoNext(ms, fn) {
 function pauseAuto() {
   if (!autoT) return; clearTimeout(autoT); autoT = null; $("#auto").classList.add("paused");
   const b = $("#pauseBtn"); if (!b) return;
-  b.textContent = "Next ▶"; b.setAttribute("aria-label", "Paused. Go to the next one"); b.classList.add("go");
+  b.textContent = "Next →"; b.setAttribute("aria-label", "Paused. Go to the next one"); b.classList.add("go");
   b.onclick = e => { e.stopPropagation(); skipAuto(); };
 }
 function skipAuto() { if (!autoFn) return; if (autoT) clearTimeout(autoT); autoT = null; const f = autoFn; autoFn = null; f(); }
@@ -1122,7 +1058,7 @@ $("#bossLock").onclick = () => {
   const fill = k => { dots[k].className = KINDS[k] + (k === v - 1 ? " mark" : "") + (reduce ? "" : " pp"); later(() => dots[k].classList.remove("pp"), 180); };
   const done = () => {
     $("#bossYou").textContent = v; $("#bossReal").textContent = real;
-    $("#bossMsg").textContent = off <= 3 ? `🎯 Bullseye! Off by ${off}. +${pts}` : off <= 10 ? `Close! Off by ${off}. +${pts}` : `Off by ${off}. +${pts}`;
+    $("#bossMsg").textContent = off <= 3 ? `Bullseye! Off by ${off}. +${pts}` : off <= 10 ? `Close! Off by ${off}. +${pts}` : `Off by ${off}. +${pts}`;
     $("#bossRev").classList.add("on"); later(() => $("#bossMore").classList.add("on"), 500);
     S.res.boss.push(off <= 10); add(pts, null); SFX.play(off <= 10 ? "right" : "wrong"); if (off <= 3) { badge("bullseye"); confetti(); }
     note("fact", `${real} in 100 Americans`, `have already seen people in their community struggle to tell what's real from what's fake because of AI. Only ${H.dont_expect} in 100 don't expect it.`, "boss");
@@ -1167,10 +1103,24 @@ function tfPick(said) {
   S.res.tf.push(said === null ? null : right); add(pts, said === null ? false : right); SFX.play(right ? "right" : "wrong");
   $("#tfFill").style.width = "0"; $("#tfMark").style.left = c.shown + "%"; $("#tfMark").textContent = `claim: ${c.shown}`;
   $("#tfRev").classList.add("on"); requestAnimationFrame(() => requestAnimationFrame(() => $("#tfFill").style.width = c.v + "%"));
-  $("#tfMsg").textContent = (said === null ? "⏱ Time's up. " : right ? `✅ Right! +${pts} · ` : "❌ Wrong · ") + (c.truth ? `True: ${pct(c.v)}.` : `False: it's ${pct(c.v)}, not ${c.shown}.`);
+  $("#tfMsg").innerHTML = (said === null ? `${I("clock", "i-sm")}Time's up. ` : right ? `${I("check", "i-sm")}Right! +${pts} · ` : `${I("x", "i-sm")}Wrong · `) + (c.truth ? `True: ${pct(c.v)}.` : `False: it's ${pct(c.v)}, not ${c.shown}.`);
   note("fact", `${in100(c.v)} Americans`, esc(c.what) + ".", "tf" + c.what);
-  later(() => { if (++TF.k < 3) return tfShow(); if (S.res.tf.every(x => x === true)) badge("fact"); level(S.lv + 1); }, 4500);
+  tfAuto(() => { if (++TF.k < 3) return tfShow(); if (S.res.tf.every(x => x === true)) badge("fact"); level(S.lv + 1); });
 }
+// after an answer: 9 s to read the real number (a bar shows the time); hover or tap the card to pause, Next or Space to go on
+const TFA = { t: null, fn: null, at: 0 };
+function tfAuto(fn) {
+  TFA.fn = fn; const bar = $("#tfProg"), ms = reduce ? 12000 : 9000;
+  bar.style.setProperty("--t", ms + "ms"); bar.classList.remove("run", "paused"); void bar.offsetWidth; bar.classList.add("run");
+  $("#tfNext").textContent = "Next →";
+  TFA.t = later(tfGo, ms); TFA.at = performance.now();
+}
+function tfGo() { if (!TFA.fn) return; clearTimeout(TFA.t); TFA.t = null; const f = TFA.fn; TFA.fn = null; f(); }
+function tfPause() { if (!TFA.t || performance.now() - TFA.at < 700) return;   // not the layout shift right after the answer
+  clearTimeout(TFA.t); TFA.t = null; $("#tfProg").classList.add("paused"); }
+$("#tfNext").onclick = e => { e.stopPropagation(); tfGo(); };
+$("#tfRev").addEventListener("pointermove", e => { if (e.pointerType === "mouse") tfPause(); });
+$("#tfRev").addEventListener("click", tfPause);
 $("#tBtn").onclick = () => tfPick(true); $("#fBtn").onclick = () => tfPick(false);
 
 // ---------- level 5: your turn (feeling → predict → reveal, then the turn) ----------
@@ -1216,7 +1166,7 @@ $("#predLock").onclick = () => {
       : `The age groups are within the margin of error of each other. `) + (D.shapeGap1835 ? "" : `18–34 and 35–49 (${in100(m)}) are about the same.`);
     note("fact", `${plain(D.words.inevitable)} US adults`, `say AI is coming whether we want it or not (${pct(t.inevitable)}).` + (D.shapeGapReal ? " Younger adults are more likely than older adults to think it can still be shaped." : ""), "you2");
     $("#youSrc").textContent = `Question: “${D.q.agency}” · ${SRC}`;
-    $("#youNext").textContent = "See my final score 🏆";
+    $("#youNext").textContent = "See my final score";
   }
   phase(3); if (off <= 5) confetti(40);
 };
@@ -1244,9 +1194,12 @@ function end() {
   const right = ["pics", "text"].flatMap(k => S.res[k] || []).filter(x => x === true).length, of = S.items.pics.length + S.items.text.length;
   $("#endScore").textContent = "0"; $("#endScore").dataset.v = 0; countTo($("#endScore"), S.score);
   $("#endRank").textContent = rankOf(S.score);
-  $("#endSub").textContent = `${right} of ${of} pictures and texts right · best streak ${S.bestStreak} · ${S.badges.size} badge${S.badges.size === 1 ? "" : "s"}` + (vs ? ` · ${S.score >= vs.score ? "🥊 you beat " : "🥊 not quite: "}${vs.name} (${vs.score.toLocaleString("en")})` : "");
-  $("#trophy").textContent = vs && S.score >= vs.score ? "🥊" : S.score / maxScore() >= .68 ? "🏆" : S.score / maxScore() >= .4 ? "🥈" : "🎮";
-  $("#earned").innerHTML = BADGES.filter(b => S.badges.has(b[0])).map(b => `<span>${b[1]} ${b[2]}</span>`).join("");
+  $("#endSub").textContent = `${right} of ${of} pictures and texts right · best streak ${S.bestStreak} · ${S.badges.size} badge${S.badges.size === 1 ? "" : "s"}` + (vs ? ` · ${S.score > vs.score ? "you beat " : S.score === vs.score ? "a tie with " : "not quite: "}${vs.name} (${vs.score.toLocaleString("en")})` : "");
+  $("#trophy").innerHTML = I(vs && S.score >= vs.score ? "swords" : S.score / maxScore() >= .68 ? "trophy" : S.score / maxScore() >= .4 ? "medal" : "gamepad-2", "i-lg");
+  $("#earned").innerHTML = BADGES.filter(b => S.badges.has(b[0])).map(b => `<span>${I(b[1], "i-sm")}${b[2]}</span>`).join("");
+  $("#keyNums").innerHTML = [["--seen", in100(H.have_seen), "already see people around them struggle to tell real from fake"],
+    ["--vcon", in100(concerned("total")), "are concerned about AI (somewhat or very)"],
+    ["--inev", in100(G.total.agency.inevitable), `say “${esc(AL.inevitable)}”`]].map(([c, v, t]) => `<div style="--c:var(${c})"><b>${v}</b>${t}</div>`).join("");
   $("#t-end").innerHTML = `Most Americans are worried about AI, and most think it's coming anyway.` + (D.shapeGapReal ? ` <span>Younger adults are more likely than older adults to think it can still be shaped.</span>` : "");
   // your answers next to the survey: the point of the game, not only the score
   const row = (you, us, lab) => `<li><span>${you}</span><span class="us">${us}<small>${lab}</small></span></li>`;
@@ -1271,32 +1224,57 @@ function end() {
   if (vs) { u.searchParams.set("them", vs.name); u.searchParams.set("ts", vs.score); }   // a reply: they see who won
   $("#shareUrl").value = u.toString();
   shareCard(right, of);
+  $("#shareCard").hidden = !!ROOM;   // in a room the big screen is the competition; the challenge link is for later
+  if (ROOM && !q.has("step")) roomSend({ room: ROOM, name: (S.name || "Player").slice(0, 18), score: Math.min(5000, S.score), spotted: right, of_total: of });
   const pos = board.findIndex(b => b.id === me.id) + 1;
-  if (pos === 1 && board.length > 1) { toast("🥇 New high score on this device!"); confetti(120); }
+  if (pos === 1 && board.length > 1) { toast("New high score on this device!"); confetti(120); }
   else if (pos <= 3) confetti(70);
 }
 function renderBoard() {
   const board = store.get(BOARD_KEY, []).slice(0, 10).map(b => ({ ...b, vs: vs && b.friend && b.name === vs.name && b.score === vs.score }));
-  $("#board").innerHTML = board.map(b => `<li class="${b.id && b.id === S.myId ? "me" : ""} ${b.vs ? "vs" : ""}"><span>${esc(b.name)}${b.friend ? " 🔗" : ""}<span class="sub">${b.vs ? "score to beat" : b.friend ? `via challenge link · ${b.date}` : `${b.right}/${b.of || 10} spotted · ${b.date}`}</span></span><span class="pts">${b.score.toLocaleString("en")}</span></li>`).join("");
+  $("#board").innerHTML = board.map(b => `<li class="${b.id && b.id === S.myId ? "me" : ""} ${b.vs ? "vs" : ""}"><span>${esc(b.name)}${b.id && b.id === S.myId ? " (you)" : ""}${b.friend ? ` <span title="Via challenge link">${I("link", "i-sm")}</span>` : ""}<span class="sub">${b.vs ? "score to beat" : b.friend ? `via challenge link · ${b.date}` : `${b.right}/${b.of || 10} spotted · ${b.date}`}</span></span><span class="pts">${b.score.toLocaleString("en")}</span></li>`).join("");
   $("#boardEmpty").style.display = board.length ? "none" : "block";
-  const best = board.filter(b => !b.friend)[0];
-  $("#pkTop").innerHTML = best ? `<span class="pk-sub" style="display:block;margin:0 0 3px">best</span>${best.score.toLocaleString("en")}` : "";
+}
+// ---------- the room: send the score, then show your place (only name, score and "x of 8" are sent) ----------
+async function roomApi(path, opt = {}) {
+  const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 6000);
+  try {
+    const r = await fetch(`${ROOMDB.url}/rest/v1/${path}`, { ...opt, signal: ctl.signal,
+      headers: { apikey: ROOMDB.key, "Content-Type": "application/json", ...(opt.headers || {}) } });
+    if (!r.ok) throw new Error(r.status);
+    return r.status === 201 || r.status === 204 ? null : r.json();
+  } finally { clearTimeout(t); }
+}
+async function roomSend(row, tries = 0) {
+  const card = $("#roomCard"); card.hidden = false; $("#roomRetry").hidden = true;
+  $("#roomKick").textContent = `Room ${ROOM.toUpperCase()}`; $("#roomMsg").textContent = "Sending your score to the big screen…";
+  try {
+    if (!S.roomSent) { await roomApi("room_scores", { method: "POST", body: JSON.stringify(row), headers: { Prefer: "return=minimal" } }); S.roomSent = true; }
+    const rows = await roomApi(`room_scores?room=eq.${ROOM}&select=name,score&order=score.desc&limit=500`);
+    const best = new Map(); rows.forEach(r => { if (!best.has(r.name) || best.get(r.name) < r.score) best.set(r.name, r.score); });
+    const list = [...best.values()].sort((a, b) => b - a), place = list.indexOf(best.get(row.name)) + 1;
+    $("#roomMsg").innerHTML = `You're <b>#${place}</b> of ${list.length} in the room.<small>Look at the big screen.</small>`;
+  } catch {
+    if (tries < 1) return later(() => roomSend(row, tries + 1), 1500);
+    $("#roomMsg").innerHTML = `Couldn't reach the big screen.<small>Check your connection and try again. Your score is still saved on this phone.</small>`;
+    $("#roomRetry").hidden = false; $("#roomRetry").onclick = () => roomSend(row);
+  }
 }
 // the challenge card: a head-to-head per level when you played someone's link, and a reply link back to them
 function shareCard(right, of) {
   const fmt = n => n.toLocaleString("en");
   if (vs) {
     const won = S.score > vs.score, tie = S.score === vs.score;
-    $("#shareKick").textContent = `🥊 You vs ${vs.name}: ${tie ? "a tie!" : won ? "you win!" : "they win"}`;
+    $("#shareKick").textContent = `You vs ${vs.name}: ${tie ? "a tie!" : won ? "you win!" : "they win"}`;
     $("#h2h").hidden = false;
     const cell = (a, b) => `<span class="us ${a > b ? "win" : ""}">${fmt(a)}</span>`;
     $("#h2h").innerHTML = `<li><span class="muted">Level</span><span class="us">You</span><span class="us">${esc(vs.name)}</span></li>` +
       (vs.lv ? LEVELS.map((l, i) => { const a = S.lvPts[l.id] || 0, b = vs.lv[i]; return `<li><span>${l.ic} ${l.name}</span>${cell(a, b)}${cell(b, a)}</li>`; }).join("") : "") +
       `<li class="tot"><span><b>Total</b></span>${cell(S.score, vs.score)}${cell(vs.score, S.score)}</li>`;
     $("#shareBtn").textContent = `Send to ${vs.name}`;
-    S.shareMsg = tie ? `We tied on Real or AI? with ${fmt(S.score)} each. Decider, same pictures:` : won ? `I beat your ${fmt(vs.score)} on Real or AI? with ${fmt(S.score)} 😎 Rematch, same pictures:` : `I got ${fmt(S.score)} vs your ${fmt(vs.score)} on Real or AI? Rematch, same pictures:`;
+    S.shareMsg = tie ? `We tied on Real or AI? with ${fmt(S.score)} each. Decider, same pictures:` : won ? `I beat your ${fmt(vs.score)} on Real or AI? with ${fmt(S.score)}. Rematch, same pictures:` : `I got ${fmt(S.score)} vs your ${fmt(vs.score)} on Real or AI? Rematch, same pictures:`;
   } else {
-    $("#shareKick").textContent = "🥊 Challenge a friend"; $("#h2h").hidden = true;
+    $("#shareKick").textContent = "Challenge a friend"; $("#h2h").hidden = true;
     $("#shareBtn").textContent = "Share";
     S.shareMsg = `I spotted ${right} of ${of} fakes and scored ${fmt(S.score)} on Real or AI? Can you beat me? Same pictures:`;
   }
@@ -1306,10 +1284,17 @@ $("#shareBtn").onclick = async () => {
   try { await navigator.share({ title: "Real or AI?", text: S.shareMsg, url: $("#shareUrl").value }); } catch {}
 };
 $("#copyBtn").onclick = async () => {
-  try { await navigator.clipboard.writeText(S.shareMsg + " " + $("#shareUrl").value); toast(vs ? `📋 Copied: send it to ${vs.name}` : "📋 Copied: send it to a friend"); }
+  try { await navigator.clipboard.writeText(S.shareMsg + " " + $("#shareUrl").value); toast(vs ? `Copied: send it to ${vs.name}` : "Copied: send it to a friend"); }
   catch { $("#shareUrl").select(); toast("Select the link and copy it"); }
 };
-$("#boardBtn").onclick = () => { tab("board"); openSheet(); };
+$("#boardBtn").onclick = e => { tab("board"); openSheet(e.currentTarget); };
+// refresh: read the leaderboard again (e.g. after a game or a challenge link in another tab)
+$("#boardRefresh").onclick = () => {
+  renderBoard(); const b = $("#boardRefresh");
+  if (!reduce) { b.classList.remove("spin"); void b.offsetWidth; b.classList.add("spin"); }
+  toast("Leaderboard updated");
+};
+addEventListener("storage", e => { if (e.key === BOARD_KEY) renderBoard(); });   // another tab saved a score
 const COLS = [["n", g => G[g].n], ["±", g => Math.round(G[g].moe)], ["Concerned", g => concerned(g)], ["Excited", g => G[g].sentiment.very_excited + G[g].sentiment.somewhat_excited],
   ["None", g => G[g].sentiment.none], ["Can shape", g => G[g].agency.can_shape], ["Coming anyway", g => G[g].agency.inevitable], ["Neither", g => G[g].agency.neither]];
 $("#tbl").innerHTML = `<table><tr><th>Group</th>${COLS.map(c => `<th>${c[0]}</th>`).join("")}</tr>` +
@@ -1324,63 +1309,27 @@ $("#srcAll").innerHTML = `<b>Questions, word for word:</b> “${esc(D.stems.ai_c
   `<b>Texts:</b> human texts word for word from Wikivoyage (“Verzasca Valley”, rev. 4275033, 2021; “Lauterbrunnen”, rev. 4407914, 2022), CC BY-SA 3.0. AI texts written by Claude (Anthropic).<br>` +
   `The true-or-false claims show either the real number or a deliberately wrong one; the answer always shows the real number. Prototype v8 by Adhurim Thaqi, HSLU Data Storytelling, built with Claude.`;
 
-// ---------- sheet (phone) + tabs ----------
-function tab(t) { $$(".tabs [data-tab]").forEach(b => b.setAttribute("aria-selected", b.dataset.tab === t)); $("#pane-notes").classList.toggle("on", t === "notes"); $("#pane-board").classList.toggle("on", t === "board"); if (t === "board") renderBoard(); }
+// ---------- the drawer: opens only on an explicit click, tap or key; ✕, the backdrop or Esc close it ----------
+function tab(t) { $$(".tabs [data-tab]").forEach(b => b.setAttribute("aria-selected", b.dataset.tab === t)); ["you", "notes", "board"].forEach(k => $("#pane-" + k).classList.toggle("on", k === t)); if (t === "board") renderBoard(); }
 $$(".tabs [data-tab]").forEach(b => b.onclick = () => tab(b.dataset.tab));
-const PHONE = matchMedia("(max-width:860px)");
-function sheetInert() { $("#sheet").inert = PHONE.matches && !$("#sheet").classList.contains("open"); }   // a closed sheet can't be tabbed into
-function openSheet() { $("#sheet").classList.add("open"); $("#scrim").classList.add("on"); sheetInert(); if (PHONE.matches) setTimeout(() => $("#sheetClose").focus(), 60); }
+let opener = null;
+function openSheet(from) {
+  opener = from || document.activeElement;
+  const d = $("#sheet"); d.inert = false; d.classList.add("open"); $("#scrim").classList.add("on");
+  $(".stage").inert = true; $("#sheetBtn").setAttribute("aria-expanded", "true");
+  S.unread = 0; $("#hudNotes").dataset.c = 0;
+  setTimeout(() => $('.tabs [aria-selected="true"]').focus(), 60);
+}
 function closeSheet() {
-  const was = $("#sheet").classList.contains("open"), back = was && $("#sheet").contains(document.activeElement);
-  $("#sheet").classList.remove("open"); $("#scrim").classList.remove("on"); sheetInert();
-  if (back) $("#sheetBtn").focus();
+  const d = $("#sheet"); if (!d.classList.contains("open")) return;
+  d.classList.remove("open"); d.inert = true; $("#scrim").classList.remove("on");
+  $(".stage").inert = false; $("#sheetBtn").setAttribute("aria-expanded", "false");
+  if (opener && document.contains(opener) && opener.offsetParent) opener.focus();
 }
 $("#sheetClose").onclick = closeSheet;
-PHONE.addEventListener("change", sheetInert); sheetInert();
-$("#sheetBtn").onclick = () => { tab("notes"); openSheet(); };
 $("#scrim").onclick = closeSheet;
-
-// ---------- side pillars (wider than a phone) ----------
-// While you play, both sides are slim pillars, so the game gets the attention. The start screen opens only the
-// leaderboard (the player panel is empty before you play); the end screen opens both. Hover (short delay, so passing the cursor over doesn't open it), keyboard focus or a tap
-// slides the full panel out over the game. Esc or moving away closes it. 📌 keeps a panel open.
-const WIDE = matchMedia("(min-width:861px)");
-const PIN = Object.assign({ l: false, r: false }, store.get("realOrAI.pin", {}));
-const DOCK = { l: $("#dockL"), r: $("#dockR") };
-const UI = { l: { hover: 0, tap: 0, kbd: 0, t: 0 }, r: { hover: 0, tap: 0, kbd: 0, t: 0 } };
-const roomy = k => $("#s-end").classList.contains("on") || (k === "r" && $("#s-intro").classList.contains("on"));
-function pillars() {
-  let peeking = false;
-  for (const k of ["l", "r"]) {
-    const docked = WIDE.matches && (PIN[k] || roomy(k)), u = UI[k];
-    const open = docked || (WIDE.matches && (u.hover || u.tap || u.kbd));
-    $(".app").classList.toggle("dock-" + k, docked);
-    DOCK[k].classList.toggle("open", open);
-    if (open && !docked) peeking = true;
-    $(`.pin[data-pin="${k}"]`).setAttribute("aria-pressed", PIN[k]);
-  }
-  $("#peekL").setAttribute("aria-expanded", DOCK.l.classList.contains("open"));
-  $(".app").classList.toggle("peeking", peeking);
-}
-for (const k of ["l", "r"]) {
-  const d = DOCK[k], u = UI[k];
-  d.addEventListener("pointerenter", e => { if (e.pointerType !== "mouse") return; clearTimeout(u.t); u.t = setTimeout(() => { u.hover = 1; pillars(); }, 110); });
-  d.addEventListener("pointerleave", e => { if (e.pointerType !== "mouse") return; clearTimeout(u.t); u.t = setTimeout(() => { u.hover = u.tap = 0; pillars(); }, 280); });
-  d.addEventListener("focusin", e => { if (e.target.matches(":focus-visible")) { u.kbd = 1; pillars(); } });
-  d.addEventListener("focusout", e => { if (!d.contains(e.relatedTarget)) { u.kbd = 0; pillars(); } });
-}
-$("#peekL").onclick = () => { UI.l.tap = 1; pillars(); };
-$("#peekL").onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); UI.l.kbd = 1; pillars(); $("#fullL").querySelector("button")?.focus(); } };
-$("#peekR").onclick = e => { const b = e.target.closest("[data-open]"); if (b) tab(b.dataset.open); UI.r.tap = 1; pillars(); if (b && UI.r.kbd) $(`.tabs [data-tab="${b.dataset.open}"]`).focus(); };
-$$(".pin").forEach(b => b.onclick = () => { const k = b.dataset.pin; PIN[k] = !PIN[k]; store.set("realOrAI.pin", PIN); UI[k].tap = 0; pillars(); });
-document.addEventListener("pointerdown", e => { for (const k of ["l", "r"]) if (UI[k].tap && !DOCK[k].contains(e.target)) { UI[k].tap = 0; pillars(); } });
-addEventListener("keydown", e => {
-  if (e.key !== "Escape") return;
-  if ($("#sheet").classList.contains("open")) return closeSheet();
-  for (const k of ["l", "r"]) { const u = UI[k]; if (u.hover || u.tap || u.kbd) { u.hover = u.tap = u.kbd = 0; if (DOCK[k].contains(document.activeElement)) document.activeElement.blur(); } }
-  pillars();
-});
-WIDE.addEventListener("change", pillars);
+$("#sheetBtn").onclick = e => { if (document.body.classList.contains("atintro")) tab("board"); openSheet(e.currentTarget); };
+addEventListener("keydown", e => { if (e.key === "Escape" && $("#sheet").classList.contains("open")) { e.stopPropagation(); closeSheet(); } });
 
 // ---------- intro ----------
 const randomName = () => ADJ[Math.floor(Math.random() * ADJ.length)] + " " + ANI[Math.floor(Math.random() * ANI.length)];
@@ -1388,13 +1337,16 @@ S.name = store.get("realOrAI.name", "") || "";
 $("#nameIn").value = S.name;
 $("#nameIn").oninput = e => { S.name = e.target.value.trim().slice(0, 18); hud(); };
 $("#dice").onclick = () => { S.name = randomName(); $("#nameIn").value = S.name; hud(); };
-if (vs) {
+if (ROOM) {
+  $("#challenge").innerHTML = `You're playing in room <b>${esc(ROOM.toUpperCase())}</b>: everyone here gets the same pictures. At the end, your <b>player name and score</b> appear on the big screen.`;
+  $("#challenge").classList.add("on");
+} else if (vs) {
   const fmt = n => n.toLocaleString("en"), t = vs.them;
   $("#challenge").innerHTML = t
-    ? `🥊 <b>${esc(vs.name)}</b> played your challenge: <b>${fmt(vs.score)}</b> vs your <b>${fmt(t.score)}</b>. ` + (vs.score > t.score ? "They won. Win it back on the same pictures?" : vs.score === t.score ? "A tie. Play the decider?" : "You're still ahead. Play the rematch?")
-    : `🥊 <b>${esc(vs.name)}</b> challenges you: <b>${fmt(vs.score)} points</b> with the same pictures. Can you beat it?`;
+    ? `<b>${esc(vs.name)}</b> played your challenge: <b>${fmt(vs.score)}</b> vs your <b>${fmt(t.score)}</b>. ` + (vs.score > t.score ? "They won. Win it back on the same pictures?" : vs.score === t.score ? "A tie. Play the decider?" : "You're still ahead. Play the rematch?")
+    : `<b>${esc(vs.name)}</b> challenges you: <b>${fmt(vs.score)} points</b> with the same pictures. Can you beat it?`;
   $("#challenge").classList.add("on");
-  // their score goes on this device's leaderboard (marked 🔗), once per link
+  // their score goes on this device's leaderboard (marked with a link icon), once per link
   if (!q.has("step")) {
     const board = store.get(BOARD_KEY, []);
     if (!board.some(b => b.friend && b.name === vs.name && b.score === vs.score)) {
@@ -1406,20 +1358,19 @@ if (vs) {
 (() => {   // the intro mosaic: two real, two AI from the hard pool, labelled (as a teaser)
   const hard = POOL.filter(p => p.level === 2), r = hard.filter(p => p.truth === "real"), a = hard.filter(p => p.truth === "ai");
   const four = [r[0], a[a.length - 1], a[2], r[3]].filter(Boolean);
-  $("#mosaic").innerHTML = four.map(p => `<div style="background-image:url('${p.file}')"><span>?</span></div>`).join("");
+  $("#mosaic").innerHTML = four.map(p => `<div style="background-image:url('${p.file}')"><span>${I("circle-help", "i-sm")}</span></div>`).join("");
 })();
 function startGame() {
   if (!S.name) { S.name = randomName(); $("#nameIn").value = S.name; }
   store.set("realOrAI.name", S.name);
   const keepName = S.name, keepPlayed = S.playedOnce, last = S.items;
   fresh(); S.name = keepName; S.playedOnce = keepPlayed; S.items = last;
-  $("#notes").innerHTML = ""; $("#notesEmpty").style.display = ""; $("#noteCnt").textContent = 0; $("#hudNotes").textContent = 0; $("#pkNotes").textContent = $("#pkNotes").dataset.c = 0;
+  $("#notes").innerHTML = ""; $("#notesEmpty").style.display = ""; $("#noteCnt").textContent = 0; S.unread = 0; $("#hudNotes").dataset.c = 0;
   $$("#badges div").forEach(d => d.classList.remove("on"));
-  tab("notes"); draw(); level(0);
+  tab("you"); draw(); level(0);
 }
-$("#start").onclick = () => { SFX.play("click"); startGame(); };
-["#soundBtn", "#soundBtn2"].forEach(id => $(id).onclick = () => SFX.toggle()); SFX.paint();
-$("#again").onclick = () => { clearAll(); screen("s-intro"); tab("board"); S.lv = -1; hud(); $("#hudLv").textContent = "Real or AI?"; $("#hudIc").textContent = "🎮"; };
+$("#start").onclick = () => { startGame(); };
+$("#again").onclick = () => { clearAll(); screen("s-intro"); S.lv = -1; hud(); $("#hudLv").textContent = "Real or AI?"; $("#hudIc").innerHTML = I("gamepad-2", "i-sm"); };
 if (q.has("reset")) { store.set(SEEN_KEY + ".1", []); store.set(SEEN_KEY + ".2", []); store.set(TSEEN_KEY, []); }
 
 // ---------- keys ----------
@@ -1429,12 +1380,13 @@ addEventListener("keydown", e => {
   if (on("#s-guess")) {
     if (!G_.answered) { if (k === "ArrowLeft" || k === "a" || k === "A") guess("ai"); if (k === "ArrowRight" || k === "r" || k === "R") guess("real"); if (k === "h" || k === "H") hint(); }
     else if (k === " " || k === "Enter") { e.preventDefault(); skipAuto(); }
-  } else if (on("#s-tf")) { if (k === "t" || k === "T" || k === "ArrowRight") tfPick(true); if (k === "f" || k === "F" || k === "ArrowLeft") tfPick(false); }
+  } else if (on("#s-tf") && TFA.fn && (k === " " || k === "Enter")) { e.preventDefault(); tfGo(); }
+  else if (on("#s-tf")) { if (k === "t" || k === "T" || k === "ArrowRight") tfPick(true); if (k === "f" || k === "F" || k === "ArrowLeft") tfPick(false); }
   else if (on("#s-level") && (k === " " || k === "Enter")) { e.preventDefault(); $("#lvGo").click(); }
 });
 
 // ---------- review shortcuts: ?step=pics|text|boss|tf|you|turn|end ----------
-hud(); renderBoard(); pillars(); if (!q.get("step")) tab("board");   // first screen: show the leaderboard
+hud(); renderBoard(); tab("you"); document.body.classList.toggle("atintro", $("#s-intro").classList.contains("on"));
 const want = q.get("step");
 const IDX = { pics: 0, text: 1, boss: 2, tf: 3, you: 4, turn: 4 };
 if (want && (want in IDX || want === "end")) {

@@ -21,7 +21,7 @@ already see this around them, and what they think about AI.** The experience on 
 
 ## How the prototype works (v8)
 **▶ Play it:** https://adhurimthaqi.github.io/dataset-datastorytelling/exercises/W47_sprint3/v8.html
-(works on a phone and a laptop; about 4 minutes; nothing is saved or sent anywhere except your scores on your own device)
+(works on a phone and a laptop; about 4 minutes. Normal play sends nothing anywhere: scores stay on your device. Only in a live room, see below, are your player name and score sent to the room screen.)
 
 ### The 5 levels
 | # | Level | What you do | What you learn |
@@ -42,6 +42,8 @@ At the end: your **final score and rank**, your **badges**, the **key message**,
   *how to tell*, the photographer and licence), then the game moves on by itself. Tap or press **Space** to skip,
   or **Keep open** to read it calmly.
 - **Hint:** 💡 shows what to look at (never the answer) and costs 40 points.
+- **True or false:** after each answer the real number stays up for 9 seconds (tap to pause, **Next ▶** to go on).
+- **Screen readers:** every picture has a scene description (`alt.json`) that never gives away the answer.
 
 ### The game layer
 - **Points:** for being right, a speed bonus, a streak bonus (🔥 in a row), and for guesses close to the real number.
@@ -55,10 +57,16 @@ At the end: your **final score and rank**, your **badges**, the **key message**,
   Scores that reach you by link go on your leaderboard, marked 🔗. There's no server: the link itself carries the name and the points.
 
 ### The screen
-- **Laptop:** three columns: player card (score, streak, levels, badges) · the game · field notes and leaderboard.
-- **Tablet:** two columns plus a top bar.
-- **Phone:** a top bar, with notes and the leaderboard in a sheet that slides up.
-- Light and dark mode follow the device setting.
+- **Start screen:** the title, one sentence on what you'll do, a preview of four pictures, your player name (with a dice button for
+  a random name) and **Start the game**. No score, levels or badges yet; the header button opens only the leaderboard.
+- **While you play, only the challenge:** a minimal top bar (level, points, **☰ Progress**). No side panels.
+- **☰ Progress** opens one drawer with three tabs: **You** (score, streak, levels, badges), **Notes**, **Board** (leaderboard).
+  It opens only on a click, tap or key: a side drawer on a laptop, a bottom sheet on a phone. It closes with ✕, a click outside or Esc.
+- **End screen:** the survey findings come first (key message and three big numbers), then you vs. US adults, then your score.
+- Light and dark mode follow the device setting. Sound: three soft cues only (right, wrong, the end), no toggle.
+- **One icon family:** [Lucide](https://lucide.dev) outline icons (ISC licence), 16–20 px, inlined from `icons.json`, so the page works offline.
+  No emoji in the interface. Icon-only buttons have a tooltip and a screen-reader label. Right/wrong is shown by an icon and a word
+  as well as colour, and badges say *Locked* or *Earned*. The homepage uses the same icons.
 
 ### The pictures and texts
 - **35 pictures** of the same kind of scene (Swiss river valleys), so the subject gives nothing away:
@@ -78,8 +86,25 @@ At the end: your **final score and rank**, your **badges**, the **key message**,
 - **True or false:** after the answer, the real number is always shown.
 - **Not Swiss opinions:** these are US adults (latest wave, 10–14 Sep 2026, n = 1,083), and the game says so.
 
+### Live round for the presentation: "scan the QR code and let's play together"
+1. On the projector, open **https://adhurimthaqi.github.io/dataset-datastorytelling/exercises/W47_sprint3/live.html?room=hslu** (any room code works, e.g. `?room=it-final`). Press **F** for fullscreen.
+2. The audience scans the QR code. It opens the game in that room (`v8.html?room=…`), so **everyone plays the same round**.
+3. The start screen says clearly that the player name and score will appear on the big screen. At the end, each phone shows
+   *"You're #3 of 18 in the room"*, and the projector shows the **live top 10** (best round per name) and the number of players.
+4. Rude name? **Click it on the projector** to hide it there ("Show hidden" brings it back).
+5. **Fresh start:** use a new room code (e.g. one per session). Old rooms stay in the database but never show up.
+
+How it works: a small Supabase project (`real-or-ai-live`, region Zurich) with one table, `room_scores`. It holds only the room code,
+player name, score and "x of 8 spotted". The page uses the public publishable key (`room.json`). Row-level security allows
+**adding and reading only**, nobody can change or delete scores through the API, and the database rejects impossible values
+(score 0–5000, names up to 18 characters). If the connection fails, the phone shows *Try again* and the score stays on the phone.
+The GitHub repo does **not** need to be connected to Supabase.
+
+To delete a room's scores after the talk, run this in the Supabase SQL editor: `delete from room_scores where room = 'hslu';`
+
 ### How it's built
-- **One HTML file** with no framework. It's generated: `template.html` + the survey CSV + `pool.json` → `build.py` → `v8.html`.
+- **One HTML file** with no framework. It's generated: `template.html` + the survey CSV + `pool.json` + `alt.json` + `icons.json` + `room.json` → `build.py` → `v8.html`
+  (and `live_template.html` → `live.html`, the projector page; QR codes with the vendored `vendor/qrcode.js`, MIT).
 - **Rebuild:** run `python exercises/W47_sprint3/build.py`, then check it with `python check.py`.
 - **Pictures:** `prepare_images.py` downloads and prepares them.
 - **Review shortcuts:** `?step=pics`, `?step=text`, `?step=boss`, `?step=tf`, `?step=end` … jump to a level; `?theme=dark` and `?limit=8`
