@@ -19,26 +19,25 @@ instead of comment sections.
 The idea in one line: **first you find out yourself how hard it is to tell real from fake, then you find out that most Americans
 already see this around them, and what they think about AI.** The experience on your own screen makes the survey number personal.
 
-## How the prototype works (v7)
-**▶ Play it:** https://adhurimthaqi.github.io/dataset-datastorytelling/exercises/W47_sprint3/v7.html
-(works on a phone and a laptop; about 5 minutes; nothing is saved or sent anywhere except your scores on your own device)
+## How the prototype works (v8)
+**▶ Play it:** https://adhurimthaqi.github.io/dataset-datastorytelling/exercises/W47_sprint3/v8.html
+(works on a phone and a laptop; about 4 minutes; nothing is saved or sent anywhere except your scores on your own device)
 
-### The 7 levels
+### The 5 levels
 | # | Level | What you do | What you learn |
 |---|---|---|---|
-| 1 | 🌄 **Warm-up** | 4 pictures of Swiss mountain valleys: **real photo or AI?** 5 seconds each. | Older AI pictures are "too perfect". |
-| 2 | 🧨 **Hard mode** | 4 more pictures, ×1.5 points: new 2026 AI models against real photos that *look* fake. | "Too beautiful" is no proof; look at signs, repeating houses, staged mess. |
-| 3 | ✍️ **Texts** | 2 short travel texts: **written by a person or by AI?** | AI text sounds like a brochure and has no names or details you could check. |
-| 4 | 🎯 **The number** | Guess with a slider: how many of 100 Americans already see people struggling to tell real from fake? | **57 in 100** already see it, only 2 in 100 don't expect it. |
+| 1 | 🌄 **Real or AI?** | 6 pictures of Swiss mountain valleys: **real photo or AI?** 5 seconds each. The first 2 are easy (older AI); then 🧨 **hard mode**, ×1.5 points: new 2026 AI models against real photos that *look* fake. | Older AI pictures are "too perfect", but "too beautiful" is no proof; look at signs, repeating houses, staged mess. |
+| 2 | ✍️ **Texts** | 2 short travel texts: **written by a person or by AI?** | AI text sounds like a brochure and has no names or details you could check. |
+| 3 | 🎯 **The number** | Guess with a slider: how many of 100 Americans already see people struggling to tell real from fake? | **57 in 100** already see it, only 2 in 100 don't expect it. |
 | 5 | ↕️ **More or fewer** | Higher-or-lower with other changes Americans see AI causing in their community (saving time, losing connections, …). | Which changes people actually notice, and what "within the margin of error" means. |
-| 6 | ⚡ **True or false** | 3 quick claims about AI risks and families. Some use the real number, some a wrong one. 8 seconds each. | The real numbers, for example how many say AI is making families' job security worse. |
-| 7 | 🫵 **Your turn** | Answer the survey's own two questions, then guess how America answered. | **2 in 3** are concerned; **2 in 3** say AI is coming anyway; younger adults (18–34) are more likely than 65+ to think it can still be shaped. |
+| 4 | ⚡ **True or false** | 3 quick claims about AI risks and families. Some use the real number, some a wrong one. 8 seconds each. | The real numbers, for example how many say AI is making families' job security worse. |
+| 5 | 🫵 **Your turn** | Answer the survey's own two questions, then guess how America answered. | **2 in 3** are concerned; **2 in 3** say AI is coming anyway; younger adults (18–34) are more likely than 65+ to think it can still be shaped. |
 
 At the end: your **final score and rank**, your **badges**, the **key message**, a "**What you learned**" summary, the
-**leaderboard**, and a **challenge link** for a friend.
+**leaderboard**, and a **challenge link** for a friend (after playing someone's link: a head-to-head per level and a reply link).
 
 ### How you play
-- **Answer:** tap **AI** or **REAL**, swipe (left = AI, right = real), or press **←** / **→** on a keyboard.
+- **Answer:** tap or click **AI** or **REAL**, swipe (left = AI, right = real), or press **←** / **→** on a keyboard.
 - **No "Next" button and no scrolling:** after each answer the result slides over the picture (right or wrong, who made it,
   *how to tell*, the photographer and licence), then the game moves on by itself. Tap or press **Space** to skip,
   or **Keep open** to read it calmly.
@@ -46,12 +45,14 @@ At the end: your **final score and rank**, your **badges**, the **key message**,
 
 ### The game layer
 - **Points:** for being right, a speed bonus, a streak bonus (🔥 in a row), and for guesses close to the real number.
-- **8 badges:** Eagle eye, Lightning, On fire, Bullseye, Data nerd, Fact-checker, Mind reader, No hints.
+- **7 badges:** Eagle eye, Lightning, On fire, Bullseye, Fact-checker, Mind reader, No hints.
 - **Rank:** from *Doom-scroller* to *AI whisperer*.
 - **Field notes:** every answer adds a clue (how to spot AI) or a fact (a survey number) to your notebook, so you learn
   while you play.
 - **Leaderboard:** the top 10 on the device, good for passing one phone around in class.
 - **Challenge a friend:** the link gives them the same pictures and questions, with your score to beat and a live race bar.
+  At the end they see **who won, level by level**, and can send a **reply link** back (rematch on the same pictures).
+  Scores that reach you by link go on your leaderboard, marked 🔗. There's no server: the link itself carries the name and the points.
 
 ### The screen
 - **Laptop:** three columns: player card (score, streak, levels, badges) · the game · field notes and leaderboard.
@@ -78,16 +79,17 @@ At the end: your **final score and rank**, your **badges**, the **key message**,
 - **Not Swiss opinions:** these are US adults (latest wave, 10–14 Sep 2026, n = 1,083), and the game says so.
 
 ### How it's built
-- **One HTML file** with no framework. It's generated: `template.html` + the survey CSV + `pool.json` → `build.py` → `v7.html`.
+- **One HTML file** with no framework. It's generated: `template.html` + the survey CSV + `pool.json` → `build.py` → `v8.html`.
 - **Rebuild:** run `python exercises/W47_sprint3/build.py`, then check it with `python check.py`.
 - **Pictures:** `prepare_images.py` downloads and prepares them.
-- **Review shortcuts:** `?step=hard`, `?step=boss`, `?step=hilo`, `?step=end` … jump to a level; `?theme=dark` and `?limit=8`
+- **Review shortcuts:** `?step=pics`, `?step=text`, `?step=boss`, `?step=tf`, `?step=end` … jump to a level; `?theme=dark` and `?limit=8`
   (seconds per picture) also work.
 - **More detail:** `exercises/W47_sprint3/README.md`; all prompts in `exercises/W43_prototyping/prototype/prompts.md`.
 - **Earlier versions:**
   - v1–v4: the hook only
   - v5: the six-step story
   - v6: hints and the text round
+  - v7: the full game with 7 levels (tested at the 19.11 coaching)
 
 ## Background
 Alternatives sketched for Milestone 2: **B "Stand where you feel"** (exhibition: visitors stand on a floor scale and a crowd of
@@ -100,7 +102,7 @@ dots forms around them) and **C "Dinner table"** (branched animatic: age groups 
   (interview 2) → a representative survey answers exactly that.
 
 ## Where we are
-*Last updated 12.11.2026: prototype v7 is live, the user test (W48) is next.*
+*Last updated 26.11.2026: prototype v8 (5 levels) is built; test it on a real phone next.*
 
 | Week | Milestone | Status |
 |---|---|---|
@@ -109,8 +111,8 @@ dots forms around them) and **C "Dinner table"** (branched animatic: age groups 
 | W44 · 29.10 | Implementation plan, sprint plan, design references; test results (3 testers); v4 with a random picture pool | ✅ [Plan (PDF)](https://adhurimthaqi.github.io/dataset-datastorytelling/exercises/W44_plan/documentation/01_implementation-plan.pdf) · [v4](https://adhurimthaqi.github.io/dataset-datastorytelling/exercises/W43_prototyping/prototype/v4.html) |
 | W45 · 05.11 | Sprint 1: all six steps in one file (v5); mentoring (Alain) → v6 with AI hints and a text round | ✅ [v5](https://adhurimthaqi.github.io/dataset-datastorytelling/exercises/W45_sprint1/v5.html) · [v6](https://adhurimthaqi.github.io/dataset-datastorytelling/exercises/W46_sprint2/v6.html) |
 | W46 · 12.11 | Mentoring 2 (Alain) → v7: the full game (game layout, 7 levels, harder AI pictures, the data as games, leaderboard and challenge link) | ✅ [v7](https://adhurimthaqi.github.io/dataset-datastorytelling/exercises/W47_sprint3/v7.html) |
-| W47 · 19.11 | Mentoring; test v7 on a real phone and with testers who don't know the project | ⏳ next |
-| W48 · 26.11 | Results of the user test | ⏳ |
+| W47 · 19.11 | Coaching → v8: 5 levels instead of 7 ("more or fewer" removed, one picture level that gets harder), tap/click on the answer buttons, challenge link with a head-to-head and reply | ✅ [v8](https://adhurimthaqi.github.io/dataset-datastorytelling/exercises/W47_sprint3/v8.html) |
+| W48 · 26.11 | Results of the user test; test v8 on a real phone | ⏳ next |
 | W51 · 17.12 | Interactive prototype + short rationale (max. 2 pages), presented to Interactive Things | ⏳ |
 
 **W43 lesson (Gordan Savičić):** a prototype tests *one* aspect of the data with *one* interaction. Build it as one HTML file
@@ -124,14 +126,14 @@ against the source. Then watch a stranger use it for three minutes and ask "What
 | [Americans on AI](https://adhurimthaqi.github.io/dataset-datastorytelling/ai.html) | The data findings: headline numbers, trend, "find your group" |
 | [Milestone 1](https://adhurimthaqi.github.io/dataset-datastorytelling/w41.html) | Rebriefing, user survey, concept |
 | [Milestone 2](https://adhurimthaqi.github.io/dataset-datastorytelling/w43.html) | Hand sketches, directions, wireframes, comparison, AI draft |
-| [Prototype v7](https://adhurimthaqi.github.io/dataset-datastorytelling/exercises/W47_sprint3/v7.html) | The current prototype: Real or AI? as a game, then the survey data as games (about 5 minutes) |
+| [Prototype v8](https://adhurimthaqi.github.io/dataset-datastorytelling/exercises/W47_sprint3/v8.html) | The current prototype: Real or AI? as a game, then the survey data as games (5 levels, about 4 minutes) |
 | [Exercises & process](https://adhurimthaqi.github.io/dataset-datastorytelling/exercises.html) | Process log, W38–W40 exercises, file list |
 | [Practice report](https://adhurimthaqi.github.io/dataset-datastorytelling/output/report.html) | Warm-up with four public datasets |
 
 ## The repo
 | Folder / file | What |
 |---|---|
-| `exercises/` | The coursework: `W38_mapping`, `W39_data` (survey CSV, `data.json`, notebook), `W40_interviews` (3 interviews, criteria), `W41_concept`, `W43_prototyping` (directions, hand-sketch photos, AI draft, prototypes v1–v4, `prompts.md`), `W44_plan` (implementation and sprint plan), `W45_sprint1` (v5), `W46_sprint2` (v6), `W47_sprint3` (v7), `process-log.md` |
+| `exercises/` | The coursework: `W38_mapping`, `W39_data` (survey CSV, `data.json`, notebook), `W40_interviews` (3 interviews, criteria), `W41_concept`, `W43_prototyping` (directions, hand-sketch photos, AI draft, prototypes v1–v4, `prompts.md`), `W44_plan` (implementation and sprint plan), `W45_sprint1` (v5), `W46_sprint2` (v6), `W47_sprint3` (v7, v8), `process-log.md` |
 | `solutions/` | Worked versions of W38–W41 (mappings, analysis, findings with sources) |
 | `ai.html`, `w41.html`, `w43.html`, `exercises.html`, `index.html` | The site pages (rebuilt by the `build_page.py` scripts) |
 | `explore.py`, `data/`, `output/` | The warm-up practice (see below) |
@@ -174,3 +176,19 @@ Every chart has a camera icon (top-right) → export PNG for storyboards / anima
 - In the CO2 chart, toggle **Total / Per person**: who's the "worst" emitter flips.
 - Swap `"Switzerland"` for another country in `co2()`.
 - Titanic: add `AgeGroup` to the sunburst `path=[...]` for a deeper branch.
+
+
+# Professor's feedback 
+- Questions to ask? 
+- a. "What's missing for a 6?"
+- b. "Is US survey data okay for a Swiss audience, or should I frame it differently?"
+- c. "Is ~5 minutes and 7 levels the right length?"
+
+
+# Answers 
+- It might be a good solution to add a timer onboarding or anything that lets the user prepare for the content. 
+- Dense - too much text 
+- Responsivness in the phone. Fit on screen (game interface). 
+- more or fewer - unsure what number is fewer 
+- also add clicking as well besides dragging 
+- prompt md information we dont need it to show in the web 

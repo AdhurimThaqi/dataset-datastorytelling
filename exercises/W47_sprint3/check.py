@@ -1,4 +1,4 @@
-"""Check every number in v7.html against the official CSV (sprint 3).
+"""Check every number in v8.html against the official CSV (sprint 3).
 
 Run:  python check.py      → prints each check and "0 mismatches", or the mismatches.
 It reads the CSV directly with the csv module (not through data_cut.py), so a bug in the build can't hide itself.
@@ -16,7 +16,7 @@ WAVE = "2026-09-10"
 FAKE = "People are struggling to tell what's real from what's fake"
 sys.stdout.reconfigure(encoding="utf-8")
 
-page = (HERE / "v7.html").read_text(encoding="utf-8")
+page = (HERE / "v8.html").read_text(encoding="utf-8")
 template = (HERE / "template.html").read_text(encoding="utf-8")
 D = json.loads(re.search(r"const D = (\{.*?\});\n", page).group(1))
 

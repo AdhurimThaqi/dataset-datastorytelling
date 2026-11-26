@@ -4,16 +4,20 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <link rel="icon" href="../../favicon.svg" type="image/svg+xml"><link rel="icon" href="../../favicon-32.png" sizes="32x32"><link rel="apple-touch-icon" href="../../apple-touch-icon.png">
-<title>Real or AI? · v7</title>
+<title>Real or AI? · v8</title>
 <!--
-  Prototype v7 · sprint 3 · "Real or AI?" as a full game
+  Prototype v8 · "Real or AI?" as a full game
   v7 = v6 + mentoring feedback 12 Nov: game layout that uses the sides (player card · stage · field notes/leaderboard),
   no scrolling and no "Next" clicking during play (auto-advance, swipe, keys), harder pictures (2026 AI models vs.
-  real photos that look fake), the data part as games (guess the number · higher or lower · true or false ·
-  predict America), points, streaks, badges, a leaderboard on this device and a "challenge a friend" link.
+  real photos that look fake), the data part as games, points, streaks, badges, a leaderboard on this device and a
+  "challenge a friend" link.
+  v8 = v7 + coaching feedback 19 Nov: 5 levels instead of 7 (warm-up and hard mode are one picture level that gets
+  harder; "more or fewer" is removed because testers found it confusing), and a better challenge: the link carries
+  your points per level, the friend sees a head-to-head at the end and can send a rematch link back. Still no server:
+  scores stay on the device and travel only inside a link you choose to send.
   HSLU I.BA_DAS, Adhurim Thaqi (solo). Built with Claude (LLM), prompts in ../W43_prototyping/prototype/prompts.md.
   THIS FILE IS GENERATED: edit template.html, then run `python build.py`. Every survey number comes from the CSV (see check.py).
-  Review shortcuts: ?step=intro|warm|hard|text|boss|hilo|tf|you|turn|end · ?theme=dark|light · ?limit=8 · ?reset
+  Review shortcuts: ?step=pics|text|boss|tf|you|turn|end · ?theme=dark|light · ?limit=8 · ?reset
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
@@ -255,25 +259,7 @@ input[type=range]{width:100%;accent-color:var(--ai);height:36px}
 .legend li.me::after{content:"you";margin-left:auto;font-size:11px;letter-spacing:.06em;text-transform:uppercase;border:1.5px solid var(--ink);border-radius:999px;padding:1px 7px}
 .callout{border-left:4px solid var(--seen);background:var(--panel2);border-radius:0 14px 14px 0;padding:12px 14px;font-size:15px}
 .source{font-size:11px;color:var(--muted);line-height:1.4}
-
-/* higher or lower */
-.hilo{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:stretch}
-.hcard{border-radius:20px;padding:22px 18px;background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px;min-height:250px;position:relative;overflow:hidden}
-.hcard .it{font:700 clamp(18px,2.2vw,23px)/1.25 var(--display)}
-.hcard .val{margin-top:auto;font:700 64px/1 var(--display);letter-spacing:-.04em;font-variant-numeric:tabular-nums}
-.hcard .val small{font-size:16px;letter-spacing:0;color:var(--muted);font-weight:500;margin-left:4px}
-.hcard .unit{font-size:13px;color:var(--ink2)}
-.hcard .fillbar{position:absolute;left:0;bottom:0;height:6px;background:var(--seen);transition:width .8s ease}
-.hcard.q .val{color:var(--muted)}
-.hcard.ok{box-shadow:0 0 0 3px var(--good),var(--shadow)}.hcard.no{box-shadow:0 0 0 3px var(--bad),var(--shadow)}.hcard.tie{box-shadow:0 0 0 3px var(--gold),var(--shadow)}
-.vs{display:grid;place-items:center;font:700 18px/1 var(--display);color:var(--muted)}
-.vs span{width:46px;height:46px;border-radius:50%;background:var(--panel2);display:grid;place-items:center}
-.hlbtns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.hlbtns button{font:700 18px/1 var(--display);min-height:56px}
 .hlmsg{text-align:center;font-weight:600;min-height:24px}
-.pips{display:flex;gap:6px;justify-content:center}
-.pips i{width:28px;height:6px;border-radius:3px;background:var(--line)}
-.pips i.ok{background:var(--good)}.pips i.no{background:var(--bad)}.pips i.tie{background:var(--gold)}.pips i.now{background:var(--ink)}
 
 /* true or false */
 .claim{font:700 clamp(22px,3vw,32px)/1.25 var(--display);letter-spacing:-.015em;text-align:center;padding:30px 16px;min-height:200px;display:grid;place-items:center}
@@ -314,6 +300,8 @@ input[type=range]{width:100%;accent-color:var(--ai);height:36px}
 .vsus{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
 .vsus li{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:14px;color:var(--ink2)}
 .vsus li b{color:var(--ink)}
+.h2h li{grid-template-columns:1fr auto auto;font-size:13px;padding:9px 12px}
+.h2h .us{min-width:56px}.h2h .win{color:var(--good)}.h2h .tot{background:var(--panel2)}
 .vsus .us{font:700 15px/1.2 var(--display);color:var(--ink);text-align:right;white-space:nowrap}
 .vsus .us small{display:block;font:500 11px/1.3 system-ui;color:var(--muted)}
 .learned{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -443,7 +431,6 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
   .hero{grid-template-columns:1fr}.mosaic{display:none}
   .how{grid-template-columns:1fr}.how div{padding:10px 12px}.how b{display:inline;margin:0 4px}
   #s-guess{--mw:min(100%,calc((100dvh - 250px) * 4 / 3))}
-  .hilo{grid-template-columns:1fr;gap:8px}.vs{display:none}.hcard{min-height:0;padding:16px}.hcard .val{font-size:44px}
   .bossgrid,.two{grid-template-columns:1fr}
   .guessnum{font-size:64px}
   .learned{grid-template-columns:1fr}
@@ -528,7 +515,7 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
     <div class="wrap">
       <div class="hero">
         <div>
-          <p class="kicker">7 levels · 5 minutes</p>
+          <p class="kicker">5 levels · 4 minutes</p>
           <h1 id="t-intro" class="disp">Real or <em>AI?</em></h1>
           <p class="ink2" style="font-size:19px">Spot the fakes. Guess the data. Beat your friends.</p>
         </div>
@@ -619,22 +606,6 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
     </div>
   </section>
 
-  <!-- higher or lower -->
-  <section id="s-hilo" aria-labelledby="t-hilo">
-    <div class="wrap">
-      <p class="kicker">Survey of US adults · their local community · <span data-dates></span></p>
-      <h2 class="q" id="t-hilo">More or fewer Americans already see this?</h2>
-      <div class="pips" id="hiloPips"></div>
-      <div class="hilo">
-        <div class="hcard" id="hA"><p class="unit">already see it around them</p><p class="it" id="hAit"></p><p class="val" id="hAval"></p><i class="fillbar" id="hAbar"></i></div>
-        <div class="vs"><span>VS</span></div>
-        <div class="hcard q" id="hB"><p class="unit">already see it around them</p><p class="it" id="hBit"></p><p class="val" id="hBval">?</p><i class="fillbar" id="hBbar" style="width:0"></i></div>
-      </div>
-      <div class="hlbtns"><button id="hiBtn">▲ More</button><button id="loBtn">▼ Fewer</button></div>
-      <p class="hlmsg" id="hiloMsg" aria-live="polite"></p>
-    </div>
-  </section>
-
   <!-- true or false -->
   <section id="s-tf" aria-labelledby="t-tf">
     <div class="wrap">
@@ -684,8 +655,11 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
       <div><p class="kicker" style="margin-bottom:8px">You vs. US adults</p><ul class="vsus" id="vsUS"></ul></div>
       <div><p class="kicker" style="margin-bottom:8px">What you learned</p><ul class="learned" id="learned"></ul></div>
       <div class="card" style="display:flex;flex-direction:column;gap:10px">
-        <p class="kicker">🥊 Challenge a friend</p>
-        <div class="share"><input id="shareUrl" readonly aria-label="Challenge link"><button class="primary" id="copyBtn">Copy</button></div>
+        <p class="kicker" id="shareKick">🥊 Challenge a friend</p>
+        <ul class="vsus h2h" id="h2h" hidden></ul>
+        <p class="small" id="shareTxt">Same pictures, same questions, your score to beat.</p>
+        <div class="share"><input id="shareUrl" readonly aria-label="Challenge link"><button class="primary" id="shareBtn" hidden>Share</button><button class="primary" id="copyBtn">Copy</button></div>
+        <p class="tiny">The link holds only your player name, your points and which pictures you got. Nothing is uploaded.</p>
       </div>
       <div class="cta"><button class="ghost" id="boardBtn">🏆 Leaderboard</button><button class="primary" id="again">Play again · new pictures</button></div>
       <details><summary>Sources and all numbers</summary><div class="tbl" id="tbl"></div><p class="source" id="srcAll"></p></details>
@@ -779,18 +753,16 @@ const SAY_TEXT = { 5: "Read it 📖", 4: "Person or machine?", 3: "Too smooth?",
 
 // ---------- game setup ----------
 const LEVELS = [
-  { id: "warm", ic: "🌄", name: "Warm-up", kind: "pic", bridge: "First your eyes, then the data: what US adults told a survey about AI.", type: "📷 Image challenge", how: "Drag the picture left for AI, right for Real, or tap the buttons · 100 points + up to 50 for speed", blurb: "4 valleys. Real photo or AI?", d: "Older AI models · 5 s each" },
-  { id: "hard", ic: "🧨", name: "Hard mode", kind: "pic", mult: 1.5, type: "📷 Image challenge", how: "Tap AI or Real · 150 points + up to 50 for speed", blurb: "Newest AI vs. real photos that look fake.", d: "4 pictures · ×1.5 points" },
+  { id: "pics", ic: "🌄", name: "Real or AI?", kind: "pic", bridge: "First your eyes, then the data: what US adults told a survey about AI.", type: "📷 Image challenge", how: "Drag the picture left for AI, right for Real, or tap the buttons · 100 points + up to 50 for speed · from picture 3: 🧨 hard mode, ×1.5", blurb: "6 valleys. Real photo or AI? It gets harder.", d: "2 easy, then 4 hard · ×1.5" },
   { id: "text", ic: "✍️", name: "Texts", kind: "text", type: "✍️ Text challenge", how: "Tap AI or Person · 120 points + up to 50 for speed", blurb: "Person or AI? Read fast.", d: "2 short travel texts" },
   { id: "boss", ic: "🎯", name: "The number", kind: "boss", bridge: "That was hard for you. Is it hard in real life too? A survey asked US adults (not Swiss residents) whether people where they live already struggle with this.", type: "📊 Data challenge", how: "Slide to your guess · up to 300 points, 10 fewer per point off", blurb: "How many Americans see this happening?", d: "Guess on 100 dots · up to 300 points" },
-  { id: "hilo", ic: "↕️", name: "More or fewer", kind: "hilo", bridge: "Fakes are only one change. What else do US adults already see AI changing in their community?", type: "📊 Data challenge", how: "Pick More or Fewer · 100 points each", blurb: "What else do Americans see AI changing?", d: "4 quick picks: more or fewer" },
   { id: "tf", ic: "⚡", name: "True or false", kind: "tf", bridge: "Same skill as spotting a fake picture, now with numbers: a real survey figure or a made-up one?", type: "🧠 Knowledge check", how: "Is the number real? · 100 points + up to 30 for speed", blurb: "Real number or fake number?", d: "3 claims · 8 s each" },
   { id: "you", ic: "🫵", name: "Your turn", kind: "you", bridge: "You have seen what Americans notice. Now answer the survey's own questions and guess how US adults answered.", type: "🗳️ Your opinion", how: "Answer, then guess America · up to 200 points per guess", blurb: "Answer like the survey. Then guess America.", d: "2 questions + 2 guesses" },
 ];
 const BADGES = [
   ["eagle", "🦅", "Eagle eye", "All hard-mode pictures right"], ["lightning", "⚡", "Lightning", "A right answer in under 1.5 s"],
   ["streak", "🔥", "On fire", "5 right in a row"], ["bullseye", "🎯", "Bullseye", "The number within ±3"],
-  ["nerd", "📊", "Data nerd", "More or fewer: no mistakes"], ["fact", "🧠", "Fact-checker", "True or false: all right"],
+  ["fact", "🧠", "Fact-checker", "True or false: all right"],
   ["mind", "🔮", "Mind reader", "A prediction within ±5"], ["nohint", "🙈", "No hints", "Finished without any hint"],
 ];
 const RANKS = [[0, "Doom-scroller"], [.3, "Spotter"], [.5, "Detective"], [.68, "Fact-checker"], [.82, "AI whisperer"]];
@@ -859,10 +831,17 @@ const SFX = (() => {
 let S;
 function fresh() {
   S = { name: S ? S.name : "", score: 0, streak: 0, bestStreak: 0, hints: 0, lv: -1, items: {}, res: {}, badges: new Set(), notes: [],
-        seed: 0, play: null, maxScore: 0, you1: null, you2: null, pred: {}, hilo: [], tf: [], done: false };
+        seed: 0, play: null, maxScore: 0, you1: null, you2: null, pred: {}, tf: [], lvPts: {}, done: false };
 }
 fresh();
-const vs = q.has("vs") && q.has("s") ? { name: q.get("vs").slice(0, 18), score: Math.max(0, Math.min(99999, +q.get("s") || 0)) } : null;
+// challenge link: vs = who sent it, s = their score, vl = their points per level,
+// them + ts = (in a reply) the score of the person it is sent back to, so they see who won
+const clampPts = v => Math.max(0, Math.min(99999, Math.round(+v) || 0));
+const vs = q.has("vs") && q.has("s") ? (() => {
+  const lv = (q.get("vl") || "").split(".").filter(x => x !== "").map(clampPts);
+  return { name: q.get("vs").slice(0, 18), score: clampPts(q.get("s")), lv: lv.length === LEVELS.length ? lv : null,
+    them: q.has("them") && q.has("ts") ? { name: q.get("them").slice(0, 18), score: clampPts(q.get("ts")) } : null };
+})() : null;
 
 // ---------- drawing the round ----------
 const SEEN_KEY = "realOrAI.seen.v7", TSEEN_KEY = "realOrAI.textSeen.v7";
@@ -882,21 +861,23 @@ function draw() {
   const last = Object.values(S.items).flat().map(x => x.file || x.text);
   S.seed = q.has("r") && !S.playedOnce ? (+q.get("r") >>> 0) : (Math.random() * 2 ** 31) >>> 0;
   const fixed = !S.playedOnce && q.get("p") && q.get("t");
+  // one picture level that gets harder: 2 easy (older AI, 1 real + 1 AI), then 4 hard (2026 AI vs. real photos that look fake)
+  let warm = [], hard = [];
   if (fixed) {   // challenge link: exactly the same pictures and texts
     const P = q.get("p").split(".").map(Number).filter(i => POOL[i]), T = q.get("t").split(".").map(Number).filter(i => TEXTS[i]);
-    S.items.warm = P.slice(0, 4).map(i => POOL[i]); S.items.hard = P.slice(4, 8).map(i => POOL[i]); S.items.text = T.map(i => TEXTS[i]);
+    warm = P.filter(i => POOL[i].level === 1).slice(0, 2).map(i => POOL[i]); hard = P.filter(i => POOL[i].level === 2).slice(0, 4).map(i => POOL[i]);
+    S.items.text = T.map(i => TEXTS[i]);
   }
-  if (!fixed || S.items.warm.length < 4 || S.items.hard.length < 4 || S.items.text.length < 2) {
+  if (!fixed || warm.length < 2 || hard.length < 4 || S.items.text.length < 2) {
     rnd = Math.random;
-    S.items.warm = drawFrom(POOL.filter(p => p.level === 1), p => p.file, 2, SEEN_KEY + ".1", last);
-    S.items.hard = drawFrom(POOL.filter(p => p.level === 2), p => p.file, 2, SEEN_KEY + ".2", last);
+    warm = drawFrom(POOL.filter(p => p.level === 1), p => p.file, 1, SEEN_KEY + ".1", last);
+    hard = drawFrom(POOL.filter(p => p.level === 2), p => p.file, 2, SEEN_KEY + ".2", last);
     S.items.text = drawFrom(TEXTS, t => t.text, 1, TSEEN_KEY, last);
   }
-  ["warm", "hard"].forEach(k => S.items[k] = S.items[k].map(p => ({ kind: "pic", ...p })));
+  S.items.pics = [...warm.map(p => ({ kind: "pic", ...p })), ...hard.map(p => ({ kind: "pic", hard: true, ...p }))];
   rnd = mulberry32(S.seed);       // the data games use the seed, so a challenge gets the same questions
-  S.hilo = shuffle(D.community.map((c, i) => i)).slice(0, 5);
   S.tf = makeClaims();
-  S.play = { p: [...S.items.warm, ...S.items.hard].map(x => POOL.findIndex(p => p.file === x.file)), t: S.items.text.map(x => TEXTS.indexOf(TEXTS.find(t => t.text === x.text))) };
+  S.play = { p: S.items.pics.map(x => POOL.findIndex(p => p.file === x.file)), t: S.items.text.map(x => TEXTS.indexOf(TEXTS.find(t => t.text === x.text))) };
   S.playedOnce = true;
 }
 
@@ -917,6 +898,7 @@ function add(points, right) {
   else if (right === false) S.streak = 0;
   if (points > 0) {
     S.score += points;
+    const id = LEVELS[S.lv] && LEVELS[S.lv].id; if (id) S.lvPts[id] = (S.lvPts[id] || 0) + points;   // per level, for the head-to-head
     const p = $("#pop"); p.textContent = "+" + points; p.classList.remove("go"); void p.offsetWidth; p.classList.add("go");
     bump($("#pkScore"));
   }
@@ -930,7 +912,7 @@ function countTo(el, to) {
   requestAnimationFrame(f);
 }
 function rankOf(score) { const f = score / maxScore(); return RANKS.filter(r => f >= r[0]).pop()[1]; }
-function maxScore() { return 4 * 190 + 4 * 280 + 2 * 190 + 300 + 4 * 100 + 3 * 130 + 2 * 200; }   // rough ceiling, only for the rank title
+function maxScore() { return 2 * 190 + 4 * 280 + 2 * 190 + 300 + 3 * 130 + 2 * 200; }   // rough ceiling, only for the rank title
 function hud() {
   countTo($("#score"), S.score); countTo($("#hudScore"), S.score);
   $$("#flames b").forEach((b, k) => b.classList.toggle("on", k < S.streak));
@@ -992,16 +974,19 @@ function level(i) {
   [3, 2, 1].forEach((k, j) => later(() => { SFX.play("count"); const c = $("#lvCount"); c.textContent = k; c.classList.remove("tick"); void c.offsetWidth; c.classList.add("tick"); }, wait + j * 750));
   later(go, wait + 2300);
 }
-const RUN = { pic: startGuess, text: startGuess, boss, hilo, tf, you: youStart };
+const RUN = { pic: startGuess, text: startGuess, boss, tf, you: youStart };
 
-// ---------- levels 1–3: real or AI ----------
+// ---------- levels 1–2: real or AI (pictures, then texts) ----------
 let G_ = { L: null, n: 0, list: [], shownAt: 0, ticking: false, raf: 0, limit: 5, hint: false };
-function startGuess(L) { G_ = { ...G_, L, n: 0, list: S.items[L.id], limit: TIME[L.id] }; S.res[L.id] = []; screen("s-guess"); show(); }
+const limitOf = p => p.kind === "text" ? TIME.text : p.hard ? TIME.hard : TIME.warm;
+function startGuess(L) { G_ = { ...G_, L, n: 0, list: S.items[L.id] }; S.res[L.id] = []; screen("s-guess"); show(); }
 function show() {
   const p = G_.list[G_.n], m = $("#media");
+  G_.limit = limitOf(p);
+  if (p.hard && !(G_.list[G_.n - 1] || {}).hard) { toast("🧨 Hard mode: the newest AI · ×1.5 points"); SFX.play("badge"); }
   m.className = "media" + (p.kind === "text" ? " text" : ""); m.style.transform = "";
   $("#s-guess").classList.remove("answered"); $("#s-guess").scrollTop = 0; $("#verdict").innerHTML = ""; $("#s-guess").classList.toggle("textmode", p.kind === "text"); $("#verdict").className = "verdict"; $("#tip").textContent = ""; $("#tip").className = "tip";
-  $("#ctr").textContent = `${G_.n + 1} / ${G_.list.length}`;
+  $("#ctr").textContent = `${p.hard ? "🧨 " : ""}${G_.n + 1} / ${G_.list.length}`;
   $("#realLbl").textContent = p.kind === "text" ? "PERSON" : "REAL";
   $$("[data-g]").forEach(b => { b.disabled = false; b.classList.remove("picked"); });
   $("#hintBtn").disabled = false; G_.hint = false; G_.answered = false;
@@ -1009,7 +994,7 @@ function show() {
   $("#say").textContent = p.kind === "text" ? SAY_TEXT[5] : SAY[G_.n % 4][5];
   stamps(0);
   // the first two pictures and the first text say the card can be dragged
-  const coach = (G_.L.id === "warm" && G_.n < 2) || (p.kind === "text" && G_.n === 0);
+  const coach = (G_.L.id === "pics" && G_.n < 2) || (p.kind === "text" && G_.n === 0);
   $("#coachWhat").textContent = p.kind === "text" ? "the text" : "the picture";
   $("#coachReal").textContent = p.kind === "text" ? "Person →" : "Real →";
   m.classList.toggle("coached", coach);
@@ -1052,13 +1037,13 @@ function guess(g) {
   if (G_.answered || !$("#s-guess").classList.contains("on")) return;
   G_.answered = true; G_.answeredAt = performance.now(); stopTimer();
   const p = G_.list[G_.n], late = g === "none", right = g === p.truth, secs = late ? G_.limit : (performance.now() - G_.shownAt) / 1000;
-  const L = G_.L, base = L.id === "hard" ? 150 : L.id === "text" ? 120 : 100;
+  const L = G_.L, base = p.kind === "text" ? 120 : 100, mult = p.hard ? 1.5 : 0;
   let pts = 0, why = "";
   const hadStreak = S.streak;
   if (right) {
     const speed = Math.round(50 * Math.max(0, 1 - secs / G_.limit)), streak = Math.min(100, 20 * S.streak);
-    pts = Math.max(0, Math.round((base + speed) * (L.mult || 1)) + streak - (G_.hint ? 40 : 0));
-    why = `${L.mult ? "(" : ""}${base} right${speed ? ` + ${speed} speed` : ""}${L.mult ? `) × ${L.mult}` : ""}${streak ? ` + ${streak} streak 🔥` : ""}${G_.hint ? " − 40 hint" : ""}`;
+    pts = Math.max(0, Math.round((base + speed) * (mult || 1)) + streak - (G_.hint ? 40 : 0));
+    why = `${mult ? "(" : ""}${base} right${speed ? ` + ${speed} speed` : ""}${mult ? `) × ${mult} hard mode` : ""}${streak ? ` + ${streak} streak 🔥` : ""}${G_.hint ? " − 40 hint" : ""}`;
     if (secs < 1.5) badge("lightning");
   }
   S.res[L.id].push(late ? null : right);
@@ -1079,7 +1064,7 @@ function guess(g) {
   $("#verdict").classList.add("on"); $("#s-guess").classList.add("answered");
   if (matchMedia(STACKED).matches) later(() => $("#verdict").scrollIntoView({ block: "nearest", behavior: reduce ? "auto" : "smooth" }), 60);
   $("#say").textContent = late ? "Too slow, the feed moved on 🫠" : right ? ["Locked in! 🔒", "Nice eyes ⚡", "Called it 😎", "Easy 💅"][G_.n % 4] : ["Fooled you 😈", "Ouch 🙃", "Sneaky one 🫣", "It got you 😬"][G_.n % 4];
-  note("clue", p.kind === "text" ? (p.truth === "ai" ? "AI text" : "Human text") : (p.truth === "ai" ? "AI picture" : "Real photo") + (L.id === "hard" ? " · hard mode" : ""), esc(tell), p.file || p.text);
+  note("clue", p.kind === "text" ? (p.truth === "ai" ? "AI text" : "Human text") : (p.truth === "ai" ? "AI picture" : "Real photo") + (p.hard ? " · hard mode" : ""), esc(tell), p.file || p.text);
   autoNext(G_.limit > 9 ? 9000 : 6500, nextItem);
   $("#pauseBtn").onclick = e => { e.stopPropagation(); pauseAuto(); };
   // reading it? it waits: the mouse on the card, keyboard focus in it, or opening the photo credit pauses the timer
@@ -1103,11 +1088,14 @@ function skipAuto() { if (!autoFn) return; if (autoT) clearTimeout(autoT); autoT
 function nextItem() {
   autoFn = null;
   if (++G_.n < G_.list.length) return show();
-  if (G_.L.id === "hard" && S.res.hard.every(x => x === true)) badge("eagle");
+  if (G_.L.id === "pics" && G_.list.every((p, k) => !p.hard || S.res.pics[k] === true)) badge("eagle");
   const r = S.res[G_.L.id].filter(x => x === true).length;
   if (r === G_.list.length) confetti(60);
   level(S.lv + 1);
 }
+// tap or click the buttons: the same as a swipe (this was missing in v7, so only swipe and keys worked)
+$$("[data-g]").forEach(b => b.addEventListener("click", () => { $("#media").classList.remove("demo"); guess(b.dataset.g); }));
+$("#hintBtn").addEventListener("click", hint);
 $("#media").addEventListener("click", () => { if (G_.answered && performance.now() - G_.answeredAt > 400) skipAuto(); });
 $("#verdict").addEventListener("click", e => { if (!e.target.closest("a,button") && G_.answered) skipAuto(); });   // not the click that ends a swipe
 // swipe: right = real, left = AI
@@ -1120,7 +1108,7 @@ $("#verdict").addEventListener("click", e => { if (!e.target.closest("a,button")
 })();
 function stamps(dx) { $("#stReal").style.opacity = Math.max(0, Math.min(1, dx / 90)); $("#stAi").style.opacity = Math.max(0, Math.min(1, -dx / 90)); }
 
-// ---------- level 4: the number (boss) ----------
+// ---------- level 3: the number (boss) ----------
 const KINDS = [...Array(H.have_seen).fill("seen"), ...Array(H.starting).fill("starting"), ...Array(H.expect_soon + H.dont_expect).fill("rest"), ...Array(H.not_sure + H.no_answer).fill("na")];
 $("#bossDots").innerHTML = Array(100).fill("<i></i>").join("");
 $("#hookLegend").innerHTML = [["--seen", H.have_seen, "already see it in their community"], ["--starting", H.starting, "are starting to see it"],
@@ -1156,46 +1144,7 @@ $("#bossLock").onclick = () => {
 };
 $("#bossNext").onclick = () => level(S.lv + 1);
 
-// ---------- level 5: more or fewer ----------
-const CI = D.community, seenOf = i => CI[i].dist.have_seen;
-let HL = { k: 0 };
-function hilo() {
-  screen("s-hilo"); S.res.hilo = []; HL = { k: 0 }; hiloShow();
-}
-function hiloShow() {
-  const a = S.hilo[HL.k], b = S.hilo[HL.k + 1];
-  $("#hAit").textContent = CI[a].text; $("#hAval").innerHTML = `${Math.round(seenOf(a))}<small>in 100</small>`; $("#hAbar").style.width = seenOf(a) + "%";
-  $("#hBit").textContent = CI[b].text; $("#hBval").textContent = "?"; $("#hBbar").style.width = "0";
-  $("#hA").className = "hcard"; $("#hB").className = "hcard q";
-  $("#hiBtn").disabled = $("#loBtn").disabled = false; $("#hiloMsg").textContent = "";
-  $("#hiloPips").innerHTML = Array.from({ length: 4 }, (_, k) => `<i class="${S.res.hilo[k] === true ? "ok" : S.res.hilo[k] === false ? "no" : S.res.hilo[k] === "tie" ? "tie" : k === HL.k ? "now" : ""}"></i>`).join("");
-}
-function hiloPick(up) {
-  if ($("#hiBtn").disabled) return;
-  $("#hiBtn").disabled = $("#loBtn").disabled = true;
-  const a = S.hilo[HL.k], b = S.hilo[HL.k + 1], va = seenOf(a), vb = seenOf(b), tie = Math.abs(va - vb) <= CLOSE;
-  const right = tie ? "tie" : (vb > va) === up;
-  const el = $("#hBval"), t0 = performance.now(), to = Math.round(vb);
-  const f = t => { const k = reduce ? 1 : Math.min(1, (t - t0) / 700); el.innerHTML = `${Math.round(to * k)}<small>in 100</small>`; if (k < 1) requestAnimationFrame(f); };
-  requestAnimationFrame(f); $("#hBbar").style.width = vb + "%";
-  $("#hB").className = "hcard " + (right === "tie" ? "tie" : right ? "ok" : "no");
-  $("#hiloMsg").textContent = right === "tie" ? `🟨 Too close to call: ${pct(va)} vs ${pct(vb)} is within the margin of error. You get the points anyway.`
-    : right ? `✅ Right: ${in100(vb)} vs ${in100(va)}. +100` : `❌ It's ${vb > va ? "more" : "fewer"}: ${in100(vb)} vs ${in100(va)}.`;
-  S.res.hilo.push(right); add(right ? 100 : 0, right === "tie" ? null : right); SFX.play(right ? "right" : "wrong");
-  autoHilo();
-}
-function autoHilo() {
-  later(() => {
-    if (++HL.k < 4) return hiloShow();
-    if (S.res.hilo.every(x => x !== false)) badge("nerd");
-    const order = CI.map((c, i) => i).sort((x, y) => seenOf(y) - seenOf(x));
-    note("fact", "What Americans already see AI doing around them", order.map(i => `${Math.round(seenOf(i))} · ${esc(CI[i].text.replace(/^People are /, ""))}`).join("<br>"), "hilo");
-    level(S.lv + 1);
-  }, 3800);
-}
-$("#hiBtn").onclick = () => hiloPick(true); $("#loBtn").onclick = () => hiloPick(false);
-
-// ---------- level 6: true or false ----------
+// ---------- level 4: true or false ----------
 function makeClaims() {
   const C = [];
   D.risks.forEach(r => C.push({ v: r.dist.already, stem: "risks", text: k => `<em>${k} in 100</em> Americans say “${esc(r.text)}” is <b>already happening.</b>`, what: `say “${r.text}” is already happening` }));
@@ -1234,7 +1183,7 @@ function tfPick(said) {
 }
 $("#tBtn").onclick = () => tfPick(true); $("#fBtn").onclick = () => tfPick(false);
 
-// ---------- level 7: your turn (feeling → predict → reveal, then the turn) ----------
+// ---------- level 5: your turn (feeling → predict → reveal, then the turn) ----------
 let Y = { part: 1 };
 function phase(n) { ["#ph1", "#ph2", "#ph3"].forEach((p, i) => $(p).classList.toggle("on", i + 1 === n)); $("#s-you").scrollTop = 0; }
 function youStart() { screen("s-you"); S.res.you = []; Y.part = 1; youAsk(); }
@@ -1296,23 +1245,23 @@ function youGroups(g) {   // feeling: 100 dots for America + age chips
 $("#youNext").onclick = () => { if (Y.part === 1) { Y.part = 2; youAsk(); } else level(S.lv + 1); };
 
 // ---------- end ----------
-const BOARD_KEY = "realOrAI.board.v7";
+const BOARD_KEY = "realOrAI.board.v8";   // v8 has fewer pictures, so v7 scores would not compare
 function end() {
   later(() => SFX.play("end"), 300);
   clearAll(); S.done = true; S.lv = LEVELS.length; hud();
   if (!S.hints) badge("nohint");
   screen("s-end");
-  const right = ["warm", "hard", "text"].flatMap(k => S.res[k] || []).filter(x => x === true).length;
+  const right = ["pics", "text"].flatMap(k => S.res[k] || []).filter(x => x === true).length, of = S.items.pics.length + S.items.text.length;
   $("#endScore").textContent = "0"; $("#endScore").dataset.v = 0; countTo($("#endScore"), S.score);
   $("#endRank").textContent = rankOf(S.score);
-  $("#endSub").textContent = `${right} of 10 pictures and texts right · best streak ${S.bestStreak} · ${S.badges.size} badge${S.badges.size === 1 ? "" : "s"}` + (vs ? ` · ${S.score >= vs.score ? "🥊 you beat " : "🥊 not quite: "}${vs.name} (${vs.score.toLocaleString("en")})` : "");
+  $("#endSub").textContent = `${right} of ${of} pictures and texts right · best streak ${S.bestStreak} · ${S.badges.size} badge${S.badges.size === 1 ? "" : "s"}` + (vs ? ` · ${S.score >= vs.score ? "🥊 you beat " : "🥊 not quite: "}${vs.name} (${vs.score.toLocaleString("en")})` : "");
   $("#trophy").textContent = vs && S.score >= vs.score ? "🥊" : S.score / maxScore() >= .68 ? "🏆" : S.score / maxScore() >= .4 ? "🥈" : "🎮";
   $("#earned").innerHTML = BADGES.filter(b => S.badges.has(b[0])).map(b => `<span>${b[1]} ${b[2]}</span>`).join("") || `<span class="muted" style="background:none;padding:0;font-weight:400">No badges this time. Play again: new pictures every round.</span>`;
   $("#t-end").innerHTML = `Most Americans are worried about AI, and most think it's coming anyway.` + (D.shapeGapReal ? ` <span>Younger adults are more likely than older adults to think it can still be shaped.</span>` : "");
   // your answers next to the survey: the point of the game, not only the score
   const row = (you, us, lab) => `<li><span>${you}</span><span class="us">${us}<small>${lab}</small></span></li>`;
   $("#vsUS").innerHTML = [
-    row(`You spotted <b>${right} of 10</b> pictures and texts. Telling real from fake is hard.`, in100(H.have_seen), "US adults already see people around them struggle with it"),
+    row(`You spotted <b>${right} of ${of}</b> pictures and texts. Telling real from fake is hard.`, in100(H.have_seen), "US adults already see people around them struggle with it"),
     S.bossGuess != null ? row(`You guessed <b>${S.bossGuess} in 100</b> already see that struggle.`, in100(H.have_seen), "real answer") : "",
     S.pred[1] != null ? row(`You guessed <b>${S.pred[1]} in 100</b> are concerned about AI.`, in100(concerned("total")), "real answer") : "",
     S.you1 ? row(`You feel “${esc(SL[S.you1])}”.`, in100(G.total.sentiment[S.you1]), "feel the same") : "",
@@ -1322,27 +1271,54 @@ function end() {
   $("#learned").innerHTML = [...facts, ...clues].map(n => `<li><b>${n.title}</b><br>${n.text}</li>`).join("");
   // leaderboard + challenge link
   const board = store.get(BOARD_KEY, []);
-  const me = { name: S.name || "Player", score: S.score, right, date: new Date().toISOString().slice(0, 10), id: Date.now() };
+  const me = { name: S.name || "Player", score: S.score, right, of, date: new Date().toISOString().slice(0, 10), id: Date.now() };
   if (!q.has("step")) { board.push(me); board.sort((a, b) => b.score - a.score); store.set(BOARD_KEY, board.slice(0, 50)); }   // review shortcuts never save
   S.myId = me.id; renderBoard();
   const u = new URL(location.href); u.search = "";
   u.searchParams.set("p", S.play.p.join(".")); u.searchParams.set("t", S.play.t.join(".")); u.searchParams.set("r", S.seed);
   u.searchParams.set("vs", S.name || "A friend"); u.searchParams.set("s", S.score);
+  u.searchParams.set("vl", LEVELS.map(l => S.lvPts[l.id] || 0).join("."));
+  if (vs) { u.searchParams.set("them", vs.name); u.searchParams.set("ts", vs.score); }   // a reply: they see who won
   $("#shareUrl").value = u.toString();
+  shareCard(right, of);
   const pos = board.findIndex(b => b.id === me.id) + 1;
   if (pos === 1 && board.length > 1) { toast("🥇 New high score on this device!"); confetti(120); }
   else if (pos <= 3) confetti(70);
 }
 function renderBoard() {
-  const board = store.get(BOARD_KEY, []).slice(0, 10).map(b => ({ ...b }));
-  if (vs) { board.push({ name: vs.name + " (challenge)", score: vs.score, right: "?", vs: true }); board.sort((a, b) => b.score - a.score); }
-  $("#board").innerHTML = board.slice(0, 11).map(b => `<li class="${b.id && b.id === S.myId ? "me" : ""} ${b.vs ? "vs" : ""}"><span>${esc(b.name)}<span class="sub">${b.vs ? "score to beat" : `${b.right}/10 spotted · ${b.date}`}</span></span><span class="pts">${b.score.toLocaleString("en")}</span></li>`).join("");
+  const board = store.get(BOARD_KEY, []).slice(0, 10).map(b => ({ ...b, vs: vs && b.friend && b.name === vs.name && b.score === vs.score }));
+  $("#board").innerHTML = board.map(b => `<li class="${b.id && b.id === S.myId ? "me" : ""} ${b.vs ? "vs" : ""}"><span>${esc(b.name)}${b.friend ? " 🔗" : ""}<span class="sub">${b.vs ? "score to beat" : b.friend ? `via challenge link · ${b.date}` : `${b.right}/${b.of || 10} spotted · ${b.date}`}</span></span><span class="pts">${b.score.toLocaleString("en")}</span></li>`).join("");
   $("#boardEmpty").style.display = board.length ? "none" : "block";
-  const best = board.filter(b => !b.vs)[0];
+  const best = board.filter(b => !b.friend)[0];
   $("#pkTop").innerHTML = best ? `<span class="pk-sub" style="display:block;margin:0 0 3px">best</span>${best.score.toLocaleString("en")}` : "";
 }
+// the challenge card: a head-to-head per level when you played someone's link, and a reply link back to them
+function shareCard(right, of) {
+  const fmt = n => n.toLocaleString("en");
+  if (vs) {
+    const won = S.score > vs.score, tie = S.score === vs.score;
+    $("#shareKick").textContent = `🥊 You vs ${vs.name}: ${tie ? "a tie!" : won ? "you win!" : "they win"}`;
+    $("#h2h").hidden = false;
+    const cell = (a, b) => `<span class="us ${a > b ? "win" : ""}">${fmt(a)}</span>`;
+    $("#h2h").innerHTML = `<li><span class="muted">Level</span><span class="us">You</span><span class="us">${esc(vs.name)}</span></li>` +
+      (vs.lv ? LEVELS.map((l, i) => { const a = S.lvPts[l.id] || 0, b = vs.lv[i]; return `<li><span>${l.ic} ${l.name}</span>${cell(a, b)}${cell(b, a)}</li>`; }).join("") : "") +
+      `<li class="tot"><span><b>Total</b></span>${cell(S.score, vs.score)}${cell(vs.score, S.score)}</li>`;
+    $("#shareTxt").textContent = `Send ${vs.name} your result. They see who won, level by level, and get a rematch on the same pictures.`;
+    $("#shareBtn").textContent = `Send to ${vs.name}`;
+    S.shareMsg = tie ? `We tied on Real or AI? with ${fmt(S.score)} each. Decider, same pictures:` : won ? `I beat your ${fmt(vs.score)} on Real or AI? with ${fmt(S.score)} 😎 Rematch, same pictures:` : `I got ${fmt(S.score)} vs your ${fmt(vs.score)} on Real or AI? Rematch, same pictures:`;
+  } else {
+    $("#shareKick").textContent = "🥊 Challenge a friend"; $("#h2h").hidden = true;
+    $("#shareTxt").textContent = "Same pictures, same questions, your score to beat. When they finish, they can send their result back.";
+    $("#shareBtn").textContent = "Share";
+    S.shareMsg = `I spotted ${right} of ${of} fakes and scored ${fmt(S.score)} on Real or AI? Can you beat me? Same pictures:`;
+  }
+  $("#shareBtn").hidden = !navigator.share;   // phones: the system share sheet (WhatsApp, Messages, ...)
+}
+$("#shareBtn").onclick = async () => {
+  try { await navigator.share({ title: "Real or AI?", text: S.shareMsg, url: $("#shareUrl").value }); } catch {}
+};
 $("#copyBtn").onclick = async () => {
-  try { await navigator.clipboard.writeText($("#shareUrl").value); toast("📋 Link copied: send it to a friend"); }
+  try { await navigator.clipboard.writeText(S.shareMsg + " " + $("#shareUrl").value); toast(vs ? `📋 Copied: send it to ${vs.name}` : "📋 Copied: send it to a friend"); }
   catch { $("#shareUrl").select(); toast("Select the link and copy it"); }
 };
 $("#boardBtn").onclick = () => { tab("board"); openSheet(); };
@@ -1358,7 +1334,7 @@ $("#srcAll").innerHTML = `<b>Questions, word for word:</b> “${esc(D.stems.ai_c
   `<b>Data:</b> ${SRC}. Latest wave only; the June pilot used a different method and is left out. Gaps smaller than the margin of error aren't called gaps.<br>` +
   `<b>Pictures:</b> real photos from Wikimedia Commons (CC BY / CC BY-SA, photographer named after each answer). AI pictures: Commons (public domain, VulcanSphere, Adobe Firefly, Gemini) and 8 made for this prototype with gpt-image-2.5 and gemini-3.1-flash-image (Figma AI, 12 Nov 2026). Every picture is cropped and compressed the same way, so file size and format give nothing away.<br>` +
   `<b>Texts:</b> human texts word for word from Wikivoyage (“Verzasca Valley”, rev. 4275033, 2021; “Lauterbrunnen”, rev. 4407914, 2022), CC BY-SA 3.0. AI texts written by Claude (Anthropic).<br>` +
-  `The true-or-false claims show either the real number or a deliberately wrong one; the answer always shows the real number. Prototype v7 by Adhurim Thaqi, HSLU Data Storytelling, built with Claude.`;
+  `The true-or-false claims show either the real number or a deliberately wrong one; the answer always shows the real number. Prototype v8 by Adhurim Thaqi, HSLU Data Storytelling, built with Claude.`;
 
 // ---------- sheet (phone) + tabs ----------
 function tab(t) { $$(".tabs [data-tab]").forEach(b => b.setAttribute("aria-selected", b.dataset.tab === t)); $("#pane-notes").classList.toggle("on", t === "notes"); $("#pane-board").classList.toggle("on", t === "board"); if (t === "board") renderBoard(); }
@@ -1424,7 +1400,21 @@ S.name = store.get("realOrAI.name", "") || "";
 $("#nameIn").value = S.name;
 $("#nameIn").oninput = e => { S.name = e.target.value.trim().slice(0, 18); hud(); };
 $("#dice").onclick = () => { S.name = randomName(); $("#nameIn").value = S.name; hud(); };
-if (vs) { $("#challenge").innerHTML = `🥊 <b>${esc(vs.name)}</b> challenges you: <b>${vs.score.toLocaleString("en")} points</b> with the same pictures. Can you beat it?`; $("#challenge").classList.add("on"); }
+if (vs) {
+  const fmt = n => n.toLocaleString("en"), t = vs.them;
+  $("#challenge").innerHTML = t
+    ? `🥊 <b>${esc(vs.name)}</b> played your challenge: <b>${fmt(vs.score)}</b> vs your <b>${fmt(t.score)}</b>. ` + (vs.score > t.score ? "They won. Win it back on the same pictures?" : vs.score === t.score ? "A tie. Play the decider?" : "You're still ahead. Play the rematch?")
+    : `🥊 <b>${esc(vs.name)}</b> challenges you: <b>${fmt(vs.score)} points</b> with the same pictures. Can you beat it?`;
+  $("#challenge").classList.add("on");
+  // their score goes on this device's leaderboard (marked 🔗), once per link
+  if (!q.has("step")) {
+    const board = store.get(BOARD_KEY, []);
+    if (!board.some(b => b.friend && b.name === vs.name && b.score === vs.score)) {
+      board.push({ name: vs.name, score: vs.score, friend: true, date: new Date().toISOString().slice(0, 10), id: Date.now() + 1 });
+      board.sort((a, b) => b.score - a.score); store.set(BOARD_KEY, board.slice(0, 50));
+    }
+  }
+}
 (() => {   // the intro mosaic: two real, two AI from the hard pool, labelled (as a teaser)
   const hard = POOL.filter(p => p.level === 2), r = hard.filter(p => p.truth === "real"), a = hard.filter(p => p.truth === "ai");
   const four = [r[0], a[a.length - 1], a[2], r[3]].filter(Boolean);
@@ -1451,21 +1441,20 @@ addEventListener("keydown", e => {
   if (on("#s-guess")) {
     if (!G_.answered) { if (k === "ArrowLeft" || k === "a" || k === "A") guess("ai"); if (k === "ArrowRight" || k === "r" || k === "R") guess("real"); if (k === "h" || k === "H") hint(); }
     else if (k === " " || k === "Enter") { e.preventDefault(); skipAuto(); }
-  } else if (on("#s-hilo")) { if (k === "ArrowUp") hiloPick(true); if (k === "ArrowDown") hiloPick(false); }
-  else if (on("#s-tf")) { if (k === "t" || k === "T" || k === "ArrowRight") tfPick(true); if (k === "f" || k === "F" || k === "ArrowLeft") tfPick(false); }
+  } else if (on("#s-tf")) { if (k === "t" || k === "T" || k === "ArrowRight") tfPick(true); if (k === "f" || k === "F" || k === "ArrowLeft") tfPick(false); }
   else if (on("#s-level") && (k === " " || k === "Enter")) { e.preventDefault(); $("#lvGo").click(); }
 });
 
-// ---------- review shortcuts: ?step=warm|hard|text|boss|hilo|tf|you|turn|end ----------
+// ---------- review shortcuts: ?step=pics|text|boss|tf|you|turn|end ----------
 hud(); renderBoard(); pillars(); if (!q.get("step")) tab("board");   // first screen: show the leaderboard
 const want = q.get("step");
-const IDX = { warm: 0, hard: 1, text: 2, boss: 3, hilo: 4, tf: 5, you: 6, turn: 6 };
+const IDX = { pics: 0, text: 1, boss: 2, tf: 3, you: 4, turn: 4 };
 if (want && (want in IDX || want === "end")) {
   if (!S.name) S.name = "Reviewer";
   draw();
   const upto = want === "end" ? LEVELS.length : IDX[want];
-  LEVELS.slice(0, upto).forEach(l => { S.res[l.id] = l.id === "text" ? [true, false] : [true, false, true, null].slice(0, l.kind === "pic" ? 4 : 3); });
-  if (upto > 3) { note("fact", `${H.have_seen} in 100 Americans`, "have already seen people in their community struggle to tell what's real from what's fake because of AI.", "boss"); S.score = 1200; }
+  LEVELS.slice(0, upto).forEach(l => { S.res[l.id] = l.id === "text" ? [true, false] : [true, false, true, null, true, true].slice(0, l.kind === "pic" ? 6 : 3); });
+  if (upto > 2) { note("fact", `${H.have_seen} in 100 Americans`, "have already seen people in their community struggle to tell what's real from what's fake because of AI.", "boss"); S.score = 1200; }
   if (want === "end") { S.you1 = "somewhat_concerned"; S.you2 = "inevitable"; S.score = 2140; badge("eagle"); badge("bullseye"); end(); }
   else { S.lv = upto; hud(); RUN[LEVELS[upto].kind](LEVELS[upto]);
     if (want === "turn") { S.you1 = "somewhat_concerned"; Y.part = 2; youAsk(); } }

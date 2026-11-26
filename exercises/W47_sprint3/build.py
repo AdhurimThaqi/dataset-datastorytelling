@@ -1,4 +1,4 @@
-"""Build v7.html from template.html + the official CSV + pool.json (sprint 3).
+"""Build v8.html from template.html + the official CSV + pool.json (sprint 3; v7.html stays as the tested version).
 
 Run:  python prepare_images.py   (once; downloads/recompresses the pictures, writes pool.json)
       python build.py            (every time the template or the data changes)
@@ -93,7 +93,7 @@ data = {
 pool = json.loads((HERE / "pool.json").read_text(encoding="utf-8"))
 html = (HERE / "template.html").read_text(encoding="utf-8")
 out = html.replace("__DATA__", json.dumps(data, ensure_ascii=False)).replace("__POOL__", json.dumps(pool, ensure_ascii=False))
-(HERE / "v7.html").write_text(out, encoding="utf-8")
-print("wrote", HERE / "v7.html")
+(HERE / "v8.html").write_text(out, encoding="utf-8")
+print("wrote", HERE / "v8.html")
 if D.missing:
     print("not reported in the CSV, shown as 0:", ", ".join(sorted(set(D.missing))))

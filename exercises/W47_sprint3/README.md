@@ -1,7 +1,21 @@
-# Sprint 3 · v7: Real or AI? as a full game (12.11.2026, polished 19.11.2026)
+# Sprint 3 · v7: Real or AI? as a full game (12.11.2026, polished 19.11.2026) · v8 (26.11.2026)
 
-**Open it:** [`v7.html`](v7.html) (needs the `img/` folder next to it; works offline except for the font)
+**Open it:** [`v8.html`](v8.html), the current version · [`v7.html`](v7.html), the version from the 19.11 coaching (kept unchanged). Both need the `img/` folder next to them; they work offline except for the font.
 
+## v8: what changed after the coaching (19.11)
+| Feedback (coaching) | v8 |
+|---|---|
+| 7 levels are too many | **5 levels:** 🌄 Real or AI? (6 pictures: 2 easy, then 4 in 🧨 hard mode at ×1.5; a toast marks the switch) · ✍️ Texts · 🎯 The number · ⚡ True or false · 🫵 Your turn. 8 pictures and texts instead of 10, about 4 minutes. |
+| "More or fewer": unclear what "fewer" means | **Removed.** Its five "seen in your community" numbers are still in "Sources and all numbers". The "Data nerd" badge went with it (7 badges now). |
+| Add clicking as well as dragging | The **AI / REAL buttons and 💡 Hint now work when tapped or clicked.** In v7 they had no click handler, so only swipe and keys worked. |
+| Leaderboard: only on the device | Still no server (nothing is uploaded), but the **challenge link does more:** it carries your points per level. Your friend gets a **head-to-head per level** at the end and a **"Send to …" reply link**. When you open it you see who won and can play the rematch on the same pictures. Every score that reaches you by link goes on your device's leaderboard, marked 🔗. On a phone, **Share** opens the system share sheet (WhatsApp, Messages, …) with a ready-made message. |
+
+Leaderboard key is now `realOrAI.board.v8`: v8 has fewer pictures, so v7 scores would not compare.
+Checked 26.11: `check.py` 149 checks, 0 mismatches. Played through three times in headless Edge at 390×844 (touch): player A, then B from A's link, then A opening B's reply. All 5 levels, the head-to-head and the 🔗 board entries worked, with no script errors and no sideways scrolling. Still to do: try it on a real phone.
+
+---
+
+# v7 (the version before)
 ## What changed from v6
 | Feedback (lecturer) | v7 |
 |---|---|
@@ -35,10 +49,10 @@ Honesty rules still apply: "too close to call" in more-or-fewer when two items a
 | `template.html` | The page, **without numbers**: edit this one |
 | `prepare_images.py` | Downloads the Commons pictures, crops/compresses every picture the same way, writes `img/p01…p35.jpg` and `pool.json` (answer, credit, licence, "how to tell" per picture) |
 | `img/originals/` | The 8 generated AI pictures at full size (proof of origin; not used by the page) |
-| `build.py` | Writes `v7.html` with the numbers from the CSV + `pool.json` |
-| `check.py` | Every number in `v7.html` against the CSV: `149 checks … 0 mismatches` |
+| `build.py` | Writes `v8.html` with the numbers from the CSV + `pool.json` (v7.html is kept as it was) |
+| `check.py` | Every number in `v8.html` against the CSV: `149 checks … 0 mismatches` |
 
-**Review shortcuts:** `?step=warm|hard|text|boss|hilo|tf|you|turn|end` · `?theme=dark|light` · `?limit=8` (seconds per picture) · `?reset` (forget which pictures you've seen). Review shortcuts never save to the leaderboard.
+**Review shortcuts (v8):** `?step=pics|text|boss|tf|you|turn|end` (v7: `warm|hard|text|boss|hilo|tf|you|turn|end`) · `?theme=dark|light` · `?limit=8` (seconds per picture) · `?reset` (forget which pictures you've seen). Review shortcuts never save to the leaderboard.
 
 ## Status (19.11.2026)
 - ✅ `check.py`: 149 checks, 0 mismatches
