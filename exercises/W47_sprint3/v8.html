@@ -135,6 +135,7 @@ section.on{display:flex;animation:in .35s ease}
 /* ---------- stage pieces ---------- */
 .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:18px}
 .cta{display:flex;gap:10px;margin-top:auto;padding-top:6px}.cta button{flex:1}
+.bossnext{display:none}#bossMore.on+.bossnext{display:flex}
 
 /* intro */
 .hero{display:grid;grid-template-columns:1.1fr 1fr;gap:22px;align-items:center}
@@ -287,6 +288,7 @@ input[type=range]{width:100%;accent-color:var(--ai);height:36px}
 /* true or false */
 .claim{font:700 clamp(22px,3vw,32px)/1.25 var(--display);letter-spacing:-.015em;text-align:center;padding:30px 16px;min-height:200px;display:grid;place-items:center}
 .claim em{font-style:normal;color:var(--ai)}
+.ctx{font-size:12px;color:var(--muted)}.ctx summary{padding:2px 0;min-height:24px}
 .tfbtns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .tfbtns button{font:700 20px/1 var(--display);min-height:60px}
 .tfbtns .t{border-color:var(--good);color:var(--good)}.tfbtns .f{border-color:var(--bad);color:var(--bad)}
@@ -376,8 +378,18 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
   .hero{grid-template-columns:1fr}.mosaic{display:none}
   .how{grid-template-columns:1fr}.how div{padding:10px 12px}.how b{display:inline;margin:0 4px}
   #s-guess{--mw:min(100%,calc((100dvh - 250px) * 4 / 3))}
-  .bossgrid,.two{grid-template-columns:1fr}
-  .guessnum{font-size:64px}
+  .two{grid-template-columns:1fr}
+  /* the number: dots and the guess side by side, so the whole level fits a phone screen without scrolling */
+  .bossgrid{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:12px}
+  .bossgrid .dots{gap:4px;width:min(100%,calc(100dvh - 400px));min-width:120px}
+  #s-boss .wrap{gap:10px}
+  #s-boss .cta button{width:100%;padding:12px 10px}
+  #bossRev .cmp{gap:6px}#bossRev .legend{font-size:12px;gap:4px}
+  .guessnum{font-size:52px}
+  /* result screens may be longer than the phone: the chart is smaller and Next stays pinned at the bottom */
+  #youViz .dots{max-width:220px!important;gap:3px!important;margin:8px auto 4px!important}
+  #youViz .chips button{min-height:34px;padding:4px 10px;font-size:13px}
+  #s-boss .bossnext,#ph3 .cta{position:sticky;bottom:0;z-index:2;margin-top:4px;padding:14px 0 calc(4px + env(safe-area-inset-bottom));background:linear-gradient(to bottom,transparent,var(--bg) 35%)}
   .learned{grid-template-columns:1fr}
   .endtop{gap:12px}.trophy{width:60px;height:60px;font-size:32px;border-radius:16px}
   .claim{min-height:150px;padding:18px 8px}
@@ -406,6 +418,14 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
   .verdict.on{display:block;animation:in .3s ease}
   .verdict .vh{font-size:20px;flex-wrap:wrap}
   #s-guess.answered .choices,#s-guess.answered .tip,#s-guess.answered .fuse{display:none}
+}
+/* very short phone screens (e.g. iPhone SE with the browser bars): tighter, so nothing needs scrolling */
+@media (max-width:860px) and (max-height:600px){
+  #s-level .wrap{gap:8px}.lvicon{width:60px;height:60px;border-radius:18px}.lvicon .i-xl{width:32px;height:32px}
+  .lvname{font-size:34px}.lvcount{font-size:60px;min-height:60px}.lvbridge{padding:8px 12px;font-size:14px}
+  #s-guess{--mw:min(100%,calc((100dvh - 290px) * 4 / 3))}
+  .claim{min-height:0;padding:10px 6px;font-size:21px}.tfbar{margin:10px 0 22px}
+  .hud{margin-bottom:6px}
 }
 /* phones held sideways and short laptop windows: answer card NEXT TO the picture */
 @media (max-height:640px) and (min-width:600px) and (orientation:landscape){
@@ -436,7 +456,7 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
         <div>
           <p class="kicker">5 levels · 4 minutes</p>
           <h1 id="t-intro" class="disp">Real or <em>AI?</em></h1>
-          <p class="lead">First, spot the AI fakes among real photos and texts of Swiss valleys. Then guess what US adults told a survey about AI, and compare yourself with them.</p>
+          <p class="lead">First, spot the AI fakes among real photos and texts of Swiss valleys. Then guess what US adults think about AI and see how your guesses compare.</p>
         </div>
         <div class="mosaic" aria-hidden="true" id="mosaic"></div>
       </div>
@@ -497,9 +517,9 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
   <!-- boss: guess the number -->
   <section id="s-boss" aria-labelledby="t-boss">
     <div class="wrap">
-      <p class="kicker">Boss level · survey of US adults · <span data-dates></span> · n = <span data-n></span></p>
+      <p class="kicker">Boss level · survey of US adults · n = <span data-n></span></p>
       <p class="bossq" id="t-boss">Out of 100 US adults, how many have <u>already</u> seen people in their community struggle to tell real from fake because of AI?</p>
-      <p class="tiny" id="bossCtx"></p>
+      <details class="ctx"><summary>The exact survey question</summary><p class="tiny" id="bossCtx"></p></details>
       <div class="bossgrid">
         <div class="dots" id="bossDots" role="img" aria-label="100 dots"></div>
         <div>
@@ -518,8 +538,8 @@ th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:right}th:fi
       <div class="reveal" id="bossMore">
         <div class="callout" id="surprise"></div>
         <details class="source"><summary>Source</summary><p id="srcHook"></p></details>
-        <div class="cta"><button class="primary" id="bossNext">Next level →</button></div>
       </div>
+      <div class="cta bossnext"><button class="primary" id="bossNext">Next level →</button></div>
     </div>
   </section>
 
@@ -1041,7 +1061,7 @@ $("#hookLegend").innerHTML = [["--seen", H.have_seen, "already see it in their c
   ["--rest", H.expect_soon + H.dont_expect, `expect it soon (${H.expect_soon}) or don't expect it (${H.dont_expect})`],
   ["--na", H.not_sure + H.no_answer, `not sure (${H.not_sure}) or no answer (${H.no_answer})`]].map(([c, v, t]) => `<li style="--c:var(${c})"><b>${v}</b> ${t}</li>`).join("");
 $("#surprise").innerHTML = `<b>Only ${H.dont_expect} in 100</b> don't expect it at all. Being fooled by AI isn't a personal weakness: most Americans already see it around them.`;
-$("#bossCtx").innerHTML = `The survey asked: “${esc(D.q.fake)}” We count everyone who answered “${esc(D.labels.community.have_seen)}”.`;
+$("#bossCtx").innerHTML = `Survey of US adults, ${esc(D.dates)}. The survey asked: “${esc(D.q.fake)}” We count everyone who answered “${esc(D.labels.community.have_seen)}”.`;
 $("#srcHook").innerHTML = `Question: “${esc(D.stems.ai_community_impact)} ${esc(D.q.fake)}” Answer “${esc(D.labels.community.have_seen)}”. ${SRC}. Rounded to whole people: ` + Object.keys(R).map(k => `${R[k]} → ${H[k]}`).join(", ") + ".";
 function bossPaint(v) { $$("#bossDots i").forEach((d, k) => d.className = k < v ? "g" : ""); $("#bossVal").textContent = v; }
 function boss() {
